@@ -1,7 +1,7 @@
 name: Rust converter checks
 on:
   push:
-    branches: [main, feat/rust-eml-ocel-slice]
+    branches: [main, 'feat/**']
     paths:
       - 'Cargo.toml'
       - 'Cargo.lock'
