@@ -82,3 +82,7 @@ The task manifest is now task-ID-based and acyclic. Safe body decoding/zoning do
 
 ## Selected product/consumer/retrieval refinement
 The core outcome remains a Rust email-to-OCEL converter, with Enron only a canonical example/verification profile. The planned package names use Mailweft without changing existing schema IDs. The legacy foi-process pipeline is unvalidated and excluded from all correctness references. FOI acquisition, archive, consumer and ontology feedback responsibilities are in FOI-BOUNDARIES.md. Optional source-constrained GraphRAG is specified in GRAPHRAG.md and track 13; its retrieval graph is derived, not the authoritative source or event store. No graph requirement is added to default conversion or core release.
+
+## Implemented package layout
+
+The native checkpoint uses `crates/mailweft-core` and `crates/mailweft-cli`; logical components are internal modules. Earlier single-directory paths are superseded by this tested two-package layout. Stable schema IDs are unchanged. See docs/CORE-CHECKPOINT.md for actual status and unresolved security gates.

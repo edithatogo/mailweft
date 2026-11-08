@@ -12,3 +12,7 @@ Do not expand the three specialist Rust candidates merely to implement a roadmap
 
 ## Mailweft and optional GraphRAG
 The new repository name is accepted; preserve historical schema IDs. The core is a Rust email-to-OCEL converter. GraphRAG remains optional and has no selected mandatory library. First qualify deterministic graph projection/retrieval over the existing evidence records; Microsoft GraphRAG is a Python reference/comparator outside default production. FOI-O is consumer-owned ontology input/output, not a Mailweft runtime dependency. All source capture/archive activities stay outside Mailweft.
+
+## Implemented package layout
+
+The native checkpoint uses `crates/mailweft-core` and `crates/mailweft-cli`; logical components are internal modules. Earlier single-directory paths are superseded by this tested two-package layout. Stable schema IDs are unchanged. See docs/CORE-CHECKPOINT.md for actual status and unresolved security gates.

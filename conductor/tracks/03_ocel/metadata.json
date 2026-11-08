@@ -1,7 +1,7 @@
 {
   "id": "03_ocel",
   "title": "Canonical OCEL 2.0 projection and Rust4PM verification",
-  "status": "not_started",
+  "status": "in_progress",
   "requirements": [
     "R07",
     "R08",

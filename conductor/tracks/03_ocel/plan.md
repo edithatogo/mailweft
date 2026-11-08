@@ -81,3 +81,7 @@ Read the track spec, AGENTS.md and the task manifest. Each unchecked task is uni
 - Acceptance: Every unsupported field reported, not erased. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
 - Verification: `Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked`.
 - Evidence: `conductor/tracks/03_ocel/evidence.md`.
+
+## Native checkpoint
+
+See ../../execution/20261108-core-slice.md. Only explicitly checked foundation tasks are complete. Remaining checked-in capability is partial; security issue #4 blocks qualification/release.

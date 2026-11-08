@@ -1,3 +1,9 @@
+# Current build status
+
+A bounded Rust converter/CLI now exists on PR #3. Native checks and real CLI schema validation have run; security issue #4 remains blocking. Read [core checkpoint](CORE-CHECKPOINT.md) and [execution ledger](../conductor/execution/20261108-core-slice.md). Historical planning receipts below are dated evidence, not current implementation claims.
+
+---
+
 # Verification status — Mailweft publication, 8 November 2026
 
 ## Current revision
