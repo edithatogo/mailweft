@@ -14,3 +14,6 @@ serde_json = "1"
 [[bin]]
 name = "mailweft"
 path = "src/main.rs"
+
+[dev-dependencies]
+tempfile = "3"
