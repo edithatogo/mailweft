@@ -16,8 +16,12 @@ fn emits_valid_role_qualified_ocel_shape_without_leaking_addresses() {
     let event = &doc["events"][0];
     assert_eq!(event["type"], "source_copy_observed");
     assert_eq!(event["time"], "2026-11-09T01:02:03Z");
-    let roles: Vec<_> = event["relationships"].as_array().unwrap().iter()
-        .filter_map(|x| x["qualifier"].as_str()).collect();
+    let roles: Vec<_> = event["relationships"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter_map(|x| x["qualifier"].as_str())
+        .collect();
     for role in ["from", "to", "cc", "bcc", "source_copy", "message"] {
         assert!(roles.contains(&role), "missing {role}");
     }
@@ -42,7 +46,10 @@ fn preserves_distinct_source_copies_without_claiming_message_delivery() {
 fn conversion_is_deterministic_for_explicit_observation_time() {
     let a = convert_eml(RAW, "mailbox/1", observed()).unwrap();
     let b = convert_eml(RAW, "mailbox/1", observed()).unwrap();
-    assert_eq!(serde_json::to_vec(&a).unwrap(), serde_json::to_vec(&b).unwrap());
+    assert_eq!(
+        serde_json::to_vec(&a).unwrap(),
+        serde_json::to_vec(&b).unwrap()
+    );
 }
 
 #[test]
@@ -55,8 +62,11 @@ fn rejects_empty_or_oversized_input() {
 fn missing_bcc_is_not_fabricated() {
     let raw = b"From: a@example.invalid\nTo: b@example.invalid\n\nhello";
     let result = convert_eml(raw, "copy", observed()).unwrap();
-    let roles: Vec<_> = result.log.events[0].relationships.iter()
-        .map(|r| r.qualifier.as_str()).collect();
+    let roles: Vec<_> = result.log.events[0]
+        .relationships
+        .iter()
+        .map(|r| r.qualifier.as_str())
+        .collect();
     assert!(!roles.contains(&"bcc"));
 }
 

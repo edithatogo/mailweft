@@ -106,7 +106,10 @@ fn push_address_links(
                     attributes: Vec::new(),
                     relationships: Vec::new(),
                 });
-                let relation = Relationship { object_id, qualifier: role.to_string() };
+                let relation = Relationship {
+                    object_id,
+                    qualifier: role.to_string(),
+                };
                 if !relationships.contains(&relation) {
                     relationships.push(relation);
                 }
@@ -131,7 +134,9 @@ pub fn convert_eml(
     if source_id.trim().is_empty() {
         return Err(Error::InvalidSourceId);
     }
-    let parsed = MessageParser::new().parse(raw).ok_or(Error::InvalidSource)?;
+    let parsed = MessageParser::new()
+        .parse(raw)
+        .ok_or(Error::InvalidSource)?;
     if parsed.from().is_none()
         && parsed.to().is_none()
         && parsed.sender().is_none()
@@ -148,24 +153,36 @@ pub fn convert_eml(
     );
 
     let mut objects = BTreeMap::new();
-    objects.insert(message_candidate_id.clone(), Object {
-        id: message_candidate_id.clone(),
-        object_type: "email_message".into(),
-        attributes: Vec::new(),
-        relationships: vec![Relationship {
-            object_id: source_copy_id.clone(),
-            qualifier: "observed_as_copy".into(),
-        }],
-    });
-    objects.insert(source_copy_id.clone(), Object {
-        id: source_copy_id.clone(),
-        object_type: "source_copy".into(),
-        attributes: Vec::new(),
-        relationships: Vec::new(),
-    });
+    objects.insert(
+        message_candidate_id.clone(),
+        Object {
+            id: message_candidate_id.clone(),
+            object_type: "email_message".into(),
+            attributes: Vec::new(),
+            relationships: vec![Relationship {
+                object_id: source_copy_id.clone(),
+                qualifier: "observed_as_copy".into(),
+            }],
+        },
+    );
+    objects.insert(
+        source_copy_id.clone(),
+        Object {
+            id: source_copy_id.clone(),
+            object_type: "source_copy".into(),
+            attributes: Vec::new(),
+            relationships: Vec::new(),
+        },
+    );
     let mut relationships = vec![
-        Relationship { object_id: message_candidate_id.clone(), qualifier: "message".into() },
-        Relationship { object_id: source_copy_id.clone(), qualifier: "source_copy".into() },
+        Relationship {
+            object_id: message_candidate_id.clone(),
+            qualifier: "message".into(),
+        },
+        Relationship {
+            object_id: source_copy_id.clone(),
+            qualifier: "source_copy".into(),
+        },
     ];
     for (role, addresses) in [
         ("from", parsed.from()),
@@ -177,7 +194,7 @@ pub fn convert_eml(
     ] {
         push_address_links(&mut relationships, &mut objects, role, addresses);
     }
-    relationships.sort_by(|a,b| (&a.qualifier, &a.object_id).cmp(&(&b.qualifier, &b.object_id)));
+    relationships.sort_by(|a, b| (&a.qualifier, &a.object_id).cmp(&(&b.qualifier, &b.object_id)));
     let event_id = format!("event_{}", identity("source-observation", &source_copy_id));
 
     Ok(Conversion {
@@ -186,18 +203,29 @@ pub fn convert_eml(
         message_candidate_id,
         source_copy_id,
         log: Ocel {
-            object_types: ["email_address", "email_message", "source_copy"].iter()
-                .map(|name| OcelType { name: (*name).into(), attributes: Vec::new() }).collect(),
+            object_types: ["email_address", "email_message", "source_copy"]
+                .iter()
+                .map(|name| OcelType {
+                    name: (*name).into(),
+                    attributes: Vec::new(),
+                })
+                .collect(),
             event_types: vec![OcelType {
                 name: "source_copy_observed".into(),
-                attributes: vec![AttributeType {name: "source_sha256".into(), value_type: "string".into()}],
+                attributes: vec![AttributeType {
+                    name: "source_sha256".into(),
+                    value_type: "string".into(),
+                }],
             }],
             objects: objects.into_values().collect(),
             events: vec![Event {
                 id: event_id,
                 event_type: "source_copy_observed".into(),
                 time: observed_at,
-                attributes: vec![Attribute {name: "source_sha256".into(), value: source_sha256}],
+                attributes: vec![Attribute {
+                    name: "source_sha256".into(),
+                    value: source_sha256,
+                }],
                 relationships,
             }],
         },
