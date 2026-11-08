@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/email-ocel/contracts/v1/observed-message.schema.json",
+  "title": "ObservedMessage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_copy_id",
+    "message_candidate_id",
+    "source_sha256",
+    "observed_at",
+    "source_kind",
+    "observation_state",
+    "addresses",
+    "attachments"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "source_copy_id": {
+      "type": "string",
+      "pattern": "^copy_[A-Za-z0-9_-]{16,}$"
+    },
+    "message_candidate_id": {
+      "type": "string",
+      "pattern": "^msg_[A-Za-z0-9_-]{16,}$"
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "source_kind": {
+      "enum": [
+        "synthetic_eml",
+        "eml",
+        "maildir",
+        "mbox",
+        "edrm_eml"
+      ]
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "header_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "source_received_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "header_message_id_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "observation_state": {
+      "const": "observed_source_copy"
+    },
+    "addresses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/address"
+      }
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/attachment"
+      }
+    },
+    "thread_evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/threadLink"
+      }
+    },
+    "parse_warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 80
+      }
+    }
+  },
+  "$defs": {
+    "address": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "party_id",
+        "role",
+        "identity_state"
+      ],
+      "properties": {
+        "party_id": {
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "from",
+            "sender",
+            "to",
+            "cc",
+            "bcc",
+            "reply_to",
+            "unknown"
+          ]
+        },
+        "identity_state": {
+          "enum": [
+            "explicit_address",
+            "display_name_only",
+            "unresolved"
+          ]
+        }
+      }
+    },
+    "attachment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part_id",
+        "mime_type",
+        "size_bytes"
+      ],
+      "properties": {
+        "part_id": {
+          "type": "string"
+        },
+        "mime_type": {
+          "type": "string"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "filename_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "content_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "threadLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "related_message_id",
+        "basis",
+        "relationship_state"
+      ],
+      "properties": {
+        "related_message_id": {
+          "type": "string"
+        },
+        "basis": {
+          "enum": [
+            "in_reply_to",
+            "references",
+            "subject_heuristic",
+            "quote_heuristic",
+            "source_conversation_id"
+          ]
+        },
+        "relationship_state": {
+          "enum": [
+            "observed_header",
+            "inferred_candidate"
+          ]
+        },
+        "confidence": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    }
+  }
+}

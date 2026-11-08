@@ -1,0 +1,15 @@
+{
+  "product": "mailweft",
+  "core_outcome": "rust_email_to_ocel_converter",
+  "core_input": "raw_rfc5322_mime",
+  "enron_role": "verification_and_example_only",
+  "legacy_foi_is_oracle": false,
+  "first_consumer": "foi-process",
+  "dependency_direction": "foi-process -> mailweft",
+  "acquisition_owner": "fyi-cli",
+  "archive_boundary": "fyi-archive manifests or explicitly verified successor",
+  "ontology_owner": "foi-o",
+  "ontology_feedback": "evidence_linked_candidates_not_automatic_promotion",
+  "graphrag_default_enabled": false,
+  "core_requires_graph_or_model": false
+}

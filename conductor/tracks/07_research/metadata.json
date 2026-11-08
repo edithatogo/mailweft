@@ -1,0 +1,27 @@
+{
+  "id": "07_research",
+  "title": "Quality, security, scaling and optional knowledge graph",
+  "status": "not_started",
+  "requirements": [
+    "R18",
+    "R22",
+    "R23",
+    "R24",
+    "R26"
+  ],
+  "tasks": [
+    "T07.01",
+    "T07.02",
+    "T07.03",
+    "T07.04",
+    "T07.05",
+    "T07.06",
+    "T07.07",
+    "T07.08"
+  ],
+  "depends_on": [
+    "06_semantics"
+  ],
+  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence.",
+  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+}

@@ -1,0 +1,29 @@
+{
+  "id": "10_evidence-incremental",
+  "title": "Evidence receipts, alternatives and incremental interpretation",
+  "status": "not_started",
+  "requirements": [
+    "R18",
+    "R35",
+    "R37",
+    "R38",
+    "R39",
+    "R43",
+    "R46"
+  ],
+  "tasks": [
+    "T10.01",
+    "T10.02",
+    "T10.03",
+    "T10.04",
+    "T10.05",
+    "T10.06",
+    "T10.07",
+    "T10.08"
+  ],
+  "depends_on": [
+    "06_semantics"
+  ],
+  "notes": "Planning only; task manifest owns executable dependencies. Optional track never gates core release.",
+  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+}

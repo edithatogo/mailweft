@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "$id": "https://example.invalid/email-ocel/contracts/v1/communication-act.schema.json",
+  "title": "AttributedCommunicationAct",
+  "required": [
+    "schema_version",
+    "act_id",
+    "source_copy_id",
+    "segment_ids",
+    "evidence_refs",
+    "labels",
+    "origin",
+    "negated",
+    "modality",
+    "state",
+    "taxonomy_version",
+    "receipt_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "act_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_copy_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "segment_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "labels": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "request",
+          "commit",
+          "propose",
+          "inform",
+          "deliver",
+          "accept",
+          "decline",
+          "acknowledge",
+          "delegate",
+          "remind",
+          "escalate",
+          "withdraw",
+          "decision_communicated",
+          "completion_reported",
+          "unknown"
+        ]
+      }
+    },
+    "actor_candidate_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "addressee_candidate_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "work_item_candidate_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "origin": {
+      "enum": [
+        "new_authored",
+        "quoted",
+        "forwarded",
+        "generated",
+        "unknown"
+      ]
+    },
+    "negated": {
+      "type": "boolean"
+    },
+    "modality": {
+      "enum": [
+        "asserted",
+        "possible",
+        "conditional",
+        "hypothetical",
+        "unknown"
+      ]
+    },
+    "state": {
+      "enum": [
+        "asserted_by_actor",
+        "inferred",
+        "corroborated",
+        "contradicted",
+        "rejected"
+      ]
+    },
+    "taxonomy_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

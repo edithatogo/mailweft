@@ -1,0 +1,13 @@
+{
+  "id": "13_graphrag",
+  "title": "Optional evidence-constrained GraphRAG",
+  "status": "not_started",
+  "tasks": [
+    "T13.01",
+    "T13.02",
+    "T13.03",
+    "T13.04",
+    "T13.05",
+    "T13.06"
+  ]
+}

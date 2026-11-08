@@ -1,0 +1,27 @@
+{
+  "id": "04_data-validation",
+  "title": "Synthetic and Enron raw-to-processed validation",
+  "status": "not_started",
+  "requirements": [
+    "R11",
+    "R13",
+    "R14",
+    "R17",
+    "R24"
+  ],
+  "tasks": [
+    "T04.01",
+    "T04.02",
+    "T04.03",
+    "T04.04",
+    "T04.05",
+    "T04.06",
+    "T04.07",
+    "T04.08"
+  ],
+  "depends_on": [
+    "03_ocel"
+  ],
+  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence.",
+  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "delta_id": "delta:syn-1",
+  "subject_id": "act:syn-1",
+  "revision": 2,
+  "operation": "retract",
+  "prior_record_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "record_ref": null,
+  "reason_code": "source_attribution_corrected",
+  "evidence_refs": [
+    "evidence:syn-1"
+  ],
+  "observed_at": "2026-11-08T09:00:00Z",
+  "idempotency_key": "retract:syn-1:r2"
+}

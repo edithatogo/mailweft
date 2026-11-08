@@ -1,0 +1,26 @@
+{
+  "id": "05b_email-structure",
+  "title": "Email zoning and participant enrichment before speech-act NLP",
+  "status": "not_started",
+  "requirements": [
+    "R27",
+    "R28",
+    "R29",
+    "R31"
+  ],
+  "tasks": [
+    "T05b.01",
+    "T05b.02",
+    "T05b.03",
+    "T05b.04",
+    "T05b.05",
+    "T05b.06",
+    "T05b.07",
+    "T05b.08"
+  ],
+  "depends_on": [
+    "05_attachments"
+  ],
+  "notes": "Execute task-by-task after 05_attachments. Source-controlled synthetic fixtures only; never delete source spans.",
+  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+}

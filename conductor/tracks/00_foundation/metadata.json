@@ -1,0 +1,23 @@
+{
+  "id": "00_foundation",
+  "title": "Foundation, legal/source gates and Rust workspace",
+  "status": "not_started",
+  "requirements": [
+    "R10",
+    "R12",
+    "R13",
+    "R15"
+  ],
+  "tasks": [
+    "T00.01",
+    "T00.02",
+    "T00.03",
+    "T00.04",
+    "T00.05",
+    "T00.06",
+    "T00.07"
+  ],
+  "depends_on": [],
+  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence.",
+  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+}

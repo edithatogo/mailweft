@@ -1,0 +1,32 @@
+{
+  "id": "12_ecosystem-reuse",
+  "title": "First FOI consumer and reviewed ontology feedback",
+  "status": "not_started",
+  "requirements": [
+    "R07",
+    "R20",
+    "R21",
+    "R25",
+    "R32",
+    "R35",
+    "R38",
+    "R43",
+    "R45",
+    "R47"
+  ],
+  "tasks": [
+    "T12.01",
+    "T12.02",
+    "T12.03",
+    "T12.04",
+    "T12.05",
+    "T12.06",
+    "T12.07",
+    "T12.08"
+  ],
+  "depends_on": [
+    "03_ocel"
+  ],
+  "notes": "Planning only. Sole owned consumer is foi-process; library is its dependency, never reverse. No core gate.",
+  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+}
