@@ -9,8 +9,8 @@
   - **Verify:** Default denies source content beyond Stage 1. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
   - **Done when:** diff reviewed, actual commands and exit codes appended to `conductor/tracks/05_attachments/evidence.md`, step committed as `T05.01: <short description>`.
 
-- [ ] **T05.02 — Implement body part selection and HTML sanitisation**
-  - **Edit only:** `crates/email-ocel-semantics/src/body.rs` (and same-track tests/docs when necessary).
+- [ ] **T05.02 — Scaffold optional semantics crate; implement body part selection and HTML sanitisation**
+  - **Edit only:** `Cargo.toml crates/email-ocel-semantics/Cargo.toml crates/email-ocel-semantics/src/lib.rs crates/email-ocel-semantics/src/body.rs` (and same-track tests/docs when necessary).
   - **Action:** Implement the named capability against `docs/CONTRACT.md`; start with a failing invented/synthetic test or schema assertion, then minimal fix.
   - **Verify:** No remote images/execution, fallback charset safe. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
   - **Done when:** diff reviewed, actual commands and exit codes appended to `conductor/tracks/05_attachments/evidence.md`, step committed as `T05.02: <short description>`.

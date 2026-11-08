@@ -686,12 +686,15 @@
     {
       "id": "T05.02",
       "track": "05_attachments",
-      "title": "Implement body part selection and HTML sanitisation",
+      "title": "Scaffold optional semantics crate; implement body part selection and HTML sanitisation",
       "status": "not_started",
       "depends_on": [
         "T05.01"
       ],
       "allowed_paths": [
+        "Cargo.toml",
+        "crates/email-ocel-semantics/Cargo.toml",
+        "crates/email-ocel-semantics/src/lib.rs",
         "crates/email-ocel-semantics/src/body.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",

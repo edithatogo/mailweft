@@ -1,5 +1,7 @@
 # Requirements-to-tracks coverage
 
+| Requirement | Owning tracks |
+|---|---|
 | R01 | 01_ingestion |
 | R02 | 01_ingestion |
 | R03 | 01_ingestion |
