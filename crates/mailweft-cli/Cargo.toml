@@ -1,0 +1,12 @@
+[package]
+name = "mailweft-cli"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.98"
+license = "Apache-2.0"
+description = "Offline EML to OCEL 2.0 JSON command-line interface"
+
+[dependencies]
+mailweft-core = { path = "../mailweft-core" }
+chrono = "0.4"
+serde_json = "1"
