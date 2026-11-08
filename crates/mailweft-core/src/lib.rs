@@ -1,24 +1,22 @@
-//! Raw-email conversion interfaces. Initial red-test checkpoint, not a converter.
+//! Local-only raw email to evidence-linked OCEL 2.0.
+//! No content, model, graph, network or FOI application is required.
+mod identity;
+mod parser;
+mod projection;
+mod pipeline;
+pub use pipeline::convert;
 use chrono::{DateTime, FixedOffset};
-pub use process_mining::core::event_data::object_centric::OCEL;
 use serde::{Deserialize, Serialize};
+pub use process_mining::core::event_data::object_centric::OCEL;
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
-pub enum EventView {
-    Observed,
-    HeaderAsserted,
-    Both,
-}
+pub enum EventView { Observed, HeaderAsserted, Both }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Permission {
-    Synthetic,
-    AuthorisedLocal,
-    Unknown,
-}
+pub enum Permission { Synthetic, AuthorisedLocal, Unknown }
 
-/// Caller-supplied bytes and explicit provenance; deliberately not Debug/Serialize.
+/// Caller-supplied bytes and provenance. Never Debug or Serialize raw content.
 pub struct RawEmail {
     pub bytes: Vec<u8>,
     pub source_ref: String,
@@ -26,7 +24,7 @@ pub struct RawEmail {
     pub permission: Permission,
 }
 
-/// Secret remains private and is never serialized or formatted.
+/// IDs are HMAC-scoped pseudonyms, not anonymous records. Keep the key private.
 pub struct Config {
     pub scope: String,
     key: [u8; 32],
@@ -39,41 +37,25 @@ pub struct Config {
 }
 impl Config {
     pub fn new(scope: String, key: [u8; 32], view: EventView) -> Self {
-        Self {
-            scope,
-            key,
-            view,
-            max_message_bytes: 8 * 1024 * 1024,
-            max_total_bytes: 64 * 1024 * 1024,
-            max_messages: 1024,
-            max_parts: 1024,
-            max_depth: 16,
-        }
+        Self { scope, key, view, max_message_bytes: 8 * 1024 * 1024,
+            max_total_bytes: 64 * 1024 * 1024, max_messages: 1024,
+            max_parts: 1024, max_depth: 16 }
     }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(deny_unknown_fields)]
-pub struct Party {
-    pub party_id: String,
-    pub role: String,
-    pub identity_state: String,
-}
+pub struct Party { pub party_id: String, pub role: String, pub identity_state: String }
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(deny_unknown_fields)]
 pub struct Attachment {
-    pub part_id: String,
-    pub mime_type: String,
-    pub size_bytes: u64,
-    pub filename_hash: Option<String>,
-    pub content_sha256: Option<String>,
+    pub part_id: String, pub mime_type: String, pub size_bytes: u64,
+    pub filename_hash: Option<String>, pub content_sha256: Option<String>,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(deny_unknown_fields)]
 pub struct ThreadEvidence {
-    pub related_message_id: String,
-    pub basis: String,
-    pub relationship_state: String,
+    pub related_message_id: String, pub basis: String, pub relationship_state: String,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(deny_unknown_fields)]
@@ -97,39 +79,18 @@ pub struct ObservedMessage {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(deny_unknown_fields)]
 pub struct Receipt {
-    pub schema_version: String,
-    pub run_id: String,
-    pub source_id: String,
-    pub source_version: String,
-    pub source_rights_status: String,
-    pub input_count: usize,
-    pub parsed_count: usize,
-    pub rejected_count: usize,
-    pub duplicate_copy_count: usize,
-    pub output_count: usize,
-    pub completeness: String,
-    pub config_sha256: String,
-    pub producer_version: String,
-    pub result_hash: String,
-    pub notes: Vec<String>,
+    pub schema_version: String, pub run_id: String, pub source_id: String,
+    pub source_version: String, pub source_rights_status: String,
+    pub input_count: usize, pub parsed_count: usize, pub rejected_count: usize,
+    pub duplicate_copy_count: usize, pub output_count: usize,
+    pub completeness: String, pub config_sha256: String,
+    pub producer_version: String, pub result_hash: String, pub notes: Vec<String>,
 }
 #[derive(Debug, Serialize)]
-pub struct Conversion {
-    pub ocel: OCEL,
-    pub messages: Vec<ObservedMessage>,
-    pub receipt: Receipt,
-}
+pub struct Conversion { pub ocel: OCEL, pub messages: Vec<ObservedMessage>, pub receipt: Receipt }
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Error(pub &'static str);
 impl std::fmt::Display for Error {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(self.0)
-    }
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.0) }
 }
 impl std::error::Error for Error {}
-
-/// Frozen interface for the first red/green vertical slice.
-pub fn convert(_inputs: &[RawEmail], config: &Config) -> Result<Conversion, Error> {
-    let _ = config.key;
-    Err(Error("NOT_IMPLEMENTED"))
-}

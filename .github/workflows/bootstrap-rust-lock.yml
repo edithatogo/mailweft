@@ -1,4 +1,4 @@
-name: Bootstrap reviewed Rust lock
+name: Qualify feature-branch Rust formatting
 on:
   push:
     branches: ['feat/raw-email-ocel']
@@ -6,7 +6,7 @@ on:
 permissions:
   contents: write
 jobs:
-  lock:
+  format:
     if: github.repository == 'edithatogo/mailweft' && github.ref == 'refs/heads/feat/raw-email-ocel'
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -14,19 +14,19 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           fetch-depth: 0
-      - name: Resolve exact dependencies and preserve lock on isolated branch
+      - name: Format isolated branch only
         shell: bash
         run: |
           set -euo pipefail
           rustup toolchain install 1.99.1 --profile minimal --component rustfmt --component clippy
-          test ! -f Cargo.lock
-          cargo generate-lockfile
           cargo fmt --all
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add Cargo.lock crates
-          git commit -m 'build: lock initial qualified Rust graph and format red-test checkpoint'
-          test "$(git ls-remote origin refs/heads/feat/raw-email-ocel | cut -f1)" = "$GITHUB_SHA"
-          git push origin HEAD:refs/heads/feat/raw-email-ocel
-      - name: Run real red tests (expected assertion failures before implementation)
+          if ! git diff --quiet -- crates; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add crates
+            git commit -m 'style: format native converter checkpoint'
+            test "$(git ls-remote origin refs/heads/feat/raw-email-ocel | cut -f1)" = "$GITHUB_SHA"
+            git push origin HEAD:refs/heads/feat/raw-email-ocel
+          fi
+      - name: Verify current red-green checkpoint
         run: cargo test --workspace --all-targets --locked
