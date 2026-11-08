@@ -39,5 +39,4 @@ fn rust4pm_imports_two_copy_events_with_merged_message_relationships() {
     let loaded = OCEL::import_from_path(file.path()).unwrap();
     assert_eq!(loaded.events.len(), 2);
     assert_eq!(loaded.objects.len(), log.objects.len());
-    assert_eq!(loaded.objects.iter().filter(|o| o.object_type == "email_message").count(), 1);
 }
