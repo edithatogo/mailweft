@@ -15,14 +15,16 @@ jobs:
           persist-credentials: true
       - run: rustup toolchain install stable --profile minimal --component rustfmt
       - run: cargo +stable fmt --all
+      - name: Pin dependency resolution
+        run: cargo +stable generate-lockfile
       - name: Commit only Rust formatting changes
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add crates/
+          git add crates/ Cargo.lock
           if ! git diff --cached --quiet; then
             git commit -m 'style: apply rustfmt to initial email-OCEL implementation'
             git push origin HEAD:feat/rust-eml-ocel-slice
           fi
 
-# Second one-time formatting pass for Rust4PM interop test.
+# Final one-time dependency lock generation before removal.
