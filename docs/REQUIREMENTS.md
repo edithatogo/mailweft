@@ -61,3 +61,14 @@ Priorities: **MUST** for Stage 1 release, **SHOULD** for next increment, **OPTIO
 - Quality: Rust `fmt`, `clippy -D warnings`, tests, cargo audit/deny and fixture reproducibility; code coverage target to be qualified (do not invent thresholds from an empty project).
 
 See [structural NLP design and benchmark bibliography](STRUCTURAL-EMAIL-NLP.md) for R27–R31.
+
+## Mailweft product, consumer and retrieval refinements
+
+| ID | Priority | Requirement and unambiguous acceptance |
+|---|---|---|
+| R48 | MUST | Product remains a generic Rust raw-email-to-OCEL converter. Enron is verification/example only; core release works offline on non-Enron fictional domains without any corpus access. |
+| R49 | MUST | No existing foi-process output is a validation reference, oracle, teacher or behavioral-parity target. Source-independent annotations and synthetic expectations govern acceptance; old code is diagnostic-only. |
+| R50 | OPTIONAL | First consumer depends on Mailweft, never the reverse; capture/archive ownership remains fyi-cli/fyi-archive or a verified successor. Preserve raw-versus-rendered fidelity and explicit handover evidence. |
+| R51 | OPTIONAL | Validated FOI results emit evidence-linked FOI-O contribution packets with base version, positive/negative examples, uncertainty and review state. No automatic ontology or legal-profile promotion. |
+| R52 | OPTIONAL | GraphRAG supports bounded source retrieval and optional generation only; default conversion works without it and Stage 1 output remains unchanged under optional processing or failure. |
+| R53 | OPTIONAL | Graph retrieval enforces scope/as-of boundaries before traversal and output, propagates retractions/access changes through caches, distinguishes dependent evidence and measures unsupported answers at matched coverage. |

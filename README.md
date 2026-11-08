@@ -1,66 +1,43 @@
-# email-ocel
+# Mailweft
 
-Independent Rust-first library for reconstructing **OCEL 2.0 communication events** from raw RFC 5322/MIME email, with separately versioned, optional semantic enrichment from bodies and attachments. Consumers can use Rust4PM, PM4Py or other OCEL-compatible engines; CareOps is **not** a dependency.
+**An email-to-OCEL converter written in Rust.**
 
-**Status:** specifications and executable Conductor planning scaffold only. No Rust implementation, test suite execution, corpus download, Conductor extension runtime installation or remote GitHub repository is claimed.
+Mailweft is a standalone, corpus-neutral library and CLI design: raw RFC 5322/MIME email -> typed, evidence-linked OCEL 2.0 communication logs. Optional structural NLP, semantic enrichment and GraphRAG build on that output without replacing the converter or rewriting its observations.
 
-## Non-negotiable design
-1. Raw email is the authoritative evidence source; processed Enron datasets are **external validation references** only, not training labels or inputs to event construction.
-2. Stage 1 emits evidence-grounded communication events and object links deterministically. A header date is a **claimed time**, not independent proof of delivery/sending. Source observation time is separate.
-3. Stage 2 extracts attributed assertions, candidate business events and object links with temporal, provenance, negation and uncertainty metadata; it can never overwrite Stage 1 observations.
-4. OCEL 2.0 is the portable interchange contract. A richer evidence sidecar stores fields that OCEL does not standardise.
-5. Core remains Rust-only, local/offline, reproducible, Apache-2.0. NLP, LLMs, attachment converters, cloud connectors, graphs, Python bindings, PM4Py and CareOps integration are optional.
-6. Do not commit actual email datasets, message contents, credentials, embeddings or operational data.
+**Status:** contracts and granular Conductor planning scaffold. No Rust application, extraction benchmark, model evaluation or live FOI migration has been implemented by this publication. Planning tests are not runtime validation.
 
-## Initial deliverables
-- [Product contract](docs/CONTRACT.md)
-- [Requirements](docs/REQUIREMENTS.md)
-- [Architecture and design](docs/DESIGN.md)
-- [Dataset acquisition and reconciliation](docs/DATASETS.md)
-- [Evaluation protocol](docs/VALIDATION.md)
-- [Agent instructions](AGENTS.md) and [Conductor tracks](conductor/tracks.md)
-- Machine-readable contracts under [`contracts/v1`](contracts/v1/)
+## Core contract
+- Local EML/maildir input; no processed-data prerequisite. Preserve source hashes, actual participant roles, claimed versus observed times, duplicate/copy identity and completeness.
+- Native OCEL 2.0 JSON with typed attributes, event/object relationship qualifiers and object histories; report every lossy or unsupported mapping.
+- Offline Rust-only production core; no required Python, LLM, graph database, cloud, UI, FOI project or Enron corpus.
+- Enron is a **canonical verification and example dataset**, not the subject or schema of Mailweft. Dataset-specific recipes stay outside the core; no real email data is committed.
+- Original source stays immutable. Optional interpretations retain evidence, attribution, uncertainty, correction history and review state.
 
-## Conductor setup
-The upstream Apache-2.0 Conductor source is registered as a **Git submodule** at `.agents/plugins/conductor`, pinned to tag `conductor-v0.4.1`, commit `7a5c560a4fdf5297be58594cc37527eb12790272` (verified upstream 2026-11-08). Initialize in a Git-connected checkout:
+## First consumer and ownership
+`foi-process` will depend on Mailweft. Its existing unvalidated output is **not** a reference or correctness oracle. Independently adjudicated source evidence and synthetic fixtures govern migration.
+
+`fyi-cli` retains acquisition/capture; the `fyi-archive` boundary retains archival manifests/provenance/distribution (or a verified successor). `foi-process` maps generic results into a pinned FOI-O profile and sends evidence-linked ontology improvement candidates to `foi-o`. No automatic ontology changes or legal conclusions are inferred. See [FOI boundaries and handover ambiguity](docs/FOI-BOUNDARIES.md).
+
+## Start here
+- [Product scope](docs/PRODUCT-SCOPE.md), [contract](docs/CONTRACT.md), [requirements](docs/REQUIREMENTS.md), [design](docs/DESIGN.md)
+- [Conductor index](conductor/index.md), [tracks](conductor/tracks.md), [task manifest](conductor/task-manifest.json), [execution order](docs/EXECUTION-ORDER.md)
+- [GraphRAG design](docs/GRAPHRAG.md), [FOI and error-injection protocol](docs/FOI-SCOPE-AND-ROBUSTNESS.md)
+- [Dataset verification](docs/DATASETS.md), [validation](docs/VALIDATION.md), [planning status](docs/BUILD_STATUS.md)
+
+## Conductor
+Gemini Conductor is a real Git submodule at `.agents/plugins/conductor`, pinned to commit `7a5c560a4fdf5297be58594cc37527eb12790272` (`conductor-v0.4.1`). Project context and task plans are already populated; do not run setup that overwrites them.
 
 ```sh
-git submodule update --init --recursive
-# Optionally register Conductor as a Gemini CLI extension:
-gemini extensions install https://github.com/gemini-cli-extensions/conductor --ref conductor-v0.4.1
+git clone --recurse-submodules https://github.com/edithatogo/mailweft.git
+cd mailweft
+python3 scripts/validate_scaffold.py
+python3 -m unittest discover -s scripts -p 'test_*.py'
 ```
 
-The workspace's `conductor/` files are pre-populated for noninteractive operation and are intentionally not generated by an LLM at runtime. If using Gemini CLI interactive plugin setup, inspect existing files first and **do not overwrite them**. Commands differ between plugin hosts; upstream documents `/conductor:conductor-setup`, `/conductor:conductor-new-track`, `/conductor:conductor-implement`.
+Python is only an initial planning-validation helper, not the proposed application runtime. Registering a host-specific Conductor extension is a separate optional action; the submodule does not prove it is installed in the user's agent host. See [naming and submodule details](docs/NAME-MIGRATION.md).
 
-## Reproducibility
-No language packages have yet been chosen or locked. Agent task T00.04 creates the Rust workspace and pins dependencies after qualification. For now, `python3 scripts/validate_scaffold.py` validates JSON contract documents and Conductor task cross-links using only the Python standard library. Python is a documentation-only validation helper, not an application dependency.
+## Agent execution
+Read `AGENTS.md` and the single eligible task card; implement only that task, write the specified failing tests first, record real exit codes, and leave unavailable execution blocked. The core lane is independently releasable; dataset rights, human annotation, research, graphs and downstream consumers are not core release prerequisites.
 
-## Upstream attribution and datasets
-- Gemini Conductor: https://github.com/gemini-cli-extensions/conductor (Apache-2.0)
-- Rust4PM: https://github.com/aarkue/rust4pm (MIT OR Apache-2.0)
-- Stalwart mail-parser: https://github.com/stalwartlabs/mail-parser (MIT OR Apache-2.0)
-- mail-threading: https://github.com/planetaryescape/mail-threading (MIT OR Apache-2.0; independently qualify)
-- CMU 2015 Enron corpus: https://www.cs.cmu.edu/~enron/ (no attachments; verify redistribution rights)
-- EDRM historical Enron corpus: https://www.edrm.net/ (do not redistribute raw messages; verify approved source and rights)
-- Published Enron OCEL reference: https://zenodo.org/records/21989732 (validate exact version and rights before download/use)
-- jamtho/enron-emails: https://github.com/jamtho/enron-emails (behavioural reference only; explicit software licence not verified; no translated source)
-
-This repository's source does not contain or redistribute any Enron email data.
-
-## Stage 1.5: structural email and participant evidence
-
-Before task/decision NLP, the library will identify authored text, greetings, sign-offs, signatures, reply/forward history, inline headers and disclaimers as non-destructive spans, then infer in-text addressees separately from RFC header roles. See [structural NLP specification](docs/STRUCTURAL-EMAIL-NLP.md) and [Conductor track 05b](conductor/tracks/05b_email-structure/plan.md). No implementation is claimed.
-
-## Refinement 0.2: patterns, evidence and frontier evaluation
-
-- [Extension design](docs/FRONTIER-DESIGN.md)
-- [Research comparison and metamorphic evaluation](docs/FRONTIER-EVALUATION.md)
-- [Repository reuse and limitations](docs/REPOSITORY-REUSE.md)
-- [Execution order](docs/EXECUTION-ORDER.md)
-
-The original raw-email-to-OCEL 2.0 core is preserved. New types are additive and advanced lanes remain optional. Planning now includes 47 requirements, 14 tracks and 108 tasks (30 new detailed task cards). No Rust functionality has been implemented by this update.
-
-[Refinement summary](docs/REFINEMENT-SUMMARY.md) · [Verified planning status](docs/BUILD_STATUS.md).
-
-## FOI-only scope and robustness refinement
-The sole active owned consumer is `foi-process`, which will depend on this generic library. Other owned-repository integrations are removed from active tasks. See [the superseding source-fidelity, baseline and error-impact protocol](docs/FOI-SCOPE-AND-ROBUSTNESS.md). Repository name `mailweft` is proposed; existing package paths/schema IDs are unchanged until the owner selects the name. No runtime benchmark or downstream migration is claimed.
+## Licence and references
+Original work: Apache-2.0. Upstream dependencies and datasets retain separate licences and rights. `mail-parser`, `mail-threading` and Rust4PM `process_mining` are candidates pending exact-version qualification. No upstream unlicensed implementation or email corpus is bundled. Existing version-1 schema identifiers retain the earlier email-ocel namespace as stable aliases.

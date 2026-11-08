@@ -1,50 +1,91 @@
-# FOI-only consumer qualification and migration implementation plan
+# First FOI consumer and reviewed ontology feedback — executable task plan
 
-**Goal:** bounded tasks in `spec.md`. **Architecture:** preserve independent raw-email OCEL core.
-**Tech stack:** Rust application; development-only document checkers. **Status:** all runtime tasks not started.
-**Spec:** `spec.md`, `docs/FOI-SCOPE-AND-ROBUSTNESS.md`.
+Read the track spec, AGENTS.md and the task manifest. Each unchecked task is unimplemented. Dependencies are exact task IDs, not whole-track gates.
 
-## Global constraints and review focus
-Only foi-process is an active owned consumer. Do not confuse raw and rendered sources, inferred and observed events, source status and independent gold labels, packet validation and executed migration, or absent fields and known-empty data. Exact task prerequisites are authoritative; optional integration never gates core release.
+## [ ] **T12.01 — Document independent FOI acceptance and reproduce diagnostic defects**
 
-- [ ] **T12.01 — Reproduce FOI defects and freeze the consumer boundary**
-  - Depends on: T03.08. Lane: `integration`.
-  - Files: `docs/integrations/foi-defects.md`, `scripts/check_task_t12_01.py`.
-  - Acceptance: A fixture containing typed event values and time-varying object values is marked loss when the inspected adapter drops attributes.; A suspected bug without an executable reproduction remains suspected; no whole-system failure or corrected-runtime claim is allowed.
-  - Verification: `python3 scripts/check_task_t12_01.py && python3 scripts/validate_scaffold.py`.
-  - Interface and oracles: [task card](../../tasks/T12.01.md).
+- Lane: `integration`; dependencies: T03.08.
+- Requirements: R07, R49.
+- Allowed paths: `docs/integrations/foi-independent-acceptance.json`, `scripts/check_task_t12_01.py`.
+- Action: Freeze source-based expected results before inspecting pipeline predictions. Reproduce individual suspected legacy defects only for diagnosis; never use legacy output as an expected-output baseline.
+- Acceptance: Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.
+- Verification: `python3 scripts/check_task_t12_01.py && python3 scripts/validate_scaffold.py`.
+- Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`.
+- Detailed card: [`T12.01`](../../tasks/T12.01.md).
 
-- [ ] **T12.02 — Audit FYI raw-message availability and source fidelity**
-  - Depends on: T12.01. Lane: `integration`.
-  - Files: `docs/integrations/fyi-source-fidelity.md`, `scripts/check_task_t12_02.py`.
-  - Acceptance: An HTML page cannot be labelled raw_rfc5322 or assigned fabricated Bcc/transport headers.; Unavailable Bcc and missing attachment bytes remain unavailable rather than a known-empty population.
-  - Verification: `python3 scripts/check_task_t12_02.py && python3 scripts/validate_scaffold.py`.
-  - Interface and oracles: [task card](../../tasks/T12.02.md).
+## [ ] **T12.02 — Verify acquisition/archive ownership and actual FYI source fidelity**
 
-- [ ] **T12.03 — Specify the one-way FOI adapter and lossless projection**
-  - Depends on: T12.01, T12.02, T10.01. Lane: `integration`.
-  - Files: `docs/integrations/foi-adapter-contract.md`, `scripts/check_task_t12_03.py`.
-  - Acceptance: Dependency graph is foi-process -> email library; no FOI domain crate is imported into core.; Required qualifier/attribute/history loss fails admission rather than silently emitting a reduced log.
-  - Verification: `python3 scripts/check_task_t12_03.py && python3 scripts/validate_scaffold.py`.
-  - Interface and oracles: [task card](../../tasks/T12.03.md).
+- Lane: `integration`; dependencies: T12.01.
+- Requirements: R20, R49, R50.
+- Allowed paths: `docs/integrations/foi-source-boundary.json`, `scripts/check_task_t12_02.py`.
+- Action: Inventory exact fyi-cli/fyi-archive producer versions, manifests and the documented handover conflict; classify raw RFC, export, rendered page and attachment separately. Do not acquire source or invent headers.
+- Acceptance: Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.
+- Verification: `python3 scripts/check_task_t12_02.py && python3 scripts/validate_scaffold.py`.
+- Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`.
+- Detailed card: [`T12.02`](../../tasks/T12.02.md).
 
-- [ ] **T12.04 — Freeze independently adjudicated FOI shadow comparisons**
-  - Depends on: T12.03, T11.01. Lane: `integration`.
-  - Files: `docs/integrations/foi-shadow-protocol.md`, `scripts/check_task_t12_04.py`.
-  - Acceptance: A disagreement with existing output is not automatically a new-library regression.; A platform status used as input cannot be reused as independent outcome truth; label dependencies are explicit.
-  - Verification: `python3 scripts/check_task_t12_04.py && python3 scripts/validate_scaffold.py`.
-  - Interface and oracles: [task card](../../tasks/T12.04.md).
+## [ ] **T12.03 — Specify loss-complete stage-one Mailweft consumer mapping**
 
-- [ ] **T12.05 — Prepare reversible consumer migration and replay acceptance**
-  - Depends on: T12.03, T12.04, T10.04. Lane: `integration`.
-  - Files: `docs/integrations/foi-migration-packet.md`, `scripts/check_task_t12_05.py`.
-  - Acceptance: The packet requires repeat/replay and correction tests that retain source IDs without duplicated independent events.; Missing consumer execution/rollback evidence leaves migration pending; no remote edit or production cutover is implied.
-  - Verification: `python3 scripts/check_task_t12_05.py && python3 scripts/validate_scaffold.py`.
-  - Interface and oracles: [task card](../../tasks/T12.05.md).
+- Lane: `integration`; dependencies: T12.01, T12.02, T03.08.
+- Requirements: R07, R25, R50.
+- Allowed paths: `docs/integrations/foi-mailweft-adapter.json`, `scripts/check_task_t12_03.py`.
+- Action: Define the one-way foi-process -> Mailweft invocation and full OCEL/evidence mapping; keep FOI-O terms in a pinned consumer profile. Stage-one integration requires no NLP or GraphRAG.
+- Acceptance: Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.
+- Verification: `python3 scripts/check_task_t12_03.py && python3 scripts/validate_scaffold.py`.
+- Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`.
+- Detailed card: [`T12.03`](../../tasks/T12.03.md).
 
-- [ ] **T12.06 — Qualify FOI cutover without coupling core release**
-  - Depends on: T12.01, T12.02, T12.03, T12.04, T12.05. Lane: `integration`.
-  - Files: `docs/integrations/foi-acceptance.md`, `scripts/check_task_t12_06.py`.
-  - Acceptance: Absent required real test receipts yields defer, not acceptance.; Core task closure excludes FOI integration and real-data dependencies; no unrelated owned repo enters the active scope.
-  - Verification: `python3 scripts/check_task_t12_06.py && python3 scripts/validate_scaffold.py`.
-  - Interface and oracles: [task card](../../tasks/T12.06.md).
+## [ ] **T12.04 — Define independently adjudicated FOI holdout acceptance**
+
+- Lane: `integration`; dependencies: T12.03, T04.01.
+- Requirements: R23, R40, R49, R50.
+- Allowed paths: `docs/integrations/foi-holdout.json`, `scripts/check_task_t12_04.py`.
+- Action: Prepare source-first blinded annotation and heldout whole-request partitions. Platform status, legacy output and model output may not supply independent gold. Evaluate metadata-only, correspondence-only and combined evidence arms.
+- Acceptance: Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.
+- Verification: `python3 scripts/check_task_t12_04.py && python3 scripts/validate_scaffold.py`.
+- Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`.
+- Detailed card: [`T12.04`](../../tasks/T12.04.md).
+
+## [ ] **T12.05 — Prepare validated consumer migration and safe recovery**
+
+- Lane: `integration`; dependencies: T12.03, T12.04.
+- Requirements: R38, R43, R49, R50.
+- Allowed paths: `docs/integrations/foi-migration.json`, `scripts/check_task_t12_05.py`.
+- Action: Specify cutover evidence and replay with independent expectations. Recovery must disable/quarantine analysis or use a verified snapshot; the unvalidated old pipeline is not a safe rollback reference.
+- Acceptance: Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.
+- Verification: `python3 scripts/check_task_t12_05.py && python3 scripts/validate_scaffold.py`.
+- Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`.
+- Detailed card: [`T12.05`](../../tasks/T12.05.md).
+
+## [ ] **T12.06 — Qualify FOI consumer handoff independently of core release**
+
+- Lane: `integration`; dependencies: T12.01, T12.02, T12.03, T12.04, T12.05.
+- Requirements: R25, R47, R49, R50.
+- Allowed paths: `docs/integrations/foi-cutover.json`, `scripts/check_task_t12_06.py`.
+- Action: Produce the consumer acceptance packet and distinguish not_run, blocked and observed checks. Remote sibling changes and runtime qualification remain separately executed actions, not automatic from a document.
+- Acceptance: Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.
+- Verification: `python3 scripts/check_task_t12_06.py && python3 scripts/validate_scaffold.py`.
+- Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`.
+- Detailed card: [`T12.06`](../../tasks/T12.06.md).
+
+## [ ] **T12.07 — Define evidence-linked FOI-O contribution packets**
+
+- Lane: `integration`; dependencies: T12.04.
+- Requirements: R49, R50, R51.
+- Allowed paths: `docs/integrations/foi-o-contribution.json`, `scripts/check_task_t12_07.py`.
+- Action: Specify consumer-owned ontology candidates with exact base profile, evidence state, sanitized references, counterexamples, proposed competency tests and review status. Do not edit the ontology automatically.
+- Acceptance: Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.
+- Verification: `python3 scripts/check_task_t12_07.py && python3 scripts/validate_scaffold.py`.
+- Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`.
+- Detailed card: [`T12.07`](../../tasks/T12.07.md).
+
+## [ ] **T12.08 — Specify versioned FOI-O feedback and independent re-evaluation**
+
+- Lane: `integration`; dependencies: T12.07.
+- Requirements: R49, R51.
+- Allowed paths: `docs/integrations/foi-o-feedback.json`, `scripts/check_task_t12_08.py`.
+- Action: Define accepted/rejected/deferred feedback receipts and next-version regression/heldout checks. Prevent the data or generated labels used to propose an ontology change from also proving its validity.
+- Acceptance: Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.
+- Verification: `python3 scripts/check_task_t12_08.py && python3 scripts/validate_scaffold.py`.
+- Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`.
+- Detailed card: [`T12.08`](../../tasks/T12.08.md).

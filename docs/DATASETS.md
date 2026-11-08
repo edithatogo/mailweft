@@ -1,3 +1,5 @@
+> **Current scope:** Enron is canonical verification/example data only, not the product domain or input prerequisite. The existing foi-process pipeline is unvalidated and cannot supply expected labels, a reference baseline or training targets. Use independent evidence and synthetic gold. See [PRODUCT-SCOPE](PRODUCT-SCOPE.md) and [FOI-BOUNDARIES](FOI-BOUNDARIES.md).
+
 # Raw corpora and validation datasets — controlled acquisition
 
 ## Source decision

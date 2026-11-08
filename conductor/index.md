@@ -1,21 +1,14 @@
-# Conductor — email-ocel
+# Conductor — Mailweft
 
-This is a Conductor-compatible, noninteractive repository context. It was prepared before running the interactive Conductor plugin to let a basic coding model implement tasks without inventing requirements.
+Core outcome: **an email-to-OCEL converter written in Rust**. Enron is canonical verification/example data only. foi-process is the first consumer and its old outputs are not validation references.
 
-Read in order: [product](product.md), [guidelines](product-guidelines.md), [tech stack](tech-stack.md), [workflow](workflow.md), [tracks](tracks.md), then exactly one track's spec and plan.
+Read [product](product.md), [scope contract](scope-contract.json), [guidelines](product-guidelines.md), [tech stack](tech-stack.md), [workflow](workflow.md), [execution order](../docs/EXECUTION-ORDER.md), then exactly one eligible task from [tracks](tracks.md).
 
-**Plugin:** `.agents/plugins/conductor` is a real Git submodule entry pinned to verified upstream `conductor-v0.4.1` commit `7a5c560a4fdf5297be58594cc37527eb12790272`. Clone/update on a networked machine using `git submodule update --init --recursive`. The project-local setup files are already populated. Do not run automated setup over them without review.
+Current planning: **53 requirements, 15 tracks, 116 tasks**. No Rust application or graph/model benchmark is implemented. All application tasks remain not_started. First task: **T00.01** (qualify current upstream dependencies and licences). T00.04 later creates the real Rust workspace; do not claim Cargo checks ran before it exists.
 
-All tracks start **not implemented**. This is a delivery plan and contracts scaffold, not a working parser or process-mining engine. Execution is sequential by dependency unless plans explicitly permit parallel work.
+- [Product scope](../docs/PRODUCT-SCOPE.md)
+- [FOI boundaries and ontology feedback](../docs/FOI-BOUNDARIES.md)
+- [Optional GraphRAG](../docs/GRAPHRAG.md)
+- [Robustness and error injection](../docs/FOI-SCOPE-AND-ROBUSTNESS.md)
 
-## Refinement 0.2: patterns, evidence and frontier evaluation
-
-- [Extension design](../docs/FRONTIER-DESIGN.md)
-- [Research comparison and metamorphic evaluation](../docs/FRONTIER-EVALUATION.md)
-- [Repository reuse and limitations](../docs/REPOSITORY-REUSE.md)
-- [Execution order](../docs/EXECUTION-ORDER.md)
-
-The original raw-email-to-OCEL 2.0 core is preserved. New types are additive and advanced lanes remain optional. Planning now includes 47 requirements, 14 tracks and 108 tasks (30 new detailed task cards). No Rust functionality has been implemented by this update.
-
-## FOI-only scope and robustness refinement
-The sole active owned consumer is `foi-process`, which will depend on this generic library. Other owned-repository integrations are removed from active tasks. See [the superseding source-fidelity, baseline and error-impact protocol](../docs/FOI-SCOPE-AND-ROBUSTNESS.md). Repository name `mailweft` is proposed; existing package paths/schema IDs are unchanged until the owner selects the name. No runtime benchmark or downstream migration is claimed.
+Conductor is a real gitlink at `.agents/plugins/conductor`, pinned to `7a5c560a4fdf5297be58594cc37527eb12790272`. Project setup is complete as repository context. Host extension registration and upstream plugin execution are separate and unclaimed. Never rerun setup over the supplied context without review.

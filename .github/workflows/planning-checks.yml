@@ -1,0 +1,37 @@
+name: Planning and contract checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: planning-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  planning:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out exact source and pinned Conductor
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5, resolved 2026-11-08
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Verify Conductor gitlink and checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected=7a5c560a4fdf5297be58594cc37527eb12790272
+          test "$(git ls-tree HEAD .agents/plugins/conductor | awk '{print $1}')" = 160000
+          test "$(git ls-tree HEAD .agents/plugins/conductor | awk '{print $3}')" = "$expected"
+          test "$(git -C .agents/plugins/conductor rev-parse HEAD)" = "$expected"
+      - name: Install pinned documentation-only validators
+        run: python3 -m pip install --disable-pip-version-check -r requirements-planning.txt
+      - name: Check plans, dependency DAG and scope invariants
+        run: |
+          python3 scripts/validate_scaffold.py
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+          python3 scripts/validate_contract_examples.py
+      - name: State evidence boundary
+        run: echo 'Planning checks passed. No Rust converter, NLP, FOI migration or GraphRAG runtime is certified.'

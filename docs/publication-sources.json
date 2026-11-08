@@ -1,0 +1,26 @@
+{
+  "review_date": "2026-11-08",
+  "sources": [
+    {
+      "repository": "edithatogo/fyi-cli",
+      "path": "README.md",
+      "blob_sha": "632df00f165bd1c4fed95b05de68440f49f99b9e"
+    },
+    {
+      "repository": "edithatogo/fyi-archive",
+      "path": "README.md",
+      "blob_sha": "9afd72e55eca773b7fa06cc2fe6c81541e36cdfa"
+    },
+    {
+      "repository": "edithatogo/foi-o",
+      "path": "README.md",
+      "blob_sha": "75360a339fee1377b8606e70c1de9d7b07b84128"
+    }
+  ],
+  "graphrag_sources": [
+    "https://microsoft.github.io/graphrag/index/overview/",
+    "https://microsoft.github.io/graphrag/query/overview/",
+    "https://microsoft.github.io/graphrag/index/architecture/"
+  ],
+  "limitations": "Read-only documentation review, not operational or model qualification; archive handover unresolved."
+}

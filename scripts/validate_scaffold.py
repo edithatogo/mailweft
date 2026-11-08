@@ -47,6 +47,32 @@ def validate(root: Path) -> tuple[list[str], dict[str, int]]:
 
     for name in REQUIRED:
         path_exists(name, "required document")
+    expected_scope = {
+        "product": "mailweft",
+        "core_outcome": "rust_email_to_ocel_converter",
+        "core_input": "raw_rfc5322_mime",
+        "enron_role": "verification_and_example_only",
+        "legacy_foi_is_oracle": False,
+        "first_consumer": "foi-process",
+        "dependency_direction": "foi-process -> mailweft",
+        "acquisition_owner": "fyi-cli",
+        "archive_boundary": "fyi-archive manifests or explicitly verified successor",
+        "ontology_owner": "foi-o",
+        "ontology_feedback": "evidence_linked_candidates_not_automatic_promotion",
+        "graphrag_default_enabled": False,
+        "core_requires_graph_or_model": False,
+    }
+    scope = load(root / "conductor/scope-contract.json")
+    if not isinstance(scope, dict):
+        errors.append("scope contract must be an object")
+    else:
+        for key, expected in expected_scope.items():
+            value = scope.get(key)
+            if type(value) is not type(expected) or value != expected:
+                errors.append(f"scope contract violation: {key}")
+        if set(scope) != set(expected_scope):
+            errors.append("scope contract fields must match the approved profile")
+
     requirements_text = (root / "docs/REQUIREMENTS.md").read_text(encoding="utf-8") if (root / "docs/REQUIREMENTS.md").is_file() else ""
     requirement_ids = re.findall(r"^\|\s*(R\d+)\s*\|", requirements_text, re.MULTILINE)
     if not requirement_ids or len(set(requirement_ids)) != len(requirement_ids):

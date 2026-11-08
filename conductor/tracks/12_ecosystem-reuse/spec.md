@@ -1,7 +1,6 @@
-# FOI-only consumer qualification and migration specification
+# First-consumer integration and FOI-O feedback specification
 
-**Goal:** prepare a verified, reversible integration into `foi-process`, without importing that application into the core.
-**Architecture:** consumer -> generic email library -> upstream crates. Raw MIME and FYI web/export evidence remain distinguishable.
-**Requirements:** R07, R20, R21, R25, R32, R35, R38, R43, R45, R47.
-**Design:** `docs/FOI-SCOPE-AND-ROBUSTNESS.md`, `docs/REPOSITORY-REUSE.md`, `docs/CONTRACT.md`.
-**Acceptance:** each packet has its checker and honest execution statuses. Packet completion does not establish live runtime qualification or legal correctness. No other owned repository is active scope; historical metadata is not an implementation instruction.
+**Goal:** qualify foi-process as the first consumer of Mailweft using independent source validation, with evidence-linked contributions to FOI-O.
+**Design:** docs/PRODUCT-SCOPE.md, docs/FOI-BOUNDARIES.md, docs/FOI-SCOPE-AND-ROBUSTNESS.md.
+**Boundary:** fyi-cli captures; the verified archival boundary preserves/manifests; Mailweft converts; foi-process interprets the domain; foi-o reviews ontology changes. Resolve the documented handover ambiguity before operational integration.
+**Acceptance:** no legacy-pipeline oracle or parity target, loss-complete mappings, raw-versus-rendered fidelity, explicit unexecuted runtime gates and candidate-only ontology promotion. Only this FOI consumer is active; no reverse core dependency.

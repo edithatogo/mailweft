@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "execution_rule": "One eligible task per invocation; prerequisites use exact task IDs. Core release closure excludes corpus/enrichment/research/integration lanes.",
   "tasks": [
     {
@@ -87,7 +87,7 @@
         "crates/*"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
-      "acceptance": "cargo metadata --no-deps succeeds; avoid unused crates. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
+      "acceptance": "cargo metadata --no-deps succeeds; avoid unused crates. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED. Planned package root is crates/mailweft; no Enron or FOI-specific default is allowed.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
       "commit": "T00.04: <concise result>",
@@ -182,7 +182,7 @@
         "T00.03"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/source.rs"
+        "crates/mailweft-core/src/source.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Hash byte-exact source content; source only local. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -207,7 +207,7 @@
         "T01.01"
       ],
       "allowed_paths": [
-        "crates/email-ocel-cli/src/walk.rs"
+        "crates/mailweft-cli/src/walk.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "No traversal outside root; reproducible ordering. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -232,7 +232,7 @@
         "T01.02"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/parser.rs"
+        "crates/mailweft-core/src/parser.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Malformed samples reject with stable codes. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -244,7 +244,8 @@
         "R02",
         "R03",
         "R09",
-        "R11"
+        "R11",
+        "R48"
       ],
       "lane": "core"
     },
@@ -257,7 +258,7 @@
         "T01.03"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/message.rs"
+        "crates/mailweft-core/src/message.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Synthetic multipart EML matches expected structure. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -282,7 +283,7 @@
         "T01.04"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/time.rs"
+        "crates/mailweft-core/src/time.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "No incorrect delivery/sent event. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -307,7 +308,7 @@
         "T01.05"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/mime.rs"
+        "crates/mailweft-core/src/mime.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "No remote fetch and no payload logging. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -332,7 +333,7 @@
         "T01.06"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/manifest.rs"
+        "crates/mailweft-core/src/manifest.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Input=accepted+rejected, hash valid. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -357,7 +358,7 @@
         "T01.07"
       ],
       "allowed_paths": [
-        "crates/email-ocel-cli/src/main.rs"
+        "crates/mailweft-cli/src/main.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "cargo run ingest fixture works offline. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -382,7 +383,7 @@
         "T01.08"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/identity.rs"
+        "crates/mailweft-core/src/identity.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Same bytes+config => same ID; no raw identity in output. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -406,7 +407,7 @@
         "T02.01"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/copies.rs"
+        "crates/mailweft-core/src/copies.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Two custodians retain separate copies. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -430,7 +431,7 @@
         "T02.02"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/dedup.rs"
+        "crates/mailweft-core/src/dedup.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "No silent data loss or overwrite. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -454,7 +455,7 @@
         "T02.03"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/parties.rs"
+        "crates/mailweft-core/src/parties.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Roles round-trip without duplicates introduced. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -481,7 +482,7 @@
         "T02.04"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/threads.rs"
+        "crates/mailweft-core/src/threads.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Truth graph fixtures pass. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -505,7 +506,7 @@
         "T02.05"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/heuristics.rs"
+        "crates/mailweft-core/src/heuristics.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Ambiguous collisions abstain, links uncertain. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -529,7 +530,7 @@
         "T02.06"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/legacy.rs"
+        "crates/mailweft-core/src/legacy.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Retain unresolved identity assertions, no false merges. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -553,7 +554,7 @@
         "T02.07"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/tests/threading.rs"
+        "crates/mailweft-core/tests/threading.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "No cycles passed as confirmed thread. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -621,7 +622,7 @@
         "T03.02"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/ocel.rs"
+        "crates/mailweft-core/src/ocel.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "One source copy not falsely equal message delivered. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -643,7 +644,7 @@
         "T03.03"
       ],
       "allowed_paths": [
-        "crates/email-ocel-cli/src/export.rs"
+        "crates/mailweft-cli/src/export.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Independent import succeeds. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -665,7 +666,7 @@
         "T03.04"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/tests/ocel_roundtrip.rs"
+        "crates/mailweft-core/tests/ocel_roundtrip.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "No dropped type/change history. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -687,7 +688,7 @@
         "T03.05"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/tests/ocel_relations.rs"
+        "crates/mailweft-core/tests/ocel_relations.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Equality of relation count and qualifiers. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -709,7 +710,7 @@
         "T03.06"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/tests/mining.rs"
+        "crates/mailweft-core/tests/mining.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Algorithm runs against emitted fixture. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -765,8 +766,9 @@
         "R11",
         "R13",
         "R14",
+        "R17",
         "R24",
-        "R17"
+        "R48"
       ],
       "lane": "core"
     },
@@ -799,15 +801,15 @@
     {
       "id": "T04.03",
       "track": "04_data-validation",
-      "title": "Build optional CMU raw maildir reader adapter",
+      "title": "Add canonical Enron example recipe over the generic raw-mail reader",
       "status": "not_started",
       "depends_on": [
         "T04.02"
       ],
       "allowed_paths": [
-        "crates/email-ocel-cli/src/adapter_cmu.rs"
+        "crates/mailweft-cli/src/adapter_cmu.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Use the existing generic raw reader; keep CMU/Enron paths and metadata in optional benchmark recipes, never core branches or defaults.",
       "acceptance": "Local source, no automatic download. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/04_data-validation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
@@ -816,8 +818,9 @@
         "R11",
         "R13",
         "R14",
+        "R17",
         "R24",
-        "R17"
+        "R48"
       ],
       "lane": "corpus"
     },
@@ -830,7 +833,7 @@
         "T04.03"
       ],
       "allowed_paths": [
-        "crates/email-ocel-cli/src/adapter_edrm.rs"
+        "crates/mailweft-cli/src/adapter_edrm.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Correlate source hashes and attachment metadata. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -855,7 +858,7 @@
         "T04.04"
       ],
       "allowed_paths": [
-        "crates/email-ocel-cli/src/adapter_reference.rs"
+        "crates/mailweft-cli/src/adapter_reference.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "No unsupported one-to-one claims. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -880,7 +883,7 @@
         "T04.05"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/matching.rs"
+        "crates/mailweft-core/src/matching.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "exact/likely/ambiguous/unmatched classes. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -905,7 +908,7 @@
         "T04.06"
       ],
       "allowed_paths": [
-        "crates/email-ocel-cli/src/validation.rs"
+        "crates/mailweft-cli/src/validation.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Denominators and exclusions explicitly stated. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -978,9 +981,9 @@
       ],
       "allowed_paths": [
         "Cargo.toml",
-        "crates/email-ocel-semantics/Cargo.toml",
-        "crates/email-ocel-semantics/src/lib.rs",
-        "crates/email-ocel-semantics/src/body.rs"
+        "crates/mailweft-semantics/Cargo.toml",
+        "crates/mailweft-semantics/src/lib.rs",
+        "crates/mailweft-semantics/src/body.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "No remote images/execution, fallback charset safe. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1002,7 +1005,7 @@
         "T05.02"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/nested.rs"
+        "crates/mailweft-semantics/src/nested.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Bounded recursion and source refs. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1025,7 +1028,7 @@
         "T05.03"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/segments.rs"
+        "crates/mailweft-semantics/src/segments.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Expose only a typed decoded-part boundary; do not implement a second signature/quote classifier. Track 05b owns zoning.",
@@ -1047,7 +1050,7 @@
         "T05.04"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/attachments.rs"
+        "crates/mailweft-semantics/src/attachments.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "No mandatory PDF/Office runtime. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1069,7 +1072,7 @@
         "T05.05"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/tests/security.rs"
+        "crates/mailweft-semantics/tests/security.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Adversarial fixtures reject safely. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1091,7 +1094,7 @@
         "T05.06"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/policy.rs"
+        "crates/mailweft-semantics/src/policy.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "No external network by default. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1113,7 +1116,7 @@
         "T05.02"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/zones_contract.rs",
+        "crates/mailweft-semantics/src/zones_contract.rs",
         "contracts/v1/email-zone.schema.json",
         "contracts/v1/intext-participant.schema.json"
       ],
@@ -1139,7 +1142,7 @@
         "T05b.03"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/zones.rs"
+        "crates/mailweft-semantics/src/zones.rs"
       ],
       "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
       "acceptance": "Return source-anchored authored, greeting, signoff, quoted, forwarded, signature, disclaimer, inline-header and unknown zones with full ordered coverage and no silent drop. Labels must include machine-generated/unknown and support a separate coarse multi-label genre summary without claiming an observed business event.",
@@ -1163,7 +1166,7 @@
         "T05b.01"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/offsets.rs"
+        "crates/mailweft-semantics/src/offsets.rs"
       ],
       "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
       "acceptance": "Original MIME part bytes and normalized Unicode body segments can be linked with verified part hash; malformed UTF-8 and HTML alternatives tested.",
@@ -1187,7 +1190,7 @@
         "T05b.02"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/views.rs"
+        "crates/mailweft-semantics/src/views.rs"
       ],
       "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
       "acceptance": "Original protected content remains intact; signatures are excluded from speech-act view but contribute role hints only to permitted identity view; no double counting quoted history.",
@@ -1211,7 +1214,7 @@
         "T05b.04"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/address_in_text.rs"
+        "crates/mailweft-semantics/src/address_in_text.rs"
       ],
       "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
       "acceptance": "Detect multi-person greetings, role titles, ambiguous name-only text, short closings, forwarded signatures; emit candidate assertions with calibrated uncertainty, never infer To/Cc headers.",
@@ -1235,7 +1238,7 @@
         "T05b.05"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/person_link.rs"
+        "crates/mailweft-semantics/src/person_link.rs"
       ],
       "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
       "acceptance": "Explicit Bcc unknown/empty/present distinctions; header roles remain observed claims; in-text names are inferred; task actor is not assigned solely from To field.",
@@ -1259,7 +1262,7 @@
         "T05b.06"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/tests/zones_and_participants.rs"
+        "crates/mailweft-semantics/tests/zones_and_participants.rs"
       ],
       "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
       "acceptance": "F1 and boundary agreement reported for synthetic gold; Bcc privacy, quote attribution, multilingual, false-actor and multiple-recipient adversarial cases covered.",
@@ -1307,7 +1310,7 @@
         "T05b.07"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/contracts.rs"
+        "crates/mailweft-semantics/src/contracts.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "JSON schema validation and round trips. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1330,7 +1333,7 @@
         "T06.01"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/rules.rs"
+        "crates/mailweft-semantics/src/rules.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Synthetic gold fixture precision measured. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1353,7 +1356,7 @@
         "T06.02"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/tests/semantics.rs"
+        "crates/mailweft-semantics/tests/semantics.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "No approval claimed from negative example. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1376,7 +1379,7 @@
         "T06.03"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/provenance.rs"
+        "crates/mailweft-semantics/src/provenance.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "No raw text in analytics logs. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1399,7 +1402,7 @@
         "T06.04"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/provider.rs"
+        "crates/mailweft-semantics/src/provider.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "No default network/LLM dependency. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1422,7 +1425,7 @@
         "T06.05"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/extractor.rs"
+        "crates/mailweft-semantics/src/extractor.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Reject hallucinated IDs and absent sources. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1445,7 +1448,7 @@
         "T06.06"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/review.rs"
+        "crates/mailweft-semantics/src/review.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Never mutate observed email facts. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1468,7 +1471,7 @@
         "T06.07"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/projection.rs"
+        "crates/mailweft-semantics/src/projection.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Stage 1 output unchanged after rerun. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1560,16 +1563,16 @@
     {
       "id": "T07.04",
       "track": "07_research",
-      "title": "Compare no-graph, graph-only, vector and GraphRAG methods",
+      "title": "Consolidate qualified optional retrieval benchmark evidence",
       "status": "not_started",
       "depends_on": [
         "T07.03",
-        "T07.05"
+        "T13.06"
       ],
       "allowed_paths": [
         "research/GRAPH_EVAL.md"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Summarize the executed five-arm evaluation specified in T13.06; do not create a duplicate graph implementation or infer results from planning packets.",
       "acceptance": "No advantage claimed without evaluation. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/07_research/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
@@ -1579,7 +1582,9 @@
         "R22",
         "R23",
         "R24",
-        "R26"
+        "R26",
+        "R52",
+        "R53"
       ],
       "lane": "research"
     },
@@ -1719,7 +1724,7 @@
         "T08.01"
       ],
       "allowed_paths": [
-        "crates/email-ocel-cli/src/adapter_mbox.rs"
+        "crates/mailweft-cli/src/adapter_mbox.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Streaming, byte-exact item provenance. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1742,7 +1747,7 @@
         "T08.01"
       ],
       "allowed_paths": [
-        "crates/email-ocel-core/src/formats.rs"
+        "crates/mailweft-core/src/formats.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Loss ledger and qualified parity tests. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -1874,7 +1879,8 @@
       "requirements": [
         "R12",
         "R16",
-        "R25"
+        "R25",
+        "R48"
       ],
       "lane": "core"
     },
@@ -1892,14 +1898,14 @@
         "R34"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/taxonomy.rs",
-        "crates/email-ocel-semantics/tests/task_t09_01.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/taxonomy.rs",
+        "crates/mailweft-semantics/tests/task_t09_01.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Unknown external labels return Unmapped; no nearest-label guessing.; A genre named approval_request cannot be used as an utterance act or zone without an explicit crosswalk.",
       "evidence_path": "conductor/tracks/09_patterns/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_01 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t09_01 && cargo fmt --all -- --check",
       "commit": "T09.01: Version the four independent classification vocabularies",
       "task_card": "conductor/tasks/T09.01.md",
       "interface": "map_label(profile: &TaxonomyProfile, label: &str) -> MappingDecision"
@@ -1919,14 +1925,14 @@
         "R34"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/genre.rs",
-        "crates/email-ocel-semantics/tests/task_t09_02.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/genre.rs",
+        "crates/mailweft-semantics/tests/task_t09_02.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "A calendar MIME part yields calendar_invitation kind, not a personal commitment.; An auto-response header yields automated_reply; CompletionReported remains absent.",
       "evidence_path": "conductor/tracks/09_patterns/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_02 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t09_02 && cargo fmt --all -- --check",
       "commit": "T09.02: Identify structured message kinds without inventing intent",
       "task_card": "conductor/tasks/T09.02.md",
       "interface": "classify_message_kind(message: &ObservedMessage, mime: &MimeMetadata) -> Vec<MessageKindCandidate>"
@@ -1947,14 +1953,14 @@
         "R35"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/acts.rs",
-        "crates/email-ocel-semantics/tests/task_t09_03.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/acts.rs",
+        "crates/mailweft-semantics/tests/task_t09_03.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Two authored clauses can produce request and commit with different spans.; A quoted request retains origin=quoted and is excluded from a new-authored-act projection.",
       "evidence_path": "conductor/tracks/09_patterns/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_03 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t09_03 && cargo fmt --all -- --check",
       "commit": "T09.03: Attach multi-label acts to attributed utterances",
       "task_card": "conductor/tasks/T09.03.md",
       "interface": "classify_utterances(view: &AnalysisView, taxonomy: &TaxonomyProfile) -> Vec<AttributedCommunicationAct>"
@@ -1975,14 +1981,14 @@
         "R37"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/actors.rs",
-        "crates/email-ocel-semantics/tests/task_t09_04.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/actors.rs",
+        "crates/mailweft-semantics/tests/task_t09_04.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Moving the same address from To to Cc changes header role, not an explicit body-named actor.; Two Alex identities retain two candidate IDs with unresolved status; neither is silently selected.",
       "evidence_path": "conductor/tracks/09_patterns/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_04 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t09_04 && cargo fmt --all -- --check",
       "commit": "T09.04: Resolve candidate actor roles separately from recipients",
       "task_card": "conductor/tasks/T09.04.md",
       "interface": "link_act_roles(act: &AttributedCommunicationAct, mentions: &[ParticipantAssertion]) -> RoleCandidates"
@@ -2002,14 +2008,14 @@
         "R39"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/interactions.rs",
-        "crates/email-ocel-semantics/tests/task_t09_05.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/interactions.rs",
+        "crates/mailweft-semantics/tests/task_t09_05.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Thanks produces acknowledgement candidate, not a verified fulfilment/approval event.; A quoted antecedent and its original share dependence lineage.",
       "evidence_path": "conductor/tracks/09_patterns/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_05 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t09_05 && cargo fmt --all -- --check",
       "commit": "T09.05: Link dialogue responses to antecedents",
       "task_card": "conductor/tasks/T09.05.md",
       "interface": "link_interactions(acts: &[AttributedCommunicationAct], context: &InteractionContext) -> Vec<InteractionLink>"
@@ -2028,14 +2034,14 @@
         "R37"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/commitments.rs",
-        "crates/email-ocel-semantics/tests/task_t09_06.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/commitments.rs",
+        "crates/mailweft-semantics/tests/task_t09_06.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "I will send can support commitment, never task-complete.; A later withdrawal supersedes the candidate state without editing the earlier source act.",
       "evidence_path": "conductor/tracks/09_patterns/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_06 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t09_06 && cargo fmt --all -- --check",
       "commit": "T09.06: Model commitment and withdrawal candidates",
       "task_card": "conductor/tasks/T09.06.md",
       "interface": "infer_commitment_transition(prior: &CommitmentCandidate, link: &InteractionLink) -> TransitionDecision"
@@ -2055,14 +2061,14 @@
         "R37"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/work_items.rs",
-        "crates/email-ocel-semantics/tests/task_t09_07.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/work_items.rs",
+        "crates/mailweft-semantics/tests/task_t09_07.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Two explicit task IDs remain two work-item candidates even in one email thread.; An independently matching task reference may link across threads with evidence and uncertainty, not merge source copies.",
       "evidence_path": "conductor/tracks/09_patterns/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_07 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t09_07 && cargo fmt --all -- --check",
       "commit": "T09.07: Separate work-item links from thread/topic links",
       "task_card": "conductor/tasks/T09.07.md",
       "interface": "propose_work_item_links(acts: &[AttributedCommunicationAct], context: &InteractionContext) -> Vec<WorkItemLinkCandidate>"
@@ -2085,14 +2091,14 @@
         "R36"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/interaction_projection.rs",
-        "crates/email-ocel-semantics/tests/task_t09_08.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/interaction_projection.rs",
+        "crates/mailweft-semantics/tests/task_t09_08.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Candidate-only links are omitted with a recorded reason under accepted-only policy.; Selected E2O/O2O qualifiers and typed/history attributes survive canonical round trips; sidecar references remain resolvable.",
       "evidence_path": "conductor/tracks/09_patterns/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_08 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t09_08 && cargo fmt --all -- --check",
       "commit": "T09.08: Project selected interactions without OCEL information loss",
       "task_card": "conductor/tasks/T09.08.md",
       "interface": "project_interactions(links: &[InteractionLink], policy: &ProjectionPolicy) -> ProjectionResult"
@@ -2111,14 +2117,14 @@
         "R35"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/receipts.rs",
-        "crates/email-ocel-semantics/tests/task_t10_01.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/receipts.rs",
+        "crates/mailweft-semantics/tests/task_t10_01.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Unknown evidence IDs cause missing_evidence diagnostic; no admission.; A structurally valid candidate receipt remains a candidate, not a verified business event.",
       "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_01 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t10_01 && cargo fmt --all -- --check",
       "commit": "T10.01: Add evidence receipt types and semantic checker",
       "task_card": "conductor/tasks/T10.01.md",
       "interface": "validate_receipt(receipt: &InferenceReceipt, context: &EvidenceContext) -> ValidationDecision"
@@ -2138,14 +2144,14 @@
         "R43"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/receipt_policy.rs",
-        "crates/email-ocel-semantics/tests/task_t10_02.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/receipt_policy.rs",
+        "crates/mailweft-semantics/tests/task_t10_02.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Source hash mismatch or non-UTF8 boundary prevents admission.; A mandatory attribution/authorization check marked not_run cannot produce admit_to_enriched_view.",
       "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_02 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t10_02 && cargo fmt --all -- --check",
       "commit": "T10.02: Check authorization, anchoring and source-map fidelity",
       "task_card": "conductor/tasks/T10.02.md",
       "interface": "admit_receipt(receipt: &InferenceReceipt, policy: &ProjectionPolicy) -> AdmissionDecision"
@@ -2164,14 +2170,14 @@
         "R39"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/dependence.rs",
-        "crates/email-ocel-semantics/tests/task_t10_03.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/dependence.rs",
+        "crates/mailweft-semantics/tests/task_t10_03.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Ten identical copied source claims contribute one dependence group, not ten independent corroborations.; Two classifiers on one span preserve one source lineage.",
       "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_03 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t10_03 && cargo fmt --all -- --check",
       "commit": "T10.03: Track dependent copied and quoted evidence",
       "task_card": "conductor/tasks/T10.03.md",
       "interface": "group_evidence_dependence(refs: &[EvidenceReference], links: &[CopyOrQuoteLink]) -> DependenceIndex"
@@ -2190,14 +2196,14 @@
         "R37"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/temporal.rs",
-        "crates/email-ocel-semantics/tests/task_t10_04.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/temporal.rs",
+        "crates/mailweft-semantics/tests/task_t10_04.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Without disambiguating locale/reference context, Friday stays unresolved or a candidate interval; never a fabricated point.; Equal timestamps use stable serialization order while causal ordering remains unknown.",
       "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_04 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t10_04 && cargo fmt --all -- --check",
       "commit": "T10.04: Preserve temporal intervals and partial order",
       "task_card": "conductor/tasks/T10.04.md",
       "interface": "resolve_time_candidates(input: &TemporalMention, context: &TemporalContext) -> TemporalResolution"
@@ -2215,14 +2221,14 @@
         "R38"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/deltas.rs",
-        "crates/email-ocel-semantics/tests/task_t10_05.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/deltas.rs",
+        "crates/mailweft-semantics/tests/task_t10_05.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "An identical delta replay is a no-op; conflicting bytes with the same key produce conflict.; A supersession referencing the wrong prior hash does not alter active state.",
       "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_05 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t10_05 && cargo fmt --all -- --check",
       "commit": "T10.05: Define revision and retraction ledger",
       "task_card": "conductor/tasks/T10.05.md",
       "interface": "apply_interpretation_delta(state: &mut InterpretationState, delta: &InterpretationDelta) -> DeltaOutcome"
@@ -2242,14 +2248,14 @@
         "R39"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/replay.rs",
-        "crates/email-ocel-semantics/tests/task_t10_06.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/replay.rs",
+        "crates/mailweft-semantics/tests/task_t10_06.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Upsert followed by retract leaves no active claim; prior as-of snapshot remains explainable.; Replay cannot update raw ObservedMessage or its source-copy identity.",
       "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_06 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t10_06 && cargo fmt --all -- --check",
       "commit": "T10.06: Materialize current and as-of interpretation snapshots",
       "task_card": "conductor/tasks/T10.06.md",
       "interface": "materialize_interpretations(deltas: &[InterpretationDelta], at: SnapshotBoundary) -> Result<InterpretationSnapshot, ReplayError>"
@@ -2269,14 +2275,14 @@
         "R43"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/scope.rs",
-        "crates/email-ocel-semantics/tests/task_t10_07.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/scope.rs",
+        "crates/mailweft-semantics/tests/task_t10_07.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "A downstream path/summary containing restricted Bcc evidence is unavailable to an unauthorized scope.; Purge plan includes derived embeddings/indexes/summaries and retains only permitted tombstone metadata; no automatic destructive apply.",
       "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_07 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t10_07 && cargo fmt --all -- --check",
       "commit": "T10.07: Propagate restricted scope and permitted deletion",
       "task_card": "conductor/tasks/T10.07.md",
       "interface": "derive_access_scope(inputs: &[AccessScope]) -> AccessScope; plan_retention_purge(subject: &SubjectId, index: &DerivationIndex) -> PurgePlan"
@@ -2296,14 +2302,14 @@
         "R46"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/incremental.rs",
-        "crates/email-ocel-semantics/tests/task_t10_08.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/incremental.rs",
+        "crates/mailweft-semantics/tests/task_t10_08.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Changed parser/model/prompt/taxonomy configuration cannot reuse an old interpretation cache key.; Exceeded work budget produces explicit pending/partial state, never a complete result.",
       "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_08 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t10_08 && cargo fmt --all -- --check",
       "commit": "T10.08: Invalidate caches and bound incremental recomputation",
       "task_card": "conductor/tasks/T10.08.md",
       "interface": "plan_recompute(changes: &[InterpretationDelta], dependencies: &DerivationIndex, budget: &WorkBudget) -> RecomputePlan"
@@ -2320,7 +2326,8 @@
       "lane": "research",
       "requirements": [
         "R31",
-        "R44"
+        "R44",
+        "R49"
       ],
       "allowed_paths": [
         "research/splits.md",
@@ -2349,14 +2356,14 @@
         "R41"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/metamorphic.rs",
-        "crates/email-ocel-semantics/tests/task_t11_02.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/metamorphic.rs",
+        "crates/mailweft-semantics/tests/task_t11_02.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "To/Cc swap changes only eligible header qualifiers, not a body-explicit actor.; Inserting negation or moving text into quotation changes only the declared polarity/origin expectations and never creates verified events.",
       "evidence_path": "conductor/tracks/11_frontier-validation/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t11_02 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t11_02 && cargo fmt --all -- --check",
       "commit": "T11.02: Implement controlled semantic perturbation fixtures",
       "task_card": "conductor/tasks/T11.02.md",
       "interface": "generate_perturbation_pairs(seed: u64, profile: &PerturbationProfile) -> Vec<ExpectedDeltaPair>"
@@ -2375,14 +2382,14 @@
         "R40"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/calibration.rs",
-        "crates/email-ocel-semantics/tests/task_t11_03.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/calibration.rs",
+        "crates/mailweft-semantics/tests/task_t11_03.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "No eligible gold labels yields metric=null with denominator=0, not perfect accuracy.; Uncalibrated scores are reported as scores; no probability or universal guarantee label.",
       "evidence_path": "conductor/tracks/11_frontier-validation/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t11_03 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t11_03 && cargo fmt --all -- --check",
       "commit": "T11.03: Measure calibration, abstention and group-level uncertainty",
       "task_card": "conductor/tasks/T11.03.md",
       "interface": "evaluate_selective_predictions(predictions: &[ScoredPrediction], gold: &GoldSet, policy: &EvalPolicy) -> CalibrationReport"
@@ -2403,14 +2410,14 @@
         "R46"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/routing.rs",
-        "crates/email-ocel-semantics/tests/task_t11_04.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/routing.rs",
+        "crates/mailweft-semantics/tests/task_t11_04.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Exhausted token/time budget abstains without cloud fallback.; Absent model capability reports unavailable for that lane and leaves Stage 1 usable.",
       "evidence_path": "conductor/tracks/11_frontier-validation/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t11_04 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t11_04 && cargo fmt --all -- --check",
       "commit": "T11.04: Qualify bounded rule-to-local-model routing",
       "task_card": "conductor/tasks/T11.04.md",
       "interface": "route_extraction(input: &ExtractionRequest, providers: &ProviderSet, budget: &InferenceBudget) -> ExtractionOutcome"
@@ -2430,14 +2437,14 @@
         "R42"
       ],
       "allowed_paths": [
-        "crates/email-ocel-semantics/src/process_metrics.rs",
-        "crates/email-ocel-semantics/tests/task_t11_05.rs",
-        "crates/email-ocel-semantics/src/lib.rs"
+        "crates/mailweft-semantics/src/process_metrics.rs",
+        "crates/mailweft-semantics/tests/task_t11_05.rs",
+        "crates/mailweft-semantics/src/lib.rs"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
       "acceptance": "Synthetic duplicate acts cause detected edge/event inflation versus a frozen truth log.; Different event-view policies or object-vocabulary versions block paired comparisons unless an explicit crosswalk exists.",
       "evidence_path": "conductor/tracks/11_frontier-validation/evidence.md",
-      "tests": "cargo test --locked -p email-ocel-semantics --test task_t11_05 && cargo fmt --all -- --check",
+      "tests": "cargo test --locked -p mailweft-semantics --test task_t11_05 && cargo fmt --all -- --check",
       "commit": "T11.05: Measure downstream process-distortion sensitivity",
       "task_card": "conductor/tasks/T11.05.md",
       "interface": "compare_process_projections(reference: &OcelProjection, candidate: &OcelProjection, policy: &ComparisonPolicy) -> ProcessDistortionReport"
@@ -2473,8 +2480,9 @@
       "status": "not_started",
       "depends_on": [
         "T07.05",
+        "T10.07",
         "T11.05",
-        "T10.07"
+        "T13.04"
       ],
       "lane": "research",
       "requirements": [
@@ -2523,7 +2531,7 @@
     {
       "id": "T12.01",
       "track": "12_ecosystem-reuse",
-      "title": "Reproduce FOI defects and freeze the consumer boundary",
+      "title": "Document independent FOI acceptance and reproduce diagnostic defects",
       "status": "not_started",
       "depends_on": [
         "T03.08"
@@ -2531,25 +2539,34 @@
       "lane": "integration",
       "requirements": [
         "R07",
-        "R38",
-        "R45"
+        "R49"
       ],
       "allowed_paths": [
-        "docs/integrations/foi-defects.md",
+        "docs/integrations/foi-independent-acceptance.json",
         "scripts/check_task_t12_01.py"
       ],
-      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
-      "acceptance": "A fixture containing typed event values and time-varying object values is marked loss when the inspected adapter drops attributes.; A suspected bug without an executable reproduction remains suspected; no whole-system failure or corrected-runtime claim is allowed.",
+      "action": "Freeze source-based expected results before inspecting pipeline predictions. Reproduce individual suspected legacy defects only for diagnosis; never use legacy output as an expected-output baseline.",
+      "acceptance": "Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.",
       "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
       "tests": "python3 scripts/check_task_t12_01.py && python3 scripts/validate_scaffold.py",
-      "commit": "T12.01: Reproduce FOI defects and freeze the consumer boundary",
+      "commit": "T12.01: <verified scoped result>",
       "task_card": "conductor/tasks/T12.01.md",
-      "interface": "FoIDefectLedger: exact commit, source/fixture hash, expected/actual output, reproduction command, affected layer and status"
+      "interface": "IndependentFoIAcceptancePacket: source hashes, independent annotation, heldout split, normative expected fields, diagnostic-only legacy findings",
+      "oracles": [
+        [
+          "legacy_label_rejected",
+          "A packet with expected_result_origin=legacy_pipeline is rejected, even when candidate output matches it."
+        ],
+        [
+          "source_gold_preserved",
+          "A fictional independently annotated message is accepted without any old pipeline output."
+        ]
+      ]
     },
     {
       "id": "T12.02",
       "track": "12_ecosystem-reuse",
-      "title": "Audit FYI raw-message availability and source fidelity",
+      "title": "Verify acquisition/archive ownership and actual FYI source fidelity",
       "status": "not_started",
       "depends_on": [
         "T12.01"
@@ -2557,108 +2574,149 @@
       "lane": "integration",
       "requirements": [
         "R20",
-        "R35",
-        "R45"
+        "R49",
+        "R50"
       ],
       "allowed_paths": [
-        "docs/integrations/fyi-source-fidelity.md",
+        "docs/integrations/foi-source-boundary.json",
         "scripts/check_task_t12_02.py"
       ],
-      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
-      "acceptance": "An HTML page cannot be labelled raw_rfc5322 or assigned fabricated Bcc/transport headers.; Unavailable Bcc and missing attachment bytes remain unavailable rather than a known-empty population.",
+      "action": "Inventory exact fyi-cli/fyi-archive producer versions, manifests and the documented handover conflict; classify raw RFC, export, rendered page and attachment separately. Do not acquire source or invent headers.",
+      "acceptance": "Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.",
       "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
       "tests": "python3 scripts/check_task_t12_02.py && python3 scripts/validate_scaffold.py",
-      "commit": "T12.02: Audit FYI raw-message availability and source fidelity",
+      "commit": "T12.02: <verified scoped result>",
       "task_card": "conductor/tasks/T12.02.md",
-      "interface": "FYISourceCapabilityPacket: raw_rfc5322 | platform_message_export | rendered_web_message | attachment_artifact; supplied_fields, unavailable_fields, scope and rights"
+      "interface": "FoISourceBoundaryPacket: producer revisions, ownership evidence, source_kind, locator/hash, available/missing fields, conflict status",
+      "oracles": [
+        [
+          "rendered_not_raw",
+          "A rendered page with a display date cannot become raw_rfc5322 or receive inferred Bcc fields."
+        ],
+        [
+          "handover_conflict_visible",
+          "Conflicting archive ownership documentation retains unresolved status until an exact producer receipt is supplied."
+        ]
+      ]
     },
     {
       "id": "T12.03",
       "track": "12_ecosystem-reuse",
-      "title": "Specify the one-way FOI adapter and lossless projection",
+      "title": "Specify loss-complete stage-one Mailweft consumer mapping",
       "status": "not_started",
       "depends_on": [
         "T12.01",
         "T12.02",
-        "T10.01"
+        "T03.08"
       ],
       "lane": "integration",
       "requirements": [
-        "R35",
-        "R43",
-        "R45"
+        "R07",
+        "R25",
+        "R50"
       ],
       "allowed_paths": [
-        "docs/integrations/foi-adapter-contract.md",
+        "docs/integrations/foi-mailweft-adapter.json",
         "scripts/check_task_t12_03.py"
       ],
-      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
-      "acceptance": "Dependency graph is foi-process -> email library; no FOI domain crate is imported into core.; Required qualifier/attribute/history loss fails admission rather than silently emitting a reduced log.",
+      "action": "Define the one-way foi-process -> Mailweft invocation and full OCEL/evidence mapping; keep FOI-O terms in a pinned consumer profile. Stage-one integration requires no NLP or GraphRAG.",
+      "acceptance": "Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.",
       "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
       "tests": "python3 scripts/check_task_t12_03.py && python3 scripts/validate_scaffold.py",
-      "commit": "T12.03: Specify the one-way FOI adapter and lossless projection",
+      "commit": "T12.03: <verified scoped result>",
       "task_card": "conductor/tasks/T12.03.md",
-      "interface": "FOIAdapterMappingPacket: consumer-owned field mappings, versioned evidence references, required qualifiers/typed attributes/history and explicit loss ledger"
+      "interface": "FoIAdapterPacket: producer/consumer versions, generic input/output field crosswalk, pinned FOI-O profile reference, explicit loss ledger",
+      "oracles": [
+        [
+          "attribute_history_survives",
+          "Typed event values, changing object attributes and participant qualifiers survive the fictional mapping."
+        ],
+        [
+          "reverse_dependency_rejected",
+          "A dependency from Mailweft to foi-process or an FOI-O runtime is rejected."
+        ]
+      ]
     },
     {
       "id": "T12.04",
       "track": "12_ecosystem-reuse",
-      "title": "Freeze independently adjudicated FOI shadow comparisons",
+      "title": "Define independently adjudicated FOI holdout acceptance",
       "status": "not_started",
       "depends_on": [
         "T12.03",
-        "T11.01"
+        "T04.01"
       ],
       "lane": "integration",
       "requirements": [
-        "R21",
-        "R25",
-        "R45"
+        "R23",
+        "R40",
+        "R49",
+        "R50"
       ],
       "allowed_paths": [
-        "docs/integrations/foi-shadow-protocol.md",
+        "docs/integrations/foi-holdout.json",
         "scripts/check_task_t12_04.py"
       ],
-      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
-      "acceptance": "A disagreement with existing output is not automatically a new-library regression.; A platform status used as input cannot be reused as independent outcome truth; label dependencies are explicit.",
+      "action": "Prepare source-first blinded annotation and heldout whole-request partitions. Platform status, legacy output and model output may not supply independent gold. Evaluate metadata-only, correspondence-only and combined evidence arms.",
+      "acceptance": "Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.",
       "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
       "tests": "python3 scripts/check_task_t12_04.py && python3 scripts/validate_scaffold.py",
-      "commit": "T12.04: Freeze independently adjudicated FOI shadow comparisons",
+      "commit": "T12.04: <verified scoped result>",
       "task_card": "conductor/tasks/T12.04.md",
-      "interface": "FOIShadowProtocol: identical source snapshots, independent labels, old/new outputs and correction/regression/representation/unresolved difference classes"
+      "interface": "FoIHoldoutPacket: source snapshot, annotation lineage, request split, source-answerability labels, evidence-arm restrictions, independent expected outputs",
+      "oracles": [
+        [
+          "self_labels_rejected",
+          "An input platform status reused as the evaluation label is flagged as circular, not independent validation."
+        ],
+        [
+          "thread_leakage_rejected",
+          "A request/conversation component appearing in both development and heldout sets fails the split check."
+        ]
+      ]
     },
     {
       "id": "T12.05",
       "track": "12_ecosystem-reuse",
-      "title": "Prepare reversible consumer migration and replay acceptance",
+      "title": "Prepare validated consumer migration and safe recovery",
       "status": "not_started",
       "depends_on": [
         "T12.03",
-        "T12.04",
-        "T10.04"
+        "T12.04"
       ],
       "lane": "integration",
       "requirements": [
-        "R25",
-        "R32",
-        "R45"
+        "R38",
+        "R43",
+        "R49",
+        "R50"
       ],
       "allowed_paths": [
-        "docs/integrations/foi-migration-packet.md",
+        "docs/integrations/foi-migration.json",
         "scripts/check_task_t12_05.py"
       ],
-      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
-      "acceptance": "The packet requires repeat/replay and correction tests that retain source IDs without duplicated independent events.; Missing consumer execution/rollback evidence leaves migration pending; no remote edit or production cutover is implied.",
+      "action": "Specify cutover evidence and replay with independent expectations. Recovery must disable/quarantine analysis or use a verified snapshot; the unvalidated old pipeline is not a safe rollback reference.",
+      "acceptance": "Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.",
       "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
       "tests": "python3 scripts/check_task_t12_05.py && python3 scripts/validate_scaffold.py",
-      "commit": "T12.05: Prepare reversible consumer migration and replay acceptance",
+      "commit": "T12.05: <verified scoped result>",
       "task_card": "conductor/tasks/T12.05.md",
-      "interface": "FOIMigrationPacket: default-off consumer feature, exact dependency pin, replay/correction/retraction checks, rollback and affected implementation inventory"
+      "interface": "FoIMigrationPacket: exact consumer revision, independent acceptance, replay expectations, rollback-to-validated-snapshot or disable action",
+      "oracles": [
+        [
+          "unsafe_rollback_rejected",
+          "A recovery policy that assumes the old unvalidated pipeline is safe fails validation."
+        ],
+        [
+          "replay_deduplicates",
+          "Fictional duplicate source copies retain source counts without duplicating logical communication events."
+        ]
+      ]
     },
     {
       "id": "T12.06",
       "track": "12_ecosystem-reuse",
-      "title": "Qualify FOI cutover without coupling core release",
+      "title": "Qualify FOI consumer handoff independently of core release",
       "status": "not_started",
       "depends_on": [
         "T12.01",
@@ -2669,21 +2727,330 @@
       ],
       "lane": "integration",
       "requirements": [
-        "R32",
-        "R45",
-        "R47"
+        "R25",
+        "R47",
+        "R49",
+        "R50"
       ],
       "allowed_paths": [
-        "docs/integrations/foi-acceptance.md",
+        "docs/integrations/foi-cutover.json",
         "scripts/check_task_t12_06.py"
       ],
-      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
-      "acceptance": "Absent required real test receipts yields defer, not acceptance.; Core task closure excludes FOI integration and real-data dependencies; no unrelated owned repo enters the active scope.",
+      "action": "Produce the consumer acceptance packet and distinguish not_run, blocked and observed checks. Remote sibling changes and runtime qualification remain separately executed actions, not automatic from a document.",
+      "acceptance": "Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.",
       "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
       "tests": "python3 scripts/check_task_t12_06.py && python3 scripts/validate_scaffold.py",
-      "commit": "T12.06: Qualify FOI cutover without coupling core release",
+      "commit": "T12.06: <verified scoped result>",
       "task_card": "conductor/tasks/T12.06.md",
-      "interface": "FOIAcceptancePacket: evidence for source/adapter/shadow/replay/rollback tests, unresolved gaps and version-pinned adopt/defer decision"
+      "interface": "FoICutoverPacket: scoped acceptance, loss/completeness limits, deployment/analysis status, independent release boundary",
+      "oracles": [
+        [
+          "planning_not_deployment",
+          "A complete handoff document without downstream execution is labelled not_run, never deployed."
+        ],
+        [
+          "blocked_consumer_not_core",
+          "A blocked FOI migration leaves the standalone converter release independent."
+        ]
+      ]
+    },
+    {
+      "id": "T12.07",
+      "track": "12_ecosystem-reuse",
+      "title": "Define evidence-linked FOI-O contribution packets",
+      "status": "not_started",
+      "depends_on": [
+        "T12.04"
+      ],
+      "requirements": [
+        "R49",
+        "R50",
+        "R51"
+      ],
+      "lane": "integration",
+      "action": "Specify consumer-owned ontology candidates with exact base profile, evidence state, sanitized references, counterexamples, proposed competency tests and review status. Do not edit the ontology automatically.",
+      "allowed_paths": [
+        "docs/integrations/foi-o-contribution.json",
+        "scripts/check_task_t12_07.py"
+      ],
+      "acceptance": "Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.",
+      "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
+      "tests": "python3 scripts/check_task_t12_07.py && python3 scripts/validate_scaffold.py",
+      "commit": "T12.07: <verified scoped result>",
+      "task_card": "conductor/tasks/T12.07.md",
+      "interface": "OntologyContributionPacket: base_ontology_version, candidate_kind, target_ids, evidence_refs, counterexamples, denominator, proposed_tests, review_status",
+      "oracles": [
+        [
+          "automatic_promotion_rejected",
+          "A generated candidate marked certified or auto-approved without a review decision is rejected."
+        ],
+        [
+          "negative_evidence_required",
+          "A term proposal includes counterexamples or an explicit none-observed scope statement, not only favorable examples."
+        ]
+      ]
+    },
+    {
+      "id": "T12.08",
+      "track": "12_ecosystem-reuse",
+      "title": "Specify versioned FOI-O feedback and independent re-evaluation",
+      "status": "not_started",
+      "depends_on": [
+        "T12.07"
+      ],
+      "requirements": [
+        "R49",
+        "R51"
+      ],
+      "lane": "integration",
+      "action": "Define accepted/rejected/deferred feedback receipts and next-version regression/heldout checks. Prevent the data or generated labels used to propose an ontology change from also proving its validity.",
+      "allowed_paths": [
+        "docs/integrations/foi-o-feedback.json",
+        "scripts/check_task_t12_08.py"
+      ],
+      "acceptance": "Both declared fictional packet oracles pass; unsupported runtime and source ownership stay explicit. Independent evidence only; no legacy expected-output comparison.",
+      "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
+      "tests": "python3 scripts/check_task_t12_08.py && python3 scripts/validate_scaffold.py",
+      "commit": "T12.08: <verified scoped result>",
+      "task_card": "conductor/tasks/T12.08.md",
+      "interface": "OntologyFeedbackPacket: packet_id, base/new_profile_versions, reviewer_decision_ref, rejected_candidates, heldout_validation, migration_impact",
+      "oracles": [
+        [
+          "circular_validation_rejected",
+          "A proposal trained and evaluated only on its own generated labels fails independent validation."
+        ],
+        [
+          "rejected_preserved",
+          "Rejected/deferred candidates remain traceable without changing the active pinned ontology profile."
+        ]
+      ]
+    },
+    {
+      "id": "T13.01",
+      "track": "13_graphrag",
+      "title": "Define a source-grounded graph projection contract",
+      "status": "not_started",
+      "depends_on": [
+        "T07.05",
+        "T10.06"
+      ],
+      "requirements": [
+        "R38",
+        "R52",
+        "R53"
+      ],
+      "lane": "research",
+      "action": "Define the graph view over existing objects/events/claims; do not introduce a second authoritative store or require a graph database.",
+      "allowed_paths": [
+        "docs/retrieval/graph-projection.json",
+        "scripts/check_task_t13_01.py"
+      ],
+      "acceptance": "Declared contract checker and independent fictional tests pass; this packet is not implementation of retrieval or generation. Runtime build/test selection is specified in a later implementation track after provider qualification.",
+      "evidence_path": "conductor/tracks/13_graphrag/evidence.md",
+      "tests": "python3 scripts/check_task_t13_01.py && python3 scripts/validate_scaffold.py",
+      "commit": "T13.01: <verified scoped result>",
+      "task_card": "conductor/tasks/T13.01.md",
+      "interface": "GraphProjectionPacket: source_snapshot, node/edge types, evidence state, source refs, copy-family ID, revision lineage",
+      "oracles": [
+        [
+          "non_source_node_rejected",
+          "A generated summary without original source references is not admitted as an evidence node."
+        ],
+        [
+          "stage_one_immutable",
+          "Projection input/output source hashes preserve the exact Stage 1 snapshot."
+        ]
+      ]
+    },
+    {
+      "id": "T13.02",
+      "track": "13_graphrag",
+      "title": "Specify bounded deterministic graph and lexical retrieval",
+      "status": "not_started",
+      "depends_on": [
+        "T13.01",
+        "T10.07"
+      ],
+      "requirements": [
+        "R52",
+        "R53"
+      ],
+      "lane": "research",
+      "action": "Use lexical and bounded graph retrieval as the first no-model comparator; the stated limits are initial test settings, not optimized scientific claims.",
+      "allowed_paths": [
+        "docs/retrieval/graph-retrieval.json",
+        "scripts/check_task_t13_02.py"
+      ],
+      "acceptance": "Declared contract checker and independent fictional tests pass; this packet is not implementation of retrieval or generation. Runtime build/test selection is specified in a later implementation track after provider qualification.",
+      "evidence_path": "conductor/tracks/13_graphrag/evidence.md",
+      "tests": "python3 scripts/check_task_t13_02.py && python3 scripts/validate_scaffold.py",
+      "commit": "T13.02: <verified scoped result>",
+      "task_card": "conductor/tasks/T13.02.md",
+      "interface": "RetrievalPacket: snapshot/as_of, caller scopes, edge allowlist, max_hops=2, max_nodes=100, ordered evidence refs, excluded refs, truncation flag",
+      "oracles": [
+        [
+          "scope_before_traversal",
+          "An excluded node may not bridge two authorized nodes in a returned path."
+        ],
+        [
+          "bounded_and_stable",
+          "A >100-node fictional neighborhood returns at most 100 nodes with deterministic order and explicit truncation."
+        ]
+      ]
+    },
+    {
+      "id": "T13.03",
+      "track": "13_graphrag",
+      "title": "Specify optional generation over retrieved evidence",
+      "status": "not_started",
+      "depends_on": [
+        "T13.02",
+        "T06.05"
+      ],
+      "requirements": [
+        "R20",
+        "R52",
+        "R53"
+      ],
+      "lane": "research",
+      "action": "Define a local provider boundary; Microsoft GraphRAG is an optional separately qualified research comparator, not a Python dependency of the converter.",
+      "allowed_paths": [
+        "docs/retrieval/graph-generation.json",
+        "scripts/check_task_t13_03.py"
+      ],
+      "acceptance": "Declared contract checker and independent fictional tests pass; this packet is not implementation of retrieval or generation. Runtime build/test selection is specified in a later implementation track after provider qualification.",
+      "evidence_path": "conductor/tracks/13_graphrag/evidence.md",
+      "tests": "python3 scripts/check_task_t13_03.py && python3 scripts/validate_scaffold.py",
+      "commit": "T13.03: <verified scoped result>",
+      "task_card": "conductor/tasks/T13.03.md",
+      "interface": "GraphAnswerPacket: retrieval_receipt, model/prompt versions, supporting/contradicting refs, unknowns, abstention, typed candidate assertions",
+      "oracles": [
+        [
+          "unsupported_claim_abstains",
+          "A requested fact absent from the supplied passages produces explicit unknown rather than fabricated evidence."
+        ],
+        [
+          "injection_is_data",
+          "A retrieved message instructing the system to ignore its contract neither changes policy nor invokes tools."
+        ]
+      ]
+    },
+    {
+      "id": "T13.04",
+      "track": "13_graphrag",
+      "title": "Specify temporal scope and correction invalidation",
+      "status": "not_started",
+      "depends_on": [
+        "T13.03",
+        "T10.08"
+      ],
+      "requirements": [
+        "R43",
+        "R52",
+        "R53"
+      ],
+      "lane": "research",
+      "action": "Propagate revisions/retractions/access changes through graph, vectors and summaries; no silent stale fallback.",
+      "allowed_paths": [
+        "docs/retrieval/graph-invalidation.json",
+        "scripts/check_task_t13_04.py"
+      ],
+      "acceptance": "Declared contract checker and independent fictional tests pass; this packet is not implementation of retrieval or generation. Runtime build/test selection is specified in a later implementation track after provider qualification.",
+      "evidence_path": "conductor/tracks/13_graphrag/evidence.md",
+      "tests": "python3 scripts/check_task_t13_04.py && python3 scripts/validate_scaffold.py",
+      "commit": "T13.04: <verified scoped result>",
+      "task_card": "conductor/tasks/T13.04.md",
+      "interface": "GraphInvalidationPacket: changed evidence IDs, revoked scopes, affected index/summary/embedding IDs, old/new snapshots, rebuild status",
+      "oracles": [
+        [
+          "future_evidence_excluded",
+          "An as-of query excludes messages and corrections not yet known at that observation time."
+        ],
+        [
+          "revocation_invalidates",
+          "A revoked source invalidates derived summaries and cached answers before another retrieval; stale values are unavailable."
+        ]
+      ]
+    },
+    {
+      "id": "T13.05",
+      "track": "13_graphrag",
+      "title": "Specify gated retrieval-assisted enrichment",
+      "status": "not_started",
+      "depends_on": [
+        "T13.04",
+        "T10.02"
+      ],
+      "requirements": [
+        "R21",
+        "R35",
+        "R52",
+        "R53"
+      ],
+      "lane": "research",
+      "action": "Route all proposed semantic improvements through existing claim/evidence admission. Do not automatically write FOI-O concepts or treat graph plausibility as event truth.",
+      "allowed_paths": [
+        "docs/retrieval/graph-enrichment.json",
+        "scripts/check_task_t13_05.py"
+      ],
+      "acceptance": "Declared contract checker and independent fictional tests pass; this packet is not implementation of retrieval or generation. Runtime build/test selection is specified in a later implementation track after provider qualification.",
+      "evidence_path": "conductor/tracks/13_graphrag/evidence.md",
+      "tests": "python3 scripts/check_task_t13_05.py && python3 scripts/validate_scaffold.py",
+      "commit": "T13.05: <verified scoped result>",
+      "task_card": "conductor/tasks/T13.05.md",
+      "interface": "GraphEnrichmentPacket: source_claim_id, candidate actor/work-item links, anchors, evidence checks, review outcome, distinct enriched export ID",
+      "oracles": [
+        [
+          "no_direct_event_write",
+          "A GraphRAG answer proposing task completion cannot enter observed Stage 1 events."
+        ],
+        [
+          "copy_not_corroboration",
+          "Three retrieved quotes of one message count as one source family, not three independent confirmations."
+        ]
+      ]
+    },
+    {
+      "id": "T13.06",
+      "track": "13_graphrag",
+      "title": "Pre-register GraphRAG value and unchanged-core acceptance",
+      "status": "not_started",
+      "depends_on": [
+        "T13.05",
+        "T11.01",
+        "T11.05",
+        "T11.07"
+      ],
+      "requirements": [
+        "R23",
+        "R44",
+        "R52",
+        "R53"
+      ],
+      "lane": "research",
+      "action": "Use independent FOI gold and canonical example corpora; test injected false edges, stale summaries and missing evidence. Activate only after measured value and privacy/correction tests pass.",
+      "allowed_paths": [
+        "docs/retrieval/graph-evaluation.json",
+        "scripts/check_task_t13_06.py"
+      ],
+      "acceptance": "Declared contract checker and independent fictional tests pass; this packet is not implementation of retrieval or generation. Runtime build/test selection is specified in a later implementation track after provider qualification.",
+      "evidence_path": "conductor/tracks/13_graphrag/evidence.md",
+      "tests": "python3 scripts/check_task_t13_06.py && python3 scripts/validate_scaffold.py",
+      "commit": "T13.06: <verified scoped result>",
+      "task_card": "conductor/tasks/T13.06.md",
+      "interface": "GraphEvaluationPacket: five retrieval arms, matched evidence/model/budget, heldout set, risk/coverage, scope/temporal leakage, cost, core-output parity",
+      "oracles": [
+        [
+          "simpler_baseline_retained",
+          "No-retrieval/lexical/vector/graph-only/graph+generation arms share source scope; unavailable arms are not assigned invented scores."
+        ],
+        [
+          "optional_failure_isolated",
+          "A simulated unavailable graph/model leaves default converter output byte-identical except declared volatile receipt fields."
+        ]
+      ]
     }
-  ]
+  ],
+  "product": "mailweft",
+  "scope_contract": "conductor/scope-contract.json"
 }

@@ -1,6 +1,6 @@
-# Conductor track registry
+# Conductor track registry — Mailweft
 
-The task manifest governs exact prerequisites; track links are not all-task gates. All Rust implementation tasks remain **not_started**.
+The task manifest owns exact prerequisites. All application implementation remains not_started. Optional research/integration cannot block core release.
 
 - [ ] **00_foundation: Foundation, legal/source gates and Rust workspace** — [spec](tracks/00_foundation/spec.md), [plan](tracks/00_foundation/plan.md), 7 tasks.
 - [ ] **01_ingestion: Raw EML and maildir input, manifests and parse boundaries** — [spec](tracks/01_ingestion/spec.md), [plan](tracks/01_ingestion/plan.md), 8 tasks.
@@ -15,6 +15,5 @@ The task manifest governs exact prerequisites; track links are not all-task gate
 - [ ] **09_patterns: Email acts, genres and interaction patterns** — [spec](tracks/09_patterns/spec.md), [plan](tracks/09_patterns/plan.md), 8 tasks.
 - [ ] **10_evidence-incremental: Evidence receipts, alternatives and incremental interpretation** — [spec](tracks/10_evidence-incremental/spec.md), [plan](tracks/10_evidence-incremental/plan.md), 8 tasks.
 - [ ] **11_frontier-validation: Controlled benchmarks and frontier experiments** — [spec](tracks/11_frontier-validation/spec.md), [plan](tracks/11_frontier-validation/plan.md), 8 tasks.
-- [ ] **12_ecosystem-reuse: FOI-only consumer qualification and migration** — [spec](tracks/12_ecosystem-reuse/spec.md), [plan](tracks/12_ecosystem-reuse/plan.md), 6 tasks.
-
-See [execution order](../docs/EXECUTION-ORDER.md) and [reuse register](../docs/REPOSITORY-REUSE.md).
+- [ ] **12_ecosystem-reuse: First FOI consumer and reviewed ontology feedback** — [spec](tracks/12_ecosystem-reuse/spec.md), [plan](tracks/12_ecosystem-reuse/plan.md), 8 tasks.
+- [ ] **13_graphrag: Optional evidence-constrained GraphRAG** — [spec](tracks/13_graphrag/spec.md), [plan](tracks/13_graphrag/plan.md), 6 tasks.

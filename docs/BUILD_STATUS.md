@@ -1,34 +1,31 @@
-# Verification status — 8 November 2026 refinement
+# Verification status — Mailweft publication, 8 November 2026
 
-## Scope
+## Current revision
 
-Updated the local independent `email-ocel` planning repository from baseline `5d66c44`. This is a specification/schema/tooling revision, not an implemented Rust application. All 108 application tasks are `not_started`.
+This revision updates local baseline `e1c201b` for the accepted `mailweft` repository. It is planning, contract and development-validation work only. All **116 application/research/integration tasks** remain `not_started`.
 
-## Inventory
+Inventory: **53 requirements, 15 tracks, 116 tasks, 38 detailed task cards and 11 unchanged schema contracts**. The original seven scope-regression tests were run against the inherited validator: the approved profile passed, but six invalid scope profiles incorrectly passed. Enforcement was then added. Fresh checks below verify rejection of those profiles; they are not Rust application tests.
 
-- 47 requirement IDs, 14 tracks, 108 tasks and 30 new detailed task cards.
-- 11 Draft 2020-12 schemas: seven inherited schemas unchanged; four additive types.
-- Four positive fictional record examples and 18 deliberately invalid variants.
-- Literature/source register and targeted repository-reuse register, including inspected file blob hashes.
+## Local checks actually executed
 
-## Checks executed on this revision
+- `python3 scripts/validate_scaffold.py`: PASS, 53 requirements / 15 tracks / 116 tasks / 11 schemas / 38 cards; exact task DAG, requirement references, registration and independent core closure.
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: PASS, **15 tests** (eight inherited planning checks plus seven scope checks).
+- `python3 scripts/validate_contract_examples.py`: PASS, **11 Draft 2020-12 metaschemas, four positive fictional examples and 18 rejected negative variants**.
+- `git diff --check`: run before publication; whitespace failure blocks commit.
+- Schema bytes and original Conductor gitlink are retained. Accepted name changes product/crate plans, not pre-existing schema identities.
 
-- `python3 scripts/validate_scaffold.py`: passed; exact-ID dependencies, cycle checks, registry agreement, requirement references/coverage and independent core lane closure.
-- `python3 -m unittest discover -s scripts -p test_validate_scaffold.py -v`: eight checks passed. Seven mutation cases first failed against the inherited validator and passed after the validator was extended.
-- `python3 scripts/validate_contract_examples.py`: all 11 schemas passed Draft 2020-12 metaschema checks; four positive examples accepted and 18 negative examples rejected. Missing calibration-record and retraction-prior-hash cases first exposed absent constraints; the new schemas were tightened before passing.
-- `git diff --check`: passed before commit.
-- Distribution bundle and archive are verified separately after export; an export receipt accompanies the downloadable artifacts.
+The schema examples are independent fictional records; validation does not establish cross-record integrity, source truth, privacy enforcement, calibration, process accuracy or real-world effectiveness.
 
-These development checks do not execute the planned Rust test commands or prove cross-record semantics, evidence truth, privacy enforcement, model accuracy, process fidelity or a production deployment. Python and jsonschema are development-only validators, not proposed application dependencies.
+## Publication and Conductor
 
-## Conductor and publication state
+The remote target is `edithatogo/mailweft`. Publication uses a verified Git-history transfer and a merge that preserves the prior planning commits. A separate publication receipt records the actual remote SHA and readback after success; this document does not imply a future write happened.
 
-The inherited Git submodule entry remains mode `160000`, pinned to `7a5c560a4fdf5297be58594cc37527eb12790272` at `.agents/plugins/conductor`; `.gitmodules` retains its upstream URL. The upstream checkout is uninitialized. A compatible networked development environment must initialize it and separately qualify any host plugin registration. This revision did not install or execute a Gemini/Conductor host runtime.
+Gemini Conductor is an actual gitlink, mode `160000`, at `.agents/plugins/conductor`, pinned to `7a5c560a4fdf5297be58594cc37527eb12790272`. The local authoring environment cannot reach GitHub, so its upstream checkout is uninitialized. The hosted publication/check job is intended to initialize and verify that pinned source. Host-specific plugin registration remains a separate user-environment action; checking out the source is not proof of a Gemini or other host extension installation.
 
-No GitHub repository was created or mutated; the inspected repositories were read-only sources. No corpus, source email, attachment, embedding or model weights were downloaded. No Rust workspace/application, extraction model, live provider or benchmark is claimed implemented, compiled or tested.
+The read-only planning CI verifies the gitlink/checkout and the planning tests. It does not run or claim any converter, NLP, corpus, graph or domain benchmark. No real emails, credentials, research contacts, correspondence drafts, model weights or operational source payloads belong in this publication.
 
-## FOI-only scope and robustness refinement (later 8 November 2026)
+## Product and boundary checks
 
-Supersedes the broad owned-repository adoption queue. T12.01–T12.06 now prepare only FOI defect, source-fidelity, adapter, shadow, migration and acceptance packets; T08.05 is a generic export boundary, not a CareOps integration. T11.08 no longer waits for repository-integration qualification. A new research protocol distinguishes counterfactuals, invariance and information degradation, and records existing DFG-comparison/error-injection prior art. Naming `mailweft` is proposed only; crate paths and schema identifiers are unchanged.
+Mailweft remains **an email-to-OCEL converter written in Rust**. Enron is a canonical verification/example corpus, never required input or the product domain. `foi-process` is the first consumer; legacy outputs are explicitly excluded from reference/oracle/teacher/equality roles. `fyi-cli` and the archive boundary retain acquisition/preservation ownership; `foi-o` owns reviewed ontology promotion. GraphRAG is optional and outside the core dependency closure.
 
-Fresh local checks: scaffold integrity (47 requirements, 14 tracks, 108 tasks, 11 schemas), eight validator tests, 11 metaschemas plus four positive/18 negative examples, and whitespace checks passed. No Rust extraction, model evaluation, FOI defect reproduction, remote mutation or cutover was performed. The inherited Conductor gitlink remains unchanged and uninitialized.
+No Rust application was implemented or compiled; no real-data processing, external model execution, FOI migration, ontology update or collaboration email was performed by the planning revision.

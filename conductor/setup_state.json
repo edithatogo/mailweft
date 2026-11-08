@@ -1,0 +1,10 @@
+{
+  "product": "mailweft",
+  "context_prepared": true,
+  "plugin_path": ".agents/plugins/conductor",
+  "plugin_commit": "7a5c560a4fdf5297be58594cc37527eb12790272",
+  "host_extension_installed": false,
+  "rust_workspace_implemented": false,
+  "next_task": "T00.01",
+  "scope_contract": "conductor/scope-contract.json"
+}

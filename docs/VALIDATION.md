@@ -1,3 +1,5 @@
+> **Current scope:** Enron is canonical verification/example data only, not the product domain or input prerequisite. The existing foi-process pipeline is unvalidated and cannot supply expected labels, a reference baseline or training targets. Use independent evidence and synthetic gold. See [PRODUCT-SCOPE](PRODUCT-SCOPE.md) and [FOI-BOUNDARIES](FOI-BOUNDARIES.md).
+
 # Validation strategy — explicit reference populations and metrics
 
 ## Levels
@@ -20,4 +22,4 @@
 See [FRONTIER-EVALUATION.md](FRONTIER-EVALUATION.md) for metamorphic cases, independent component-level splits, downstream process-error metrics, calibration and contemporary comparators. Preserve cross-population matchability gates. Distinguish a library feature being implemented, executed, externally benchmarked and scientifically superior.
 
 ## FOI-only scope and robustness refinement
-The sole active owned consumer is `foi-process`, which will depend on this generic library. Other owned-repository integrations are removed from active tasks. See [the superseding source-fidelity, baseline and error-impact protocol](FOI-SCOPE-AND-ROBUSTNESS.md). Repository name `mailweft` is proposed; existing package paths/schema IDs are unchanged until the owner selects the name. No runtime benchmark or downstream migration is claimed.
+The sole active owned consumer is `foi-process`, which will depend on this generic library. Other owned-repository integrations are removed from active tasks. See [the superseding source-fidelity, baseline and error-impact protocol](FOI-SCOPE-AND-ROBUSTNESS.md). Repository name `mailweft` is selected. Planned package paths use Mailweft; historical schema IDs remain stable aliases (see docs/NAME-MIGRATION.md). No runtime benchmark or downstream migration is claimed.

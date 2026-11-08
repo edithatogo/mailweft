@@ -4,11 +4,11 @@
 
 ## Scope and naming
 
-Recommended repository name: `mailweft`, with description "Rust-native reconstruction of evidence-linked, object-centric event logs from raw email." This is a recommendation, not a completed package rename or a reservation. Retain existing `email-ocel` crate paths and schema identifiers until the owner creates the selected repository and a separate rename audit is performed. Git history and the Conductor pin must survive any rename.
+Selected repository: **edithatogo/mailweft**. Core outcome: **an email-to-OCEL converter written in Rust**. Enron is only a canonical verification/example corpus, with version/rights/source matching; it is not the library's domain or required input. See `PRODUCT-SCOPE.md` and `NAME-MIGRATION.md`.
 
-Only `edithatogo/foi-process` is an active owned-repository integration target. Earlier multi-repository assessments are historical research, not an active implementation queue. There is no active integration with CareOps, Kairos, document platforms or scholarly libraries. Standard upstream parsing, serialization and Rust4PM dependencies remain eligible. This narrowing does not remove generic attachment/NLP/provider interfaces.
+`foi-process` is the first and sole active owned consumer and depends on Mailweft, never the reverse. `fyi-cli`/`fyi-archive` retain capture/archive boundaries; `foi-o` owns semantics and receives reviewed evidence-linked contributions from independently validated consumer results. See `FOI-BOUNDARIES.md` for the documented handover ambiguity and exact responsibilities.
 
-The dependency direction is **foi-process -> new library -> qualified upstream crates**. FOI-specific request identifiers, authority identities, lifecycle vocabulary, legislation/deadline rules, platform status interpretation and publication remain the consumer's responsibility. The generic library owns MIME/header parsing, generic participant/identity/quotation evidence, optional body/attachment interpretation and generic OCEL/evidence output. No circular dependency; no new shared framework is required.
+The existing FOI pipeline is unvalidated. Do not use its outputs as a reference, expected-output baseline, teacher, gold set or behavioral-parity target. It may be inspected to diagnose specific defects only. All evaluation expectations are independent of it.
 
 ## Source fidelity and the FYI application
 
@@ -27,13 +27,13 @@ Keep platform observations and email assertions independent. A page's status is 
 
 Read-only inspection of `foi-process/src/rust4pm.rs`, blob `7665c02ae363507b22f659a14cebc372e1353e14`, shows deliberate empty attribute vectors for type, object and event output. This is a documented adapter limitation, not a finding that Rust4PM cannot express attributes or that all FOI results are invalid. `src/normalize.rs`, blob `0eda8dd516754248b25615ac28dc8a86ff96a2cd`, maps supplied activity labels through an FYI profile and copies an allowlist of attributes. Reproduce each suspected defect at an exact commit before deciding what to replace.
 
-1. Freeze representative, permitted fixtures and current output with configuration/source hashes.
-2. Record a defect ledger: expected result, observed result, reproduction, affected layer and severity. Include an attribute-loss sentinel.
-3. Inventory actual source representations and accessibility; retain explicit unsupported paths.
-4. Define the one-way consumer mapping and field-by-field loss ledger. Preserve participant qualifiers, typed values, time-varying object attributes, IDs and sidecar references. Revisions/retractions belong in the evidence ledger, not an append-only OCEL sink.
-5. Run old/new paths in shadow on identical source snapshots. Classify every difference as intended correction, regression, representation difference or unresolved; the old output is a comparator, not gold.
-6. Adjudicate disagreements without model outputs as the original annotation guide; bind acceptance to frozen source and code revisions.
-7. Promote only after downstream checks, idempotent replay, correction/retraction tests and rollback checks pass. Retire duplicate implementation only after matched evidence; no remote mutation is authorized by this planning revision.
+1. Freeze permitted source hashes and independently annotated expectations before showing annotators any pipeline output.
+2. Document individual reproducible defects using a separate diagnostic ledger; this does not turn legacy output into a reference.
+3. Audit source representations, access, completeness and actual capture/archive owners.
+4. Define field-complete one-way consumer mapping; retain explicit losses and revision semantics.
+5. Test the candidate against independent source-based gold and synthetic fixtures, not equality with the old pipeline.
+6. Route validated, source-linked ontology gaps/counterexamples to FOI-O as candidates; independent review controls promotion.
+7. Promote only after actual consumer checks. Recovery is a validated snapshot or disabled/quarantined analysis, not assumed safety of the old pipeline.
 
 ## What surpassing Buss et al. means
 

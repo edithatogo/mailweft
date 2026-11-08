@@ -1,6 +1,6 @@
 {
   "id": "12_ecosystem-reuse",
-  "title": "FOI-only consumer qualification and migration",
+  "title": "First FOI consumer and reviewed ontology feedback",
   "status": "not_started",
   "requirements": [
     "R07",
@@ -20,7 +20,9 @@
     "T12.03",
     "T12.04",
     "T12.05",
-    "T12.06"
+    "T12.06",
+    "T12.07",
+    "T12.08"
   ],
   "depends_on": [
     "03_ocel"

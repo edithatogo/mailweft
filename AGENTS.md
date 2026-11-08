@@ -22,3 +22,8 @@
 
 19. Only `foi-process` is an active owned-repository integration. It consumes this library; never add a reverse dependency. Historical repository audits are not instructions to integrate those projects. Read `docs/FOI-SCOPE-AND-ROBUSTNESS.md` for current scope and evaluation design.
 20. Never label a rendered FYI page as a raw RFC message or invent unavailable headers. Do not use an input platform status as independent gold truth. Error injection runs on isolated copies with manifests, never live sources.
+
+21. The accepted product name is Mailweft. Keep existing schema `$id` values stable; use planned Mailweft crate paths. Enron belongs only to verification/examples, never generic core logic or required input.
+22. Never use existing foi-process output as a gold label, reference, teacher or equality target. Legacy inspection is diagnostic-only. Verify new outputs from independent source annotations and synthetic fixtures.
+23. Read docs/FOI-BOUNDARIES.md: fyi-cli captures, the archive boundary preserves/publishes, foi-process consumes Mailweft, and foi-o owns ontology promotion. Record the current archive handover conflict rather than moving ownership yourself.
+24. GraphRAG is optional. Use source-grounded graph retrieval before generation; summaries/answers are not evidence or observed events. No automatic ontology changes. Track 13 cannot enter the core-release dependency closure.
