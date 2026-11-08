@@ -1,0 +1,3 @@
+[workspace]
+members = ["crates/mailweft-core", "crates/mailweft-cli"]
+resolver = "2"
