@@ -74,3 +74,16 @@ fn missing_bcc_is_not_fabricated() {
 fn malformed_header_fails_closed_instead_of_synthesizing_recipients() {
     assert!(convert_eml(b"hello no header block", "copy", observed()).is_err());
 }
+
+#[test]
+fn repeated_acquisition_at_new_time_is_a_distinct_observation() {
+    let first = convert_eml(RAW, "mailbox/1", observed()).unwrap();
+    let later = convert_eml(
+        RAW,
+        "mailbox/1",
+        Utc.with_ymd_and_hms(2026, 11, 10, 1, 2, 3).unwrap(),
+    )
+    .unwrap();
+    assert_eq!(first.source_copy_id, later.source_copy_id);
+    assert_ne!(first.log.events[0].id, later.log.events[0].id);
+}
