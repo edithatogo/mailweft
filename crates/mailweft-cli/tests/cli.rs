@@ -26,8 +26,20 @@ fn batch_cli_writes_two_observation_events_as_ocel_json() {
         .arg(&second)
         .output()
         .unwrap();
-    assert!(output.status.success(), "{}", String::from_utf8_lossy(&output.stderr));
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
     let value: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
     assert_eq!(value["events"].as_array().unwrap().len(), 2);
-    assert_eq!(value["objects"].as_array().unwrap().iter().filter(|x| x["type"] == "email_message").count(), 1);
+    assert_eq!(
+        value["objects"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|x| x["type"] == "email_message")
+            .count(),
+        1
+    );
 }

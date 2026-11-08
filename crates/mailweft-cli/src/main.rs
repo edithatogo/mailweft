@@ -53,7 +53,8 @@ fn batch(args: &[String]) -> ExitCode {
             }
         }
     }
-    let inputs: Vec<_> = contents.iter()
+    let inputs: Vec<_> = contents
+        .iter()
         .zip(args[3..].iter())
         .map(|(bytes, source_id)| SourceInput {
             raw: bytes.as_slice(),

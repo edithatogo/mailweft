@@ -29,8 +29,16 @@ fn rust4pm_imports_two_copy_events_with_merged_message_relationships() {
     let raw = b"From: a@example.invalid\r\nTo: b@example.invalid\r\nSubject: Sample\r\n\r\nhello";
     let at = Utc.with_ymd_and_hms(2026, 11, 9, 1, 2, 3).unwrap();
     let sources = [
-        SourceInput { raw, source_id: "custodian/a", observed_at: at },
-        SourceInput { raw, source_id: "custodian/b", observed_at: at },
+        SourceInput {
+            raw,
+            source_id: "custodian/a",
+            observed_at: at,
+        },
+        SourceInput {
+            raw,
+            source_id: "custodian/b",
+            observed_at: at,
+        },
     ];
     let log = convert_batch(&sources).unwrap();
     let mut file = tempfile::Builder::new().suffix(".json").tempfile().unwrap();

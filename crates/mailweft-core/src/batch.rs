@@ -41,7 +41,9 @@ pub fn convert_batch(inputs: &[SourceInput<'_>]) -> Result<Ocel, Error> {
                 }
                 Entry::Occupied(mut o) => {
                     let previous = o.get_mut();
-                    if previous.object_type != object.object_type || previous.attributes != object.attributes {
+                    if previous.object_type != object.object_type
+                        || previous.attributes != object.attributes
+                    {
                         return Err(Error::IdentityCollision);
                     }
                     previous.relationships.extend(object.relationships);
