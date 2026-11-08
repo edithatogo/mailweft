@@ -34,9 +34,11 @@ pub fn convert(inputs: &[RawEmail], c: &Config) -> Result<Conversion, Error> {
     let mut duplicates = 0;
     for input in inputs {
         let message = crate::parser::parse(input, c)?;
+        // DateTime equality compares instants, but the source offset is evidence too.
+        // Reject conflicting representations rather than letting input order choose one.
         let fingerprint = (
             message.source_sha256.clone(),
-            message.observed_at,
+            message.observed_at.to_rfc3339(),
             message.source_kind.clone(),
         );
         let ref_id = c.id("source", &[input.source_ref.as_bytes()]);

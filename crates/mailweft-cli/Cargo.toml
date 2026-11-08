@@ -13,7 +13,7 @@ name = "mailweft"
 path = "src/main.rs"
 
 [dependencies]
-mailweft-core = { path = "../mailweft-core" }
+mailweft-core = { version = "=0.1.0-alpha.1", path = "../mailweft-core" }
 chrono.workspace = true
 serde_json.workspace = true
 clap.workspace = true
