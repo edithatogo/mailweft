@@ -1,4 +1,4 @@
-name: Qualify feature-branch Rust formatting
+name: Reconcile verified native checkpoint
 on:
   push:
     branches: ['feat/raw-email-ocel']
@@ -6,27 +6,86 @@ on:
 permissions:
   contents: write
 jobs:
-  format:
+  reconcile:
     if: github.repository == 'edithatogo/mailweft' && github.ref == 'refs/heads/feat/raw-email-ocel'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           fetch-depth: 0
-      - name: Format additional hardening tests on isolated branch
+      - name: Verify native slice before recording limited completion
+        run: |
+          rustup toolchain install 1.99.1 --profile minimal --component rustfmt --component clippy
+          cargo test --quiet --workspace --all-targets --locked
+          cargo fmt --all -- --check
+          cargo clippy --quiet --workspace --all-targets --locked -- -D warnings
+          python3 -m pip install --disable-pip-version-check -r requirements-planning.txt
+          python3 scripts/check_runtime_schema.py
+          git check-ignore data/real.eml fixtures/private/real.eml private.key >/dev/null
+      - name: Reconcile only named foundation and partial implementation tasks
         shell: bash
         run: |
           set -euo pipefail
-          rustup toolchain install 1.99.1 --profile minimal --component rustfmt --component clippy
-          cargo fmt --all
-          if ! git diff --quiet -- crates; then
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add crates
-            git commit -m 'style: format chronology and security regression tests'
-            test "$(git ls-remote origin refs/heads/feat/raw-email-ocel | cut -f1)" = "$GITHUB_SHA"
-            git push origin HEAD:refs/heads/feat/raw-email-ocel
-          fi
-      - name: Observe adversarial and chronology tests
-        run: cargo test --quiet --workspace --all-targets --locked --no-fail-fast
+          python3 - <<'PY'
+          import json, re
+          from pathlib import Path
+          root = Path('.')
+          path = root / 'conductor/task-manifest.json'
+          data = json.loads(path.read_text())
+          tasks = {t['id']: t for t in data['tasks']}
+          done = {'T00.01', 'T00.03', 'T00.04', 'T00.05'}
+          partial = {'T01.01','T01.03','T01.04','T01.05','T01.06','T01.07','T01.08',
+                     'T02.01','T02.02','T02.03','T02.04','T03.01','T03.02','T03.03','T03.04','T03.06','T03.08'}
+          assert done | partial | {'T00.06'} <= tasks.keys()
+          for code in done | partial | {'T00.06'}:
+              t = tasks[code]
+              assert t['status'] == 'not_started', f'Concurrent progress must be reconciled: {code}'
+              t['status'] = 'completed' if code in done else ('blocked' if code == 'T00.06' else 'in_progress')
+              t['execution_evidence'] = 'conductor/execution/20261108-core-slice.md'
+          tasks['T00.04']['title'] = 'Create minimal Rust workspace with mailweft-core and mailweft-cli'
+          tasks['T00.04']['acceptance'] = 'cargo metadata --no-deps, locked native tests and fmt pass for two packages. Components remain modules; no unused microcrates, Enron, FOI, Python, model or graph core dependency.'
+          tasks['T00.06']['blocker'] = 'https://github.com/edithatogo/mailweft/issues/4'
+          tasks['T00.06']['allowed_paths'] = ['.github/workflows/rust.yml', '.github/workflows/planning-checks.yml', 'deny.toml', 'Cargo.toml', 'Cargo.lock', 'docs/DEPENDENCIES.md']
+          tasks['T01.01']['allowed_paths'] = ['crates/mailweft-core/src/lib.rs', 'crates/mailweft-core/src/pipeline.rs', 'crates/mailweft-cli/src/main.rs']
+          for t in data['tasks']:
+              t['allowed_paths'] = [p.replace('crates/mailweft/', 'crates/mailweft-core/') for p in t.get('allowed_paths', [])]
+          path.write_text(json.dumps(data, indent=2) + '\n')
+          for folder in ('00_foundation', '01_ingestion', '02_identity', '03_ocel'):
+              base = root / 'conductor/tracks' / folder
+              m = json.loads((base / 'metadata.json').read_text())
+              m['status'] = 'in_progress'
+              (base / 'metadata.json').write_text(json.dumps(m, indent=2) + '\n')
+              p = base / 'plan.md'
+              text = p.read_text()
+              for code in done:
+                  text = text.replace(f'- [ ] **{code}', f'- [x] **{code}')
+              text = text.replace('crates/mailweft/', 'crates/mailweft-core/')
+              p.write_text(text + '\n## Native checkpoint\n\nSee ../../execution/20261108-core-slice.md. Only explicitly checked foundation tasks are complete. Remaining checked-in capability is partial; security issue #4 blocks qualification/release.\n')
+              e = base / 'evidence.md'
+              e.write_text(e.read_text() + '\n## Native execution checkpoint\n\nRecorded in `conductor/execution/20261108-core-slice.md`; current API/limits in `docs/CORE-CHECKPOINT.md`. Historic planning-only statements above refer to the original scaffold, not the current implementation. No broad track completion is asserted.\n')
+          p = root / 'conductor/tracks.md'
+          text = p.read_text().replace('All application implementation remains not_started.', 'Core conversion is implemented in a bounded preview; foundation completion and partial tasks are recorded in task-manifest.json. Security issue #4 remains blocking. No complete track or release is claimed.')
+          for folder in ('00_foundation', '01_ingestion', '02_identity', '03_ocel'):
+              text = text.replace(f'- [ ] **{folder}:', f'- [~] **{folder}:')
+          p.write_text(text)
+          p = root / 'AGENTS.md'
+          text = p.read_text().replace('18. This refinement changes plans/contracts and their validation helpers only. No Rust implementation or production integration is implied.', '18. A bounded native converter now exists. Read docs/CORE-CHECKPOINT.md and conductor/execution/20261108-core-slice.md. Do not treat the historic planning scaffold as current status or overstate the preview as full implementation. Security issue #4 remains a release blocker.')
+          p.write_text(text)
+          for name in ('docs/DESIGN.md','docs/NAME-MIGRATION.md','conductor/tech-stack.md'):
+              p = root / name
+              if p.is_file():
+                  p.write_text(p.read_text() + '\n## Implemented package layout\n\nThe native checkpoint uses `crates/mailweft-core` and `crates/mailweft-cli`; logical components are internal modules. Earlier single-directory paths are superseded by this tested two-package layout. Stable schema IDs are unchanged. See docs/CORE-CHECKPOINT.md for actual status and unresolved security gates.\n')
+          p = root / 'docs/BUILD_STATUS.md'
+          p.write_text('# Current build status\n\nA bounded Rust converter/CLI now exists on PR #3. Native checks and real CLI schema validation have run; security issue #4 remains blocking. Read [core checkpoint](CORE-CHECKPOINT.md) and [execution ledger](../conductor/execution/20261108-core-slice.md). Historical planning receipts below are dated evidence, not current implementation claims.\n\n---\n\n' + p.read_text())
+          PY
+          python3 scripts/validate_scaffold.py
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+          python3 scripts/validate_contract_examples.py
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add conductor AGENTS.md docs/DESIGN.md docs/NAME-MIGRATION.md docs/BUILD_STATUS.md
+          git commit -m 'docs: reconcile Conductor with verified partial native implementation'
+          test "$(git ls-remote origin refs/heads/feat/raw-email-ocel | cut -f1)" = "$GITHUB_SHA"
+          git push origin HEAD:refs/heads/feat/raw-email-ocel
