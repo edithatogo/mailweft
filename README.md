@@ -2,16 +2,27 @@
 
 **An email-to-OCEL converter written in Rust.**
 
-Mailweft is a standalone, corpus-neutral library and CLI design: raw RFC 5322/MIME email -> typed, evidence-linked OCEL 2.0 communication logs. Optional structural NLP, semantic enrichment and GraphRAG build on that output without replacing the converter or rewriting its observations.
+Mailweft is a standalone, corpus-neutral library and CLI: raw RFC 5322/MIME email -> typed, evidence-linked OCEL 2.0 communication logs. Optional structural NLP, semantic enrichment and GraphRAG build on that output without replacing the converter or rewriting its observations.
 
-**Status:** contracts and granular Conductor planning scaffold. No Rust application, extraction benchmark, model evaluation or live FOI migration has been implemented by this publication. Planning tests are not runtime validation.
+**Status:** an experimental offline Rust EML-to-OCEL 2.0 implementation now builds, with single-file and bounded multi-EML batch conversion, synthetic tests and independent Rust4PM import acceptance. Its published roadmap remains much broader. No real dataset benchmark, semantic NLP, GraphRAG, live FOI migration or product release has been validated.
 
 ## Core contract
-- Local EML/maildir input; no processed-data prerequisite. Preserve source hashes, actual participant roles, claimed versus observed times, duplicate/copy identity and completeness.
+- Local EML input (maildir planned); no processed-data prerequisite. Preserve source hashes, actual participant roles, claimed versus observed times, duplicate/copy identity and completeness.
 - Native OCEL 2.0 JSON with typed attributes, event/object relationship qualifiers and object histories; report every lossy or unsupported mapping.
 - Offline Rust-only production core; no required Python, LLM, graph database, cloud, UI, FOI project or Enron corpus.
 - Enron is a **canonical verification and example dataset**, not the subject or schema of Mailweft. Dataset-specific recipes stay outside the core; no real email data is committed.
 - Original source stays immutable. Optional interpretations retain evidence, attribution, uncertainty, correction history and review state.
+
+## Try the offline Rust converter
+
+```sh
+cargo run --locked -p mailweft-cli -- source.eml 2026-11-09T01:02:03Z > single.ocel.json
+cargo run --locked -p mailweft-cli -- batch 2026-11-09T01:02:03Z a.eml b.eml > batch.ocel.json
+cargo test --locked --workspace --all-targets
+cargo test --locked -p mailweft-core --features rust4pm-validation --test rust4pm_interop
+```
+
+The required timestamp is a caller-supplied acquisition observation, not proof of sending or delivery. Public output uses hashed participant identifiers and explicit qualifier relationships. Batch is limited to 1,024 explicit EML paths and 256 MiB input; large-corpus streaming, full source receipts and many fields remain planned. [Implementation limitations](docs/BATCH-IMPLEMENTATION.md).
 
 ## First consumer and ownership
 `foi-process` will depend on Mailweft. Its existing unvalidated output is **not** a reference or correctness oracle. Independently adjudicated source evidence and synthetic fixtures govern migration.
@@ -40,4 +51,4 @@ Python is only an initial planning-validation helper, not the proposed applicati
 Read `AGENTS.md` and the single eligible task card; implement only that task, write the specified failing tests first, record real exit codes, and leave unavailable execution blocked. The core lane is independently releasable; dataset rights, human annotation, research, graphs and downstream consumers are not core release prerequisites.
 
 ## Licence and references
-Original work: Apache-2.0. Upstream dependencies and datasets retain separate licences and rights. `mail-parser`, `mail-threading` and Rust4PM `process_mining` are candidates pending exact-version qualification. No upstream unlicensed implementation or email corpus is bundled. Existing version-1 schema identifiers retain the earlier email-ocel namespace as stable aliases.
+Original work: Apache-2.0. Upstream dependencies and datasets retain separate licences and rights. `mail-parser` 1.0.1 is the qualified initial parser and Rust4PM `process_mining` 0.6.2 is pinned for an optional import-validation feature. `mail-threading` remains a future candidate. No upstream unlicensed implementation or email corpus is bundled. Existing version-1 schema identifiers retain the earlier email-ocel namespace as stable aliases.
