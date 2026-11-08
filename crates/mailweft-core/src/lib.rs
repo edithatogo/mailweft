@@ -1,7 +1,7 @@
 //! Mailweft: an offline, corpus-independent EML-to-OCEL 2.0 converter.
 //! Stage 1 records archive observation, not proof of sending, delivery or business action.
 use chrono::{DateTime, Utc};
-use mail_parser::{Address, MessageParser};
+use mail_parser::{AddressList, MessageParser};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
@@ -92,10 +92,10 @@ fn push_address_links(
     relationships: &mut Vec<Relationship>,
     objects: &mut BTreeMap<String, Object>,
     role: &str,
-    addresses: Option<&Address<'_>>,
+    addresses: Option<AddressList<'_>>,
 ) {
     if let Some(addresses) = addresses {
-        for mailbox in addresses.iter() {
+        for mailbox in addresses.mailboxes() {
             // An address is evidence of a mailbox identifier, not proof of a person.
             if let Some(address) = mailbox.address().filter(|value| !value.trim().is_empty()) {
                 let normalized = address.trim().to_ascii_lowercase();
