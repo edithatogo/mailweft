@@ -1,0 +1,20 @@
+name: Publication preflight
+on:
+  push:
+    paths:
+      - '.github/workflows/publication-preflight.yml'
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check import tooling without sources or credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          git --version
+          python3 --version
+          xz --version | head -1
+          printf 'Publication tooling is available; no source import or application test has run.\n'
