@@ -18,3 +18,6 @@
 
 ## 0.2 benchmark and boundary refinements
 See [FRONTIER-EVALUATION.md](FRONTIER-EVALUATION.md) for metamorphic cases, independent component-level splits, downstream process-error metrics, calibration and contemporary comparators. Preserve cross-population matchability gates. Distinguish a library feature being implemented, executed, externally benchmarked and scientifically superior.
+
+## FOI-only scope and robustness refinement
+The sole active owned consumer is `foi-process`, which will depend on this generic library. Other owned-repository integrations are removed from active tasks. See [the superseding source-fidelity, baseline and error-impact protocol](FOI-SCOPE-AND-ROBUSTNESS.md). Repository name `mailweft` is proposed; existing package paths/schema IDs are unchanged until the owner selects the name. No runtime benchmark or downstream migration is claimed.

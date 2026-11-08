@@ -29,3 +29,6 @@ work and stop. Missing dependencies/tools => BLOCKED, never a fabricated pass.
 ## Plan validation
 
 Run `python3 scripts/validate_scaffold.py` and `python3 scripts/test_validate_scaffold.py`. These validate planning consistency, not application implementation. `python3 scripts/validate_contract_examples.py` additionally uses the development-only jsonschema package for Draft 2020-12/schema-example checks.
+
+## FOI-only scope and robustness refinement
+The sole active owned consumer is `foi-process`, which will depend on this generic library. Other owned-repository integrations are removed from active tasks. See [the superseding source-fidelity, baseline and error-impact protocol](FOI-SCOPE-AND-ROBUSTNESS.md). Repository name `mailweft` is proposed; existing package paths/schema IDs are unchanged until the owner selects the name. No runtime benchmark or downstream migration is claimed.

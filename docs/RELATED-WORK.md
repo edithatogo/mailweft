@@ -96,3 +96,6 @@ Versioned label mapping, broader/narrower relationships and explicit unknown map
 Basic zoning, speech-act detection, task-to-actor assignment and text-to-OCEL extraction already have published precedents. A Rust rewrite alone is engineering, not evidence of a scientific advance. The research claim to test is whether raw-message/copy-aware, source-grounded, uncertainty-preserving reconstruction improves **downstream process conclusions**, at equal cost and privacy constraints. Compare reference methods, independent adjudication and cross-corpus held-out tests. Failure to beat a baseline is a valid result; retain the simpler baseline.
 
 The frontier register is a dated shortlist, not proof of exhaustive novelty. Before a publication novelty claim, conduct a broader reproducible literature search, with Searchright optionally producing the search record.
+
+## Comparison correction and error-injection prior art
+See `FOI-SCOPE-AND-ROBUSTNESS.md` for the checked Buss journal extension (already includes DFG comparison), Sadeghianasl et al.'s 2026 imperfection-pattern injection study, Kabierski et al.'s quality taxonomy, CheckList behavioural testing and prior uncertain-log conformance. Novelty must be in demonstrated raw-email reconstruction and downstream reliability, not in inventing text-to-OCEL, error injection, uncertainty or Rust speed.

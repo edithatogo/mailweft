@@ -36,3 +36,6 @@ Downstream measurements compare the same projection, vocabulary and event view: 
 ## Adoption gates
 
 Adopt advanced methods only after they beat the simplest eligible baseline on the registered objective at stated privacy/resource limits. Benchmark model weights, prompts and cache versions separately. Skip an unavailable comparator with an explicit reason; do not invent results. A source/schema validator is not a successful Rust extraction or a scientific result.
+
+## FOI-only scope and robustness refinement
+The sole active owned consumer is `foi-process`, which will depend on this generic library. Other owned-repository integrations are removed from active tasks. See [the superseding source-fidelity, baseline and error-impact protocol](FOI-SCOPE-AND-ROBUSTNESS.md). Repository name `mailweft` is proposed; existing package paths/schema IDs are unchanged until the owner selects the name. No runtime benchmark or downstream migration is claimed.

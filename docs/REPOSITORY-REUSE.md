@@ -1,33 +1,22 @@
-# Repository reuse and ownership boundaries
+# Repository scope and ownership — FOI only
 
-Review: 8 November 2026. This is a targeted review, not an inventory of every repository. The source register records inspected blob hashes. No claim of fresh build/test qualification is made.
+**Superseding user decision, 8 November 2026:** `foi-process` is the only active owned-repository integration. The earlier broad repository review is preserved in Git history and the historical register; it is not an adoption backlog.
 
-**No sibling repository becomes a core dependency.** Reuse in this order: existing compatible upstream crate; small qualified neutral API; shared format/fixture; source design pattern. Extract a shared crate only after two real consumers and API/rights qualification justify it. Do not create another generic framework just for future possibilities.
+The new library is an intended dependency of `foi-process`, never the reverse. It remains a generic Rust raw-email -> OCEL 2.0/evidence library. FOI/FYI vocabulary, request/authority identity, platform state interpretation, policy/deadline rules and publication stay in the consumer.
 
-| Repository | Relevant material | Decision and qualification boundary |
-|---|---|---|
-| `foi-process` | Rust replay, revisions/retractions and optional Rust4PM projection | Reuse candidate after source audit; prefer neutral patterns/interfaces over a FOI-domain dependency. src/rust4pm.rs inspected: snapshot output deliberately passes empty attribute vectors. It is NOT an attribute-complete OCEL adapter. Cargo.toml pins process_mining=0.6.0 and declares Apache-2.0. No tests executed in this review. |
-| `sourceright` | Verification sidecars, conflict resolution and review queues | Reuse provenance/review conventions only after a contract audit. Reference/citation verification does not verify that an email assertion is true. Technical preview; not a generic email identity service. |
-| `citeweft` | Rust source spans, uncertainty and backend-neutral scholarly extraction | Optional scholarly-attachment evidence adapter. Technical preview; scholarly scope. Do not assume general PDF/Office extraction or production backend parity. |
-| `fe-reader` | Headless Rust document/PDF workflow contracts | Optional attachment provider behind read-only extraction interface. Technical preview; qualify actual text/OCR/geometry capability using its parity registry, not README feature names. |
-| `nlp-policy-nz` | Existing NLP, language and evidence mapping experiments | Evaluation reference or separate opt-in service only. README specifies a Python production runtime with Rust acceleration. Never import it into the Rust-only default binary; policy-specific models need email-domain tests. |
-| `searchright` | Rust evidence-search contracts, retrieval and provenance conventions | Optional literature/benchmark discovery and evidence-restricted retrieval. Technical alpha; scholarly search/review semantics are not mailbox semantics. Do not depend on its full workspace. |
-| `rcagent` | Investigation chronology, source/account separation and research protocols | Downstream consumer of evidence exports and optional evaluation scenarios. Released core is a Markdown skill, not a Rust engine or independently validated business-event extractor. |
-| `kairos` | Deterministic Rust DES/ABM | Optional synthetic workflow generator with independently authored email renderer. Alpha; use latent event ledger as truth, not generated emails or a second LLM as an oracle. No simulation dependency for extraction. |
-| `process-mappings` | Domain profile registry idea | Future optional domain mappings only. README explicitly describes a non-canonical incubator and says no substantive mappings implemented. Not a reusable mapping library today. |
+See [the complete source-fidelity, migration and robustness protocol](FOI-SCOPE-AND-ROBUSTNESS.md).
 
-## Important adapter finding
+## Confirmed source finding, not a whole-system verdict
 
-`foi-process/src/rust4pm.rs` (blob `7665c02ae363507b22f659a14cebc372e1353e14`) contains real Rust integration using `AppendableOCEL`. Its current projection intentionally supplies empty attributes to type declarations, objects and events. Reusing that projection unchanged would breach email-ocel's attribute/history preservation contract. This is a **project adapter limitation**, not proof that Rust4PM cannot represent the attributes. Audit the selected Rust4PM API and use full structures; add typed event attributes, time-varying object attributes and E2O/O2O parity fixtures before any reuse.
+The read-only inspected `foi-process/src/rust4pm.rs` (blob `7665c02ae363507b22f659a14cebc372e1353e14`) deliberately emits empty attribute vectors. The normalizer `src/normalize.rs` (blob `0eda8dd516754248b25615ac28dc8a86ff96a2cd`) maps supplied activity labels and allowlisted attributes. Reproduce bounded defects before replacing either path; no fresh FOI test run has been performed here.
 
-`foi-process` also has domain-specific evidence types. Review replay/retraction patterns; do not import FOI terms into the generic email model. The adapter is snapshot-oriented: an append-only sink is not a correction/retraction store.
+## Integration order
 
-## Explicit non-dependencies
+1. Reproduce defects and freeze permitted source/output fixtures.
+2. Distinguish raw RFC messages from platform exports, web renditions and attachments.
+3. Qualify complete OCEL/evidence mappings and explicit unsupported/field-loss states.
+4. Shadow old/new processing with independent adjudication; old output is not the oracle.
+5. Prepare migration, feature flag, replay and rollback in the consumer repository.
+6. Promote only after actual consumer tests and permissions pass. No remote change is implied by a packet.
 
-CareOps remains a downstream OCEL consumer. Rust4PM remains the process-mining engine; Propel may view exports. Kairos can generate test workflows, but never becomes a parser. Paignia, Voiage and innovation/economic models are not required to reconstruct communications; strategic intent or value-of-information research belongs outside this core.
-
-CiteWeft and Fe Reader are complementary candidates: scholarly evidence structure versus document/PDF backend workflows. Neither is assumed to handle all attachments. SourceRight verifies reference/provider evidence, not business claims; Searchright's scholarly retrieval infrastructure cannot be relabelled as an email GraphRAG service.
-
-## Contract-first integration packet
-
-For each proposed adapter, record: producer/consumer package+revision, SPDX/notice verification, data classes allowed, exact input/output schemas, field-level loss ledger, access-scope propagation, timeout/resource limits, offline negative test, synthetic round-trip fixture, default-disabled feature and removal/fallback test. Pin qualified versions only after successful actual compilation. Existing repository histories and native systems remain untouched by this plan.
+The track retains its existing ID `12_ecosystem-reuse` to preserve task references, but its scope is exclusively FOI integration. All other owned-repository integrations are out of scope. Upstream third-party parsing and Rust4PM dependencies are not affected by this restriction.

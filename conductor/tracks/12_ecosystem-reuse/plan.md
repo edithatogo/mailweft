@@ -1,65 +1,50 @@
-# Optional repository reuse qualification implementation plan
+# FOI-only consumer qualification and migration implementation plan
 
-**Status:** all implementation tasks not started. **Goal:** the bounded specification in `spec.md`.
-**Architecture:** retain independent Rust raw-email -> OCEL 2.0 core; optional lanes do not gate core.
-**Tech stack:** qualified Rust dependencies; Python helpers only for development-document validation.
-**Spec:** `spec.md`, `docs/CONTRACT.md`, `docs/FRONTIER-DESIGN.md`.
+**Goal:** bounded tasks in `spec.md`. **Architecture:** preserve independent raw-email OCEL core.
+**Tech stack:** Rust application; development-only document checkers. **Status:** all runtime tasks not started.
+**Spec:** `spec.md`, `docs/FOI-SCOPE-AND-ROBUSTNESS.md`.
 
 ## Global constraints and review focus
-No real email/source data in Git; no network/model fallback; no participant-role/authority conflation; preserve source attribution and OCEL attributes/qualifiers; observe exact task prerequisites, not whole-track gates. Test unknowns, malicious data, copied quotations, Unicode spans and missing/ambiguous references where applicable.
+Only foi-process is an active owned consumer. Do not confuse raw and rendered sources, inferred and observed events, source status and independent gold labels, packet validation and executed migration, or absent fields and known-empty data. Exact task prerequisites are authoritative; optional integration never gates core release.
 
-The manifest is authoritative for dependencies and lane. Checkboxes are completion records, not approval requests. Planning checks do not mark implementation complete.
-
-- [ ] **T12.01 — Qualify FOI replay patterns and full-fidelity Rust4PM boundary**
-  - Lane: `integration`. Depends on: T03.08.
-  - Edit only: `docs/integrations/foi-process.md`, `scripts/check_task_t12_01.py`.
-  - Action: Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.
-  - Acceptance: Fixture with event string/number values and time-varying object attribute fails if copied adapter drops attributes.; Snapshot sink is not advertised as revision/retraction store; no downstream code changed.
+- [ ] **T12.01 — Reproduce FOI defects and freeze the consumer boundary**
+  - Depends on: T03.08. Lane: `integration`.
+  - Files: `docs/integrations/foi-defects.md`, `scripts/check_task_t12_01.py`.
+  - Acceptance: A fixture containing typed event values and time-varying object values is marked loss when the inspected adapter drops attributes.; A suspected bug without an executable reproduction remains suspected; no whole-system failure or corrected-runtime claim is allowed.
   - Verification: `python3 scripts/check_task_t12_01.py && python3 scripts/validate_scaffold.py`.
-  - Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`. Commit: `T12.01: Qualify FOI replay patterns and full-fidelity Rust4PM boundary`.
-  - Exact interface and two oracle tests: [task card](../../tasks/T12.01.md).
+  - Interface and oracles: [task card](../../tasks/T12.01.md).
 
-- [ ] **T12.02 — Qualify Fe Reader and CiteWeft attachment evidence contracts**
-  - Lane: `integration`. Depends on: T05.05, T05b.03.
-  - Edit only: `docs/integrations/documents.md`, `scripts/check_task_t12_02.py`.
-  - Action: Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.
-  - Acceptance: Unsupported format/OCR/geometry produces unsupported, not synthesized extraction.; Provider output includes source hash and rendition/geometry mapping with exact/approximate fidelity.
+- [ ] **T12.02 — Audit FYI raw-message availability and source fidelity**
+  - Depends on: T12.01. Lane: `integration`.
+  - Files: `docs/integrations/fyi-source-fidelity.md`, `scripts/check_task_t12_02.py`.
+  - Acceptance: An HTML page cannot be labelled raw_rfc5322 or assigned fabricated Bcc/transport headers.; Unavailable Bcc and missing attachment bytes remain unavailable rather than a known-empty population.
   - Verification: `python3 scripts/check_task_t12_02.py && python3 scripts/validate_scaffold.py`.
-  - Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`. Commit: `T12.02: Qualify Fe Reader and CiteWeft attachment evidence contracts`.
-  - Exact interface and two oracle tests: [task card](../../tasks/T12.02.md).
+  - Interface and oracles: [task card](../../tasks/T12.02.md).
 
-- [ ] **T12.03 — Map SourceRight and Searchright evidence conventions**
-  - Lane: `integration`. Depends on: T10.01.
-  - Edit only: `docs/integrations/evidence.md`, `scripts/check_task_t12_03.py`.
-  - Action: Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.
-  - Acceptance: Reference/provider verification never changes an email claim into verified task completion.; Export to a consumer with insufficient scope is refused; summary evidence lineage is retained.
+- [ ] **T12.03 — Specify the one-way FOI adapter and lossless projection**
+  - Depends on: T12.01, T12.02, T10.01. Lane: `integration`.
+  - Files: `docs/integrations/foi-adapter-contract.md`, `scripts/check_task_t12_03.py`.
+  - Acceptance: Dependency graph is foi-process -> email library; no FOI domain crate is imported into core.; Required qualifier/attribute/history loss fails admission rather than silently emitting a reduced log.
   - Verification: `python3 scripts/check_task_t12_03.py && python3 scripts/validate_scaffold.py`.
-  - Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`. Commit: `T12.03: Map SourceRight and Searchright evidence conventions`.
-  - Exact interface and two oracle tests: [task card](../../tasks/T12.03.md).
+  - Interface and oracles: [task card](../../tasks/T12.03.md).
 
-- [ ] **T12.04 — Define optional NLP/RCA consumer contracts**
-  - Lane: `integration`. Depends on: T09.08.
-  - Edit only: `docs/integrations/nlp-rca.md`, `scripts/check_task_t12_04.py`.
-  - Action: Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.
-  - Acceptance: Rust default-feature build and fixture execution require no Python/model service.; RCA receives source/claim distinction and cannot silently overwrite source events.
+- [ ] **T12.04 — Freeze independently adjudicated FOI shadow comparisons**
+  - Depends on: T12.03, T11.01. Lane: `integration`.
+  - Files: `docs/integrations/foi-shadow-protocol.md`, `scripts/check_task_t12_04.py`.
+  - Acceptance: A disagreement with existing output is not automatically a new-library regression.; A platform status used as input cannot be reused as independent outcome truth; label dependencies are explicit.
   - Verification: `python3 scripts/check_task_t12_04.py && python3 scripts/validate_scaffold.py`.
-  - Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`. Commit: `T12.04: Define optional NLP/RCA consumer contracts`.
-  - Exact interface and two oracle tests: [task card](../../tasks/T12.04.md).
+  - Interface and oracles: [task card](../../tasks/T12.04.md).
 
-- [ ] **T12.05 — Document downstream CareOps and viewer interoperability**
-  - Lane: `integration`. Depends on: T08.01, T03.08.
-  - Edit only: `docs/integrations/consumers.md`, `scripts/check_task_t12_05.py`.
-  - Action: Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.
-  - Acceptance: Absent all downstream repos, core raw-to-OCEL fixtures still run.; Fork SHA/API/patch status recorded before adoption; no assumption of upstream parity or UI compliance.
+- [ ] **T12.05 — Prepare reversible consumer migration and replay acceptance**
+  - Depends on: T12.03, T12.04, T10.04. Lane: `integration`.
+  - Files: `docs/integrations/foi-migration-packet.md`, `scripts/check_task_t12_05.py`.
+  - Acceptance: The packet requires repeat/replay and correction tests that retain source IDs without duplicated independent events.; Missing consumer execution/rollback evidence leaves migration pending; no remote edit or production cutover is implied.
   - Verification: `python3 scripts/check_task_t12_05.py && python3 scripts/validate_scaffold.py`.
-  - Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`. Commit: `T12.05: Document downstream CareOps and viewer interoperability`.
-  - Exact interface and two oracle tests: [task card](../../tasks/T12.05.md).
+  - Interface and oracles: [task card](../../tasks/T12.05.md).
 
-- [ ] **T12.06 — Decide reuse after bounded evidence, without new core coupling**
-  - Lane: `integration`. Depends on: T12.01, T12.02, T12.03, T12.04, T12.05.
-  - Edit only: `docs/integrations/qualification.md`, `scripts/check_task_t12_06.py`.
-  - Action: Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.
-  - Acceptance: README claims cannot be labeled fresh runtime qualification; exact test receipt required.; All core task dependencies remain core after adapter planning; no optional integration becomes a release gate.
+- [ ] **T12.06 — Qualify FOI cutover without coupling core release**
+  - Depends on: T12.01, T12.02, T12.03, T12.04, T12.05. Lane: `integration`.
+  - Files: `docs/integrations/foi-acceptance.md`, `scripts/check_task_t12_06.py`.
+  - Acceptance: Absent required real test receipts yields defer, not acceptance.; Core task closure excludes FOI integration and real-data dependencies; no unrelated owned repo enters the active scope.
   - Verification: `python3 scripts/check_task_t12_06.py && python3 scripts/validate_scaffold.py`.
-  - Evidence: `conductor/tracks/12_ecosystem-reuse/evidence.md`. Commit: `T12.06: Decide reuse after bounded evidence, without new core coupling`.
-  - Exact interface and two oracle tests: [task card](../../tasks/T12.06.md).
+  - Interface and oracles: [task card](../../tasks/T12.06.md).

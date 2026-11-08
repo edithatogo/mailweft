@@ -62,7 +62,7 @@ Avoid publishing many tiny crates before interface pressure justifies them: begi
 
 ## Portability
 - Targets: Linux x86-64, Windows x86-64, macOS arm64. Pure Rust core where possible; test all in CI once qualified. No required Python, system OpenSSL, Office, Microsoft tenant, CUDA or Power Platform.
-- Optional consumers: PM4Py, CareOps Process, Fabric; no compile-time coupling.
+- Standard OCEL interoperability is engine-neutral. Sole active owned consumer: foi-process; no reverse compile-time coupling.
 
 ## Architecture decisions
 - ADR-0001: independent project, not CareOps submodule.

@@ -28,7 +28,7 @@ Priorities: **MUST** for Stage 1 release, **SHOULD** for next increment, **OPTIO
 | R22 | SHOULD | Compare deterministic rules, conventional NLP, optional local small LLMs with gold adjudication; zero required network egress. |
 | R23 | SHOULD | Cross-source entity links and temporal evidence graph behind optional provider; graph/GraphRAG never authoritative. |
 | R24 | SHOULD | Benchmark scaling on 10k/100k/full matched corpora, import/export fidelity, memory, time and failure rates. |
-| R25 | OPTIONAL | Python/R/Julia bindings, Power BI/Fabric integration, Outlook/Graph connector, CareOps adapter through versioned independent contracts. |
+| R25 | OPTIONAL | Python/R/Julia bindings, optional platform connectors and generic consumer exports use versioned independent contracts; foi-process is the only active owned-repository adapter. |
 | R26 | OPTIONAL | Rust4PM advanced OC algorithms, graph-assisted retrieval, uncertainty-aware conformance and simulation interoperability. |
 | R27 | SHOULD | Model header participants, in-text addressees and task actors as three separate relationship classes; preserve Bcc uncertainty and privacy restrictions, and support Resent headers. |
 | R28 | SHOULD | Segment decoded email parts into non-destructive, source-anchored functional zones, with original/semantic/identity/context views and nested quote provenance. |
@@ -48,7 +48,7 @@ Priorities: **MUST** for Stage 1 release, **SHOULD** for next increment, **OPTIO
 | R42 | SHOULD | Evaluate extraction errors through downstream object/event/edge distortion and process-conclusion sensitivity, not just token F1 or overall accuracy. |
 | R43 | SHOULD | Enforce evidence-scoped retrieval, Bcc view restrictions and deletion propagation into indexes/summaries/derived artifacts; preserve coverage-qualified absence claims. |
 | R44 | OPTIONAL | Research comparisons include 2026 text-to-OCEL collector/refiner work, object-centric quality classifications and matched-cost ablations; no frontier superiority claim without evidence. |
-| R45 | OPTIONAL | Reuse existing repository components only through separately qualified, one-way, default-disabled contracts; no domain leakage or mandatory Python runtime. |
+| R45 | OPTIONAL | The sole active owned-repository consumer is foi-process, which may depend on this library through a separately qualified one-way adapter; no reverse dependency, FOI domain leakage or mandatory Python runtime. |
 | R46 | SHOULD | Use bounded incremental processing, content/interpretation cache versioning and impact-based recomputation; optimization must preserve canonical equivalence. |
 | R47 | MUST | Task manifest uses exact existing task IDs, acyclic dependencies, requirement coverage and checked test commands; no missing external capability can be reported as passed. |
 

@@ -1,6 +1,6 @@
 {
   "id": "12_ecosystem-reuse",
-  "title": "Optional repository reuse qualification",
+  "title": "FOI-only consumer qualification and migration",
   "status": "not_started",
   "requirements": [
     "R07",
@@ -25,6 +25,6 @@
   "depends_on": [
     "03_ocel"
   ],
-  "notes": "Planning only; task manifest owns executable dependencies. Optional track never gates core release.",
+  "notes": "Planning only. Sole owned consumer is foi-process; library is its dependency, never reverse. No core gate.",
   "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
 }

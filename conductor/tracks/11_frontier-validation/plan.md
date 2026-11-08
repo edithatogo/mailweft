@@ -74,10 +74,10 @@ The manifest is authoritative for dependencies and lane. Checkboxes are completi
   - Exact interface and two oracle tests: [task card](../../tasks/T11.07.md).
 
 - [ ] **T11.08 — Define latent-truth simulation and independent renderers**
-  - Lane: `research`. Depends on: T11.01, T12.06.
+  - Lane: `research`. Depends on: T11.01.
   - Edit only: `research/synthetic-worlds.md`, `scripts/check_task_t11_08.py`.
   - Action: Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.
-  - Acceptance: Latent workflow ledger is gold; generated email or LLM judge is not gold.; Synthetic templates/paraphrase families remain isolated across train/test; Kairos absence does not block core fixtures.
+  - Acceptance: Latent workflow ledger is gold; generated email or LLM judge is not gold.; Synthetic templates/paraphrase families remain isolated across train/test; No external simulator or owned repository is required for latent-ledger fixtures.
   - Verification: `python3 scripts/check_task_t11_08.py && python3 scripts/validate_scaffold.py`.
   - Evidence: `conductor/tracks/11_frontier-validation/evidence.md`. Commit: `T11.08: Define latent-truth simulation and independent renderers`.
   - Exact interface and two oracle tests: [task card](../../tasks/T11.08.md).

@@ -48,7 +48,7 @@ Raw immutability is bounded by retention: lawful deletion removes protected byte
 - **Counterfactual/metamorphic evaluation:** controlled perturbations of addresses, salutations, signatures, quotations, negation, modality and deadlines. Expected deltas are fixed before model execution; not an observational causal claim about people.
 - **Active learning:** prioritize adjudication by expected error reduction per review cost with random-review controls; do not put research economics libraries in the core.
 - **Graph retrieval:** deterministic typed retrieval first, then vector/graph/GraphRAG comparisons at matched scope/cost. Query answers require admissible source evidence and must not re-enter the event store as observations.
-- **Synthetic worlds:** optional Kairos latent workflow logs -> independent email renderer -> blind reconstruction. Generated text is input, not ground truth; generator/model overlap, contamination and simulator domain bias must be reported.
+- **Synthetic worlds:** independently authored latent workflow fixtures -> independent email renderer -> blind reconstruction. Generated text is input, not ground truth; generator/model overlap, contamination and simulator domain bias must be reported.
 
 ## What not to infer
 
@@ -59,3 +59,6 @@ No personality, motives, wrongdoing, strategic behaviour, competence or individu
 Core acceptance: synthetic raw email -> complete typed OCEL 2.0 -> qualified Rust4PM read/round-trip, with bounded resources and no silent qualifier/attribute loss. Body understanding is an optional increment and can start as soon as safe MIME decoding/source maps exist; it does not wait for full Enron acquisition or document OCR. NLP, advanced attachments, graph experiments, optional adapters and full-corpus benchmarking cannot block the independently releasable core.
 
 External standard correction: JSON/XML/SQLite are the OCEL 2.0 baseline. The current standard site describes CSV and bundled CSV/Parquet under OCEL 2.1. Preserve 2.0, and add later interchange only as a version-labelled optional profile with feature/loss tests.
+
+## Scope correction and stronger comparison
+Only `foi-process` remains in the active integration queue, as a downstream consumer. See `FOI-SCOPE-AND-ROBUSTNESS.md` for source-fidelity, defect-led migration, prior-art limits and multi-layer error-impact experiments. No other owned-repository provider is selected by this document.

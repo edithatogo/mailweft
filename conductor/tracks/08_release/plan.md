@@ -46,11 +46,11 @@ The manifest is authoritative for dependencies and lane. Checkboxes are completi
   - Evidence: `conductor/tracks/08_release/evidence.md`. Commit: `T08.04: <concise result>`.
   - Before implementing, bind the acceptance to exact synthetic assertions and the actual predecessor interfaces; do not invent unqualified library APIs.
 
-- [ ] **T08.05 — Document independent CareOps adapter interface only**
+- [ ] **T08.05 — Document generic consumer interface with FOI as sole integration target**
   - Lane: `integration`. Depends on: T08.01.
   - Edit only: `docs/CONSUMERS.md`.
   - Action: Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.
-  - Acceptance: No CareOps dependency. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
+  - Acceptance: No downstream application dependency; foi-process is the only active owned consumer. Validate generic export and field-loss contracts; runtime checks remain blocked until implementation exists.
   - Verification: `Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked`.
   - Evidence: `conductor/tracks/08_release/evidence.md`. Commit: `T08.05: <concise result>`.
   - Before implementing, bind the acceptance to exact synthetic assertions and the actual predecessor interfaces; do not invent unqualified library APIs.

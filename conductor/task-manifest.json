@@ -1782,7 +1782,7 @@
     {
       "id": "T08.05",
       "track": "08_release",
-      "title": "Document independent CareOps adapter interface only",
+      "title": "Document generic consumer interface with FOI as sole integration target",
       "status": "not_started",
       "depends_on": [
         "T08.01"
@@ -1791,7 +1791,7 @@
         "docs/CONSUMERS.md"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
-      "acceptance": "No CareOps dependency. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
+      "acceptance": "No downstream application dependency; foi-process is the only active owned consumer. Validate the generic export contract and explicit field-loss report. Runtime checks remain blocked until implementation exists.",
       "evidence_path": "conductor/tracks/08_release/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
       "commit": "T08.05: <concise result>",
@@ -2500,8 +2500,7 @@
       "title": "Define latent-truth simulation and independent renderers",
       "status": "not_started",
       "depends_on": [
-        "T11.01",
-        "T12.06"
+        "T11.01"
       ],
       "lane": "research",
       "requirements": [
@@ -2514,7 +2513,7 @@
         "scripts/check_task_t11_08.py"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
-      "acceptance": "Latent workflow ledger is gold; generated email or LLM judge is not gold.; Synthetic templates/paraphrase families remain isolated across train/test; Kairos absence does not block core fixtures.",
+      "acceptance": "Latent workflow ledger is gold; generated email or LLM judge is not gold.; Synthetic templates/paraphrase families remain isolated across train/test; No external simulator or owned repository is required for latent-ledger fixtures.",
       "evidence_path": "conductor/tracks/11_frontier-validation/evidence.md",
       "tests": "python3 scripts/check_task_t11_08.py && python3 scripts/validate_scaffold.py",
       "commit": "T11.08: Define latent-truth simulation and independent renderers",
@@ -2524,7 +2523,7 @@
     {
       "id": "T12.01",
       "track": "12_ecosystem-reuse",
-      "title": "Qualify FOI replay patterns and full-fidelity Rust4PM boundary",
+      "title": "Reproduce FOI defects and freeze the consumer boundary",
       "status": "not_started",
       "depends_on": [
         "T03.08"
@@ -2536,25 +2535,24 @@
         "R45"
       ],
       "allowed_paths": [
-        "docs/integrations/foi-process.md",
+        "docs/integrations/foi-defects.md",
         "scripts/check_task_t12_01.py"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
-      "acceptance": "Fixture with event string/number values and time-varying object attribute fails if copied adapter drops attributes.; Snapshot sink is not advertised as revision/retraction store; no downstream code changed.",
+      "acceptance": "A fixture containing typed event values and time-varying object values is marked loss when the inspected adapter drops attributes.; A suspected bug without an executable reproduction remains suspected; no whole-system failure or corrected-runtime claim is allowed.",
       "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
       "tests": "python3 scripts/check_task_t12_01.py && python3 scripts/validate_scaffold.py",
-      "commit": "T12.01: Qualify FOI replay patterns and full-fidelity Rust4PM boundary",
+      "commit": "T12.01: Reproduce FOI defects and freeze the consumer boundary",
       "task_card": "conductor/tasks/T12.01.md",
-      "interface": "Adapter qualification packet: no FOI domain type in core; full OCEL compatibility fixture"
+      "interface": "FoIDefectLedger: exact commit, source/fixture hash, expected/actual output, reproduction command, affected layer and status"
     },
     {
       "id": "T12.02",
       "track": "12_ecosystem-reuse",
-      "title": "Qualify Fe Reader and CiteWeft attachment evidence contracts",
+      "title": "Audit FYI raw-message availability and source fidelity",
       "status": "not_started",
       "depends_on": [
-        "T05.05",
-        "T05b.03"
+        "T12.01"
       ],
       "lane": "integration",
       "requirements": [
@@ -2563,23 +2561,25 @@
         "R45"
       ],
       "allowed_paths": [
-        "docs/integrations/documents.md",
+        "docs/integrations/fyi-source-fidelity.md",
         "scripts/check_task_t12_02.py"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
-      "acceptance": "Unsupported format/OCR/geometry produces unsupported, not synthesized extraction.; Provider output includes source hash and rendition/geometry mapping with exact/approximate fidelity.",
+      "acceptance": "An HTML page cannot be labelled raw_rfc5322 or assigned fabricated Bcc/transport headers.; Unavailable Bcc and missing attachment bytes remain unavailable rather than a known-empty population.",
       "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
       "tests": "python3 scripts/check_task_t12_02.py && python3 scripts/validate_scaffold.py",
-      "commit": "T12.02: Qualify Fe Reader and CiteWeft attachment evidence contracts",
+      "commit": "T12.02: Audit FYI raw-message availability and source fidelity",
       "task_card": "conductor/tasks/T12.02.md",
-      "interface": "Two separate provider capability packets, not a mandatory shared runtime"
+      "interface": "FYISourceCapabilityPacket: raw_rfc5322 | platform_message_export | rendered_web_message | attachment_artifact; supplied_fields, unavailable_fields, scope and rights"
     },
     {
       "id": "T12.03",
       "track": "12_ecosystem-reuse",
-      "title": "Map SourceRight and Searchright evidence conventions",
+      "title": "Specify the one-way FOI adapter and lossless projection",
       "status": "not_started",
       "depends_on": [
+        "T12.01",
+        "T12.02",
         "T10.01"
       ],
       "lane": "integration",
@@ -2589,24 +2589,25 @@
         "R45"
       ],
       "allowed_paths": [
-        "docs/integrations/evidence.md",
+        "docs/integrations/foi-adapter-contract.md",
         "scripts/check_task_t12_03.py"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
-      "acceptance": "Reference/provider verification never changes an email claim into verified task completion.; Export to a consumer with insufficient scope is refused; summary evidence lineage is retained.",
+      "acceptance": "Dependency graph is foi-process -> email library; no FOI domain crate is imported into core.; Required qualifier/attribute/history loss fails admission rather than silently emitting a reduced log.",
       "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
       "tests": "python3 scripts/check_task_t12_03.py && python3 scripts/validate_scaffold.py",
-      "commit": "T12.03: Map SourceRight and Searchright evidence conventions",
+      "commit": "T12.03: Specify the one-way FOI adapter and lossless projection",
       "task_card": "conductor/tasks/T12.03.md",
-      "interface": "Neutral evidence/review export profile; no CSL or scholarly-review object required in email core"
+      "interface": "FOIAdapterMappingPacket: consumer-owned field mappings, versioned evidence references, required qualifiers/typed attributes/history and explicit loss ledger"
     },
     {
       "id": "T12.04",
       "track": "12_ecosystem-reuse",
-      "title": "Define optional NLP/RCA consumer contracts",
+      "title": "Freeze independently adjudicated FOI shadow comparisons",
       "status": "not_started",
       "depends_on": [
-        "T09.08"
+        "T12.03",
+        "T11.01"
       ],
       "lane": "integration",
       "requirements": [
@@ -2615,25 +2616,26 @@
         "R45"
       ],
       "allowed_paths": [
-        "docs/integrations/nlp-rca.md",
+        "docs/integrations/foi-shadow-protocol.md",
         "scripts/check_task_t12_04.py"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
-      "acceptance": "Rust default-feature build and fixture execution require no Python/model service.; RCA receives source/claim distinction and cannot silently overwrite source events.",
+      "acceptance": "A disagreement with existing output is not automatically a new-library regression.; A platform status used as input cannot be reused as independent outcome truth; label dependencies are explicit.",
       "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
       "tests": "python3 scripts/check_task_t12_04.py && python3 scripts/validate_scaffold.py",
-      "commit": "T12.04: Define optional NLP/RCA consumer contracts",
+      "commit": "T12.04: Freeze independently adjudicated FOI shadow comparisons",
       "task_card": "conductor/tasks/T12.04.md",
-      "interface": "Optional artifact/service boundary for nlp-policy-nz and rcagent; default binaries do not load either"
+      "interface": "FOIShadowProtocol: identical source snapshots, independent labels, old/new outputs and correction/regression/representation/unresolved difference classes"
     },
     {
       "id": "T12.05",
       "track": "12_ecosystem-reuse",
-      "title": "Document downstream CareOps and viewer interoperability",
+      "title": "Prepare reversible consumer migration and replay acceptance",
       "status": "not_started",
       "depends_on": [
-        "T08.01",
-        "T03.08"
+        "T12.03",
+        "T12.04",
+        "T10.04"
       ],
       "lane": "integration",
       "requirements": [
@@ -2642,21 +2644,21 @@
         "R45"
       ],
       "allowed_paths": [
-        "docs/integrations/consumers.md",
+        "docs/integrations/foi-migration-packet.md",
         "scripts/check_task_t12_05.py"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
-      "acceptance": "Absent all downstream repos, core raw-to-OCEL fixtures still run.; Fork SHA/API/patch status recorded before adoption; no assumption of upstream parity or UI compliance.",
+      "acceptance": "The packet requires repeat/replay and correction tests that retain source IDs without duplicated independent events.; Missing consumer execution/rollback evidence leaves migration pending; no remote edit or production cutover is implied.",
       "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
       "tests": "python3 scripts/check_task_t12_05.py && python3 scripts/validate_scaffold.py",
-      "commit": "T12.05: Document downstream CareOps and viewer interoperability",
+      "commit": "T12.05: Prepare reversible consumer migration and replay acceptance",
       "task_card": "conductor/tasks/T12.05.md",
-      "interface": "Versioned OCEL+sidecar consumer manifest; fork-delta audit checklist for owned rust4pm/propel"
+      "interface": "FOIMigrationPacket: default-off consumer feature, exact dependency pin, replay/correction/retraction checks, rollback and affected implementation inventory"
     },
     {
       "id": "T12.06",
       "track": "12_ecosystem-reuse",
-      "title": "Decide reuse after bounded evidence, without new core coupling",
+      "title": "Qualify FOI cutover without coupling core release",
       "status": "not_started",
       "depends_on": [
         "T12.01",
@@ -2672,16 +2674,16 @@
         "R47"
       ],
       "allowed_paths": [
-        "docs/integrations/qualification.md",
+        "docs/integrations/foi-acceptance.md",
         "scripts/check_task_t12_06.py"
       ],
       "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
-      "acceptance": "README claims cannot be labeled fresh runtime qualification; exact test receipt required.; All core task dependencies remain core after adapter planning; no optional integration becomes a release gate.",
+      "acceptance": "Absent required real test receipts yields defer, not acceptance.; Core task closure excludes FOI integration and real-data dependencies; no unrelated owned repo enters the active scope.",
       "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
       "tests": "python3 scripts/check_task_t12_06.py && python3 scripts/validate_scaffold.py",
-      "commit": "T12.06: Decide reuse after bounded evidence, without new core coupling",
+      "commit": "T12.06: Qualify FOI cutover without coupling core release",
       "task_card": "conductor/tasks/T12.06.md",
-      "interface": "ReuseDecision records per provider: adopt/adapter/reference/defer, versions, losses, fallback"
+      "interface": "FOIAcceptancePacket: evidence for source/adapter/shadow/replay/rollback tests, unresolved gaps and version-pinned adopt/defer decision"
     }
   ]
 }

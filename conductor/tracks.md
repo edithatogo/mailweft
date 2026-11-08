@@ -15,6 +15,6 @@ The task manifest governs exact prerequisites; track links are not all-task gate
 - [ ] **09_patterns: Email acts, genres and interaction patterns** — [spec](tracks/09_patterns/spec.md), [plan](tracks/09_patterns/plan.md), 8 tasks.
 - [ ] **10_evidence-incremental: Evidence receipts, alternatives and incremental interpretation** — [spec](tracks/10_evidence-incremental/spec.md), [plan](tracks/10_evidence-incremental/plan.md), 8 tasks.
 - [ ] **11_frontier-validation: Controlled benchmarks and frontier experiments** — [spec](tracks/11_frontier-validation/spec.md), [plan](tracks/11_frontier-validation/plan.md), 8 tasks.
-- [ ] **12_ecosystem-reuse: Optional repository reuse qualification** — [spec](tracks/12_ecosystem-reuse/spec.md), [plan](tracks/12_ecosystem-reuse/plan.md), 6 tasks.
+- [ ] **12_ecosystem-reuse: FOI-only consumer qualification and migration** — [spec](tracks/12_ecosystem-reuse/spec.md), [plan](tracks/12_ecosystem-reuse/plan.md), 6 tasks.
 
 See [execution order](../docs/EXECUTION-ORDER.md) and [reuse register](../docs/REPOSITORY-REUSE.md).

@@ -40,3 +40,6 @@ The 30 new task cards name the owned function or artifact, allowed paths, prereq
 See `BUILD_STATUS.md` for actual checks. The original seven schema files are unchanged; four additive record types have positive and negative fictional examples. Schema checks do not prove evidence truth, cross-record identity, inference calibration or scientific performance.
 
 The Conductor Git submodule remains pinned at the inherited commit. Its source checkout and host extension are not initialized/installed by this revision. No raw email corpus was downloaded, no Rust application was implemented or compiled, no model benchmark ran, and no remote GitHub repository was changed.
+
+## Superseded integration scope
+The later user instruction restricts active owned-repository integration to `foi-process`. Earlier candidate descriptions above are historical. Current tasks and research coupling are corrected in `FOI-SCOPE-AND-ROBUSTNESS.md`; no unrelated adapter is active.

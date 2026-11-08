@@ -61,3 +61,6 @@ Before task/decision NLP, the library will identify authored text, greetings, si
 The original raw-email-to-OCEL 2.0 core is preserved. New types are additive and advanced lanes remain optional. Planning now includes 47 requirements, 14 tracks and 108 tasks (30 new detailed task cards). No Rust functionality has been implemented by this update.
 
 [Refinement summary](docs/REFINEMENT-SUMMARY.md) · [Verified planning status](docs/BUILD_STATUS.md).
+
+## FOI-only scope and robustness refinement
+The sole active owned consumer is `foi-process`, which will depend on this generic library. Other owned-repository integrations are removed from active tasks. See [the superseding source-fidelity, baseline and error-impact protocol](docs/FOI-SCOPE-AND-ROBUSTNESS.md). Repository name `mailweft` is proposed; existing package paths/schema IDs are unchanged until the owner selects the name. No runtime benchmark or downstream migration is claimed.

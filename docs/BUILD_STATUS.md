@@ -26,3 +26,9 @@ These development checks do not execute the planned Rust test commands or prove 
 The inherited Git submodule entry remains mode `160000`, pinned to `7a5c560a4fdf5297be58594cc37527eb12790272` at `.agents/plugins/conductor`; `.gitmodules` retains its upstream URL. The upstream checkout is uninitialized. A compatible networked development environment must initialize it and separately qualify any host plugin registration. This revision did not install or execute a Gemini/Conductor host runtime.
 
 No GitHub repository was created or mutated; the inspected repositories were read-only sources. No corpus, source email, attachment, embedding or model weights were downloaded. No Rust workspace/application, extraction model, live provider or benchmark is claimed implemented, compiled or tested.
+
+## FOI-only scope and robustness refinement (later 8 November 2026)
+
+Supersedes the broad owned-repository adoption queue. T12.01–T12.06 now prepare only FOI defect, source-fidelity, adapter, shadow, migration and acceptance packets; T08.05 is a generic export boundary, not a CareOps integration. T11.08 no longer waits for repository-integration qualification. A new research protocol distinguishes counterfactuals, invariance and information degradation, and records existing DFG-comparison/error-injection prior art. Naming `mailweft` is proposed only; crate paths and schema identifiers are unchanged.
+
+Fresh local checks: scaffold integrity (47 requirements, 14 tracks, 108 tasks, 11 schemas), eight validator tests, 11 metaschemas plus four positive/18 negative examples, and whitespace checks passed. No Rust extraction, model evaluation, FOI defect reproduction, remote mutation or cutover was performed. The inherited Conductor gitlink remains unchanged and uninitialized.
