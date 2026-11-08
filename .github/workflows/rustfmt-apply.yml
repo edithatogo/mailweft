@@ -1,0 +1,26 @@
+name: One-time Rust formatter
+on:
+  push:
+    branches: [feat/rust-eml-ocel-slice]
+    paths: [.github/workflows/rustfmt-apply.yml]
+permissions:
+  contents: write
+jobs:
+  format:
+    if: github.repository == 'edithatogo/mailweft'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: true
+      - run: rustup toolchain install stable --profile minimal --component rustfmt
+      - run: cargo +stable fmt --all
+      - name: Commit only Rust formatting changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add crates/
+          if ! git diff --cached --quiet; then
+            git commit -m 'style: apply rustfmt to initial email-OCEL implementation'
+            git push origin HEAD:feat/rust-eml-ocel-slice
+          fi
