@@ -5,7 +5,9 @@
   "requirements": [
     "R12",
     "R16",
-    "R25"
+    "R25",
+    "R32",
+    "R47"
   ],
   "tasks": [
     "T08.01",
@@ -18,7 +20,9 @@
     "T08.08"
   ],
   "depends_on": [
-    "07"
+    "00_foundation",
+    "03_ocel"
   ],
-  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence."
+  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence.",
+  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
 }

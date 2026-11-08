@@ -1,0 +1,31 @@
+{
+  "id": "09_patterns",
+  "title": "Email acts, genres and interaction patterns",
+  "status": "not_started",
+  "requirements": [
+    "R07",
+    "R27",
+    "R30",
+    "R33",
+    "R34",
+    "R35",
+    "R36",
+    "R37",
+    "R39"
+  ],
+  "tasks": [
+    "T09.01",
+    "T09.02",
+    "T09.03",
+    "T09.04",
+    "T09.05",
+    "T09.06",
+    "T09.07",
+    "T09.08"
+  ],
+  "depends_on": [
+    "06_semantics"
+  ],
+  "notes": "Planning only; task manifest owns executable dependencies. Optional track never gates core release.",
+  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+}

@@ -8,3 +8,8 @@
 6. After every phase, rerun specified integration tests. Review architecture if data loss, confidence confusion, unsafe content processing or licence incompatibility is discovered.
 7. All external corpora remain outside source control. Never download or process a dataset merely because a task references it; check the dataset rights gate.
 8. Before a release, run full synthetic acceptance suite, verify OCEL round trips, docs, supply chain checks and zero-sensitive-artifact audit.
+
+## Task-ID scheduling and release lanes
+`task-manifest.json` is the authoritative prerequisite graph; track headings are organizational, not transitive all-task gates. All implementation tasks remain not_started. Core tasks may depend only on core tasks; corpus, enrichment, research and integration are independently selected lanes. `scripts/validate_scaffold.py` checks graph integrity, requirements, cards and lane closure. `scripts/test_validate_scaffold.py` tests that the checker rejects broken plans.
+
+One scoped design/review decision covers a feature; do not add per-message human approval rituals. Unknown source rights block real-data access only, not fictional-fixture development. Domain/authority decisions and production permissions retain their separate owners.

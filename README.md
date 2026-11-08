@@ -50,3 +50,14 @@ This repository's source does not contain or redistribute any Enron email data.
 ## Stage 1.5: structural email and participant evidence
 
 Before task/decision NLP, the library will identify authored text, greetings, sign-offs, signatures, reply/forward history, inline headers and disclaimers as non-destructive spans, then infer in-text addressees separately from RFC header roles. See [structural NLP specification](docs/STRUCTURAL-EMAIL-NLP.md) and [Conductor track 05b](conductor/tracks/05b_email-structure/plan.md). No implementation is claimed.
+
+## Refinement 0.2: patterns, evidence and frontier evaluation
+
+- [Extension design](docs/FRONTIER-DESIGN.md)
+- [Research comparison and metamorphic evaluation](docs/FRONTIER-EVALUATION.md)
+- [Repository reuse and limitations](docs/REPOSITORY-REUSE.md)
+- [Execution order](docs/EXECUTION-ORDER.md)
+
+The original raw-email-to-OCEL 2.0 core is preserved. New types are additive and advanced lanes remain optional. Planning now includes 47 requirements, 14 tracks and 108 tasks (30 new detailed task cards). No Rust functionality has been implemented by this update.
+
+[Refinement summary](docs/REFINEMENT-SUMMARY.md) · [Verified planning status](docs/BUILD_STATUS.md).

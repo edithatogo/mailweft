@@ -1,51 +1,74 @@
-# Plan — 05: Opt-in text and attachment content extraction
+# Opt-in text and attachment content extraction implementation plan
 
-**Execution rule:** One task per agent turn/commit. Complete tasks in numeric order. Update checkboxes only after acceptance and record actual commands/results in `evidence.md`.
-**Initial state:** Not started. Any unavailable requirement/tool is BLOCKED, not a pass.
+**Status:** all implementation tasks not started. **Goal:** the bounded specification in `spec.md`.
+**Architecture:** retain independent Rust raw-email -> OCEL 2.0 core; optional lanes do not gate core.
+**Tech stack:** qualified Rust dependencies; Python helpers only for development-document validation.
+**Spec:** `spec.md`, `docs/CONTRACT.md`, `docs/FRONTIER-DESIGN.md`.
+
+## Global constraints and review focus
+No real email/source data in Git; no network/model fallback; no participant-role/authority conflation; preserve source attribution and OCEL attributes/qualifiers; observe exact task prerequisites, not whole-track gates. Test unknowns, malicious data, copied quotations, Unicode spans and missing/ambiguous references where applicable.
+
+The manifest is authoritative for dependencies and lane. Checkboxes are completion records, not approval requests. Planning checks do not mark implementation complete.
 
 - [ ] **T05.01 — Define explicit content-access classification and size policy**
-  - **Edit only:** `contracts/v1/content-policy.md` (and same-track tests/docs when necessary).
-  - **Action:** Implement the named capability against `docs/CONTRACT.md`; start with a failing invented/synthetic test or schema assertion, then minimal fix.
-  - **Verify:** Default denies source content beyond Stage 1. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
-  - **Done when:** diff reviewed, actual commands and exit codes appended to `conductor/tracks/05_attachments/evidence.md`, step committed as `T05.01: <short description>`.
+  - Lane: `enrichment`. Depends on: T01.06.
+  - Edit only: `contracts/v1/content-policy.md`.
+  - Action: Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.
+  - Acceptance: Default denies source content beyond Stage 1. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
+  - Verification: `Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked`.
+  - Evidence: `conductor/tracks/05_attachments/evidence.md`. Commit: `T05.01: <concise result>`.
+  - Before implementing, bind the acceptance to exact synthetic assertions and the actual predecessor interfaces; do not invent unqualified library APIs.
 
 - [ ] **T05.02 — Scaffold optional semantics crate; implement body part selection and HTML sanitisation**
-  - **Edit only:** `Cargo.toml crates/email-ocel-semantics/Cargo.toml crates/email-ocel-semantics/src/lib.rs crates/email-ocel-semantics/src/body.rs` (and same-track tests/docs when necessary).
-  - **Action:** Implement the named capability against `docs/CONTRACT.md`; start with a failing invented/synthetic test or schema assertion, then minimal fix.
-  - **Verify:** No remote images/execution, fallback charset safe. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
-  - **Done when:** diff reviewed, actual commands and exit codes appended to `conductor/tracks/05_attachments/evidence.md`, step committed as `T05.02: <short description>`.
+  - Lane: `enrichment`. Depends on: T05.01.
+  - Edit only: `Cargo.toml`, `crates/email-ocel-semantics/Cargo.toml`, `crates/email-ocel-semantics/src/lib.rs`, `crates/email-ocel-semantics/src/body.rs`.
+  - Action: Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.
+  - Acceptance: No remote images/execution, fallback charset safe. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
+  - Verification: `Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked`.
+  - Evidence: `conductor/tracks/05_attachments/evidence.md`. Commit: `T05.02: <concise result>`.
+  - Before implementing, bind the acceptance to exact synthetic assertions and the actual predecessor interfaces; do not invent unqualified library APIs.
 
 - [ ] **T05.03 — Implement nested message/rfc822 guard**
-  - **Edit only:** `crates/email-ocel-semantics/src/nested.rs` (and same-track tests/docs when necessary).
-  - **Action:** Implement the named capability against `docs/CONTRACT.md`; start with a failing invented/synthetic test or schema assertion, then minimal fix.
-  - **Verify:** Bounded recursion and source refs. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
-  - **Done when:** diff reviewed, actual commands and exit codes appended to `conductor/tracks/05_attachments/evidence.md`, step committed as `T05.03: <short description>`.
+  - Lane: `enrichment`. Depends on: T05.02.
+  - Edit only: `crates/email-ocel-semantics/src/nested.rs`.
+  - Action: Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.
+  - Acceptance: Bounded recursion and source refs. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
+  - Verification: `Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked`.
+  - Evidence: `conductor/tracks/05_attachments/evidence.md`. Commit: `T05.03: <concise result>`.
+  - Before implementing, bind the acceptance to exact synthetic assertions and the actual predecessor interfaces; do not invent unqualified library APIs.
 
-- [ ] **T05.04 — Implement authored/quoted/forwarded/signature spans**
-  - **Edit only:** `crates/email-ocel-semantics/src/segments.rs` (and same-track tests/docs when necessary).
-  - **Action:** Implement the named capability against `docs/CONTRACT.md`; start with a failing invented/synthetic test or schema assertion, then minimal fix.
-  - **Verify:** Offsets point back to original source. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
-  - **Done when:** diff reviewed, actual commands and exit codes appended to `conductor/tracks/05_attachments/evidence.md`, step committed as `T05.04: <short description>`.
+- [ ] **T05.04 — Expose decoded body-part boundary for the single 05b zoning implementation**
+  - Lane: `enrichment`. Depends on: T05.02, T05.03.
+  - Edit only: `crates/email-ocel-semantics/src/segments.rs`.
+  - Action: Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.
+  - Acceptance: Expose only a typed decoded-part boundary; do not implement a second signature/quote classifier. Track 05b owns zoning.
+  - Verification: `Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked`.
+  - Evidence: `conductor/tracks/05_attachments/evidence.md`. Commit: `T05.04: <concise result>`.
+  - Before implementing, bind the acceptance to exact synthetic assertions and the actual predecessor interfaces; do not invent unqualified library APIs.
 
 - [ ] **T05.05 — Add optional document extractor provider interface**
-  - **Edit only:** `crates/email-ocel-semantics/src/attachments.rs` (and same-track tests/docs when necessary).
-  - **Action:** Implement the named capability against `docs/CONTRACT.md`; start with a failing invented/synthetic test or schema assertion, then minimal fix.
-  - **Verify:** No mandatory PDF/Office runtime. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
-  - **Done when:** diff reviewed, actual commands and exit codes appended to `conductor/tracks/05_attachments/evidence.md`, step committed as `T05.05: <short description>`.
+  - Lane: `enrichment`. Depends on: T05.04.
+  - Edit only: `crates/email-ocel-semantics/src/attachments.rs`.
+  - Action: Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.
+  - Acceptance: No mandatory PDF/Office runtime. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
+  - Verification: `Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked`.
+  - Evidence: `conductor/tracks/05_attachments/evidence.md`. Commit: `T05.05: <concise result>`.
+  - Before implementing, bind the acceptance to exact synthetic assertions and the actual predecessor interfaces; do not invent unqualified library APIs.
 
 - [ ] **T05.06 — Implement archive bomb, malware and path protections**
-  - **Edit only:** `crates/email-ocel-semantics/tests/security.rs` (and same-track tests/docs when necessary).
-  - **Action:** Implement the named capability against `docs/CONTRACT.md`; start with a failing invented/synthetic test or schema assertion, then minimal fix.
-  - **Verify:** Adversarial fixtures reject safely. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
-  - **Done when:** diff reviewed, actual commands and exit codes appended to `conductor/tracks/05_attachments/evidence.md`, step committed as `T05.06: <short description>`.
+  - Lane: `enrichment`. Depends on: T05.05.
+  - Edit only: `crates/email-ocel-semantics/tests/security.rs`.
+  - Action: Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.
+  - Acceptance: Adversarial fixtures reject safely. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
+  - Verification: `Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked`.
+  - Evidence: `conductor/tracks/05_attachments/evidence.md`. Commit: `T05.06: <concise result>`.
+  - Before implementing, bind the acceptance to exact synthetic assertions and the actual predecessor interfaces; do not invent unqualified library APIs.
 
 - [ ] **T05.07 — Add resource limits and local-only execution policy**
-  - **Edit only:** `crates/email-ocel-semantics/src/policy.rs` (and same-track tests/docs when necessary).
-  - **Action:** Implement the named capability against `docs/CONTRACT.md`; start with a failing invented/synthetic test or schema assertion, then minimal fix.
-  - **Verify:** No external network by default. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
-  - **Done when:** diff reviewed, actual commands and exit codes appended to `conductor/tracks/05_attachments/evidence.md`, step committed as `T05.07: <short description>`.
-
-## Phase completion gate
-- [ ] All Txx.yy steps verified or documented explicitly deferred with justification.
-- [ ] Run appropriate module integration tests, audit source/data leakage and record results in `evidence.md`.
-- [ ] No claim of operational or externally validated acceptance without real receipts.
+  - Lane: `enrichment`. Depends on: T05.06.
+  - Edit only: `crates/email-ocel-semantics/src/policy.rs`.
+  - Action: Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.
+  - Acceptance: No external network by default. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
+  - Verification: `Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked`.
+  - Evidence: `conductor/tracks/05_attachments/evidence.md`. Commit: `T05.07: <concise result>`.
+  - Before implementing, bind the acceptance to exact synthetic assertions and the actual predecessor interfaces; do not invent unqualified library APIs.

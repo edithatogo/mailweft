@@ -6,7 +6,10 @@
     "R04",
     "R05",
     "R06",
-    "R19"
+    "R19",
+    "R27",
+    "R33",
+    "R41"
   ],
   "tasks": [
     "T02.01",
@@ -19,7 +22,8 @@
     "T02.08"
   ],
   "depends_on": [
-    "01"
+    "01_ingestion"
   ],
-  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence."
+  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence.",
+  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
 }

@@ -29,3 +29,6 @@
 **/__pycache__/
 *.pyc
 .DS_Store
+
+# Only deliberately authored fictional mail fixtures may be committed.
+!fixtures/synthetic/**/*.eml

@@ -74,3 +74,8 @@ Avoid publishing many tiny crates before interface pressure justifies them: begi
 ## Incremental structural NLP (after safe content access, before business-event NLP)
 
 The intervening **Stage 1.5** is specified in [STRUCTURAL-EMAIL-NLP.md](STRUCTURAL-EMAIL-NLP.md). It annotates functional body zones, signatures, salutations and in-text person mentions without performing business-activity classification. This yields two independent representations: authoritative Stage 1 transport/header relationships and inferred, source-anchored Stage 1.5 text relationships. Quoted speech is attributed to its original reported speaker where possible and **not** counted as a new event. Every zone is recoverable by decoded-part byte offsets and hash; removed-from-analysis does not mean removed-from-evidence. Stage 2 speech-act classification is utterance-level and may assign multiple labels, unlike a coarse one-label-per-email classifier. Header roles and task responsibility remain different concepts.
+
+## 0.2 refinement and alternatives
+Read [FRONTIER-DESIGN.md](FRONTIER-DESIGN.md) for the extension design and [REPOSITORY-REUSE.md](REPOSITORY-REUSE.md) for inspected integration candidates. Selected: bounded Rust core with opt-in enrichment, not a monolithic LLM or CareOps component. Begin with core+CLI; the other crate names above are conceptual boundaries and are split only at the named implementation tasks. No graph UI or extra submodule is required.
+
+The task manifest is now task-ID-based and acyclic. Safe body decoding/zoning does not wait for corpus benchmarking or OCR. Core release does not wait for research or optional consumer adapters. Optional OCEL 2.1 interchange is outside the required 2.0 contract.

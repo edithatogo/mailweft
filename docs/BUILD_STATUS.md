@@ -1,8 +1,28 @@
-# Verification status (2026-11-08)
+# Verification status — 8 November 2026 refinement
 
-- Prepared self-contained local Git project (no GitHub remote created).
-- Conductor gitlink and .gitmodules pinned to verified upstream tag `conductor-v0.4.1` at commit `7a5c560a4fdf5297be58594cc37527eb12790272`. Upstream checkout is **not initialized**; requires networked `git submodule update --init --recursive`.
-- Conductor context, 9 tracks, 70 tasks, 5 JSON Schema Draft 2020-12 contracts generated.
-- Python-standard-library scaffold validation passed. External `jsonschema` validator checked all 5 schemas against Draft 2020-12: passed.
-- Cargo and Gemini CLI were unavailable in the creation environment. Rust code not yet implemented, compiled or tested. No Enron raw data or processed reference dataset downloaded.
-- This project is independent of CareOps Process. No CareOps repo modifications made in this turn.
+## Scope
+
+Updated the local independent `email-ocel` planning repository from baseline `5d66c44`. This is a specification/schema/tooling revision, not an implemented Rust application. All 108 application tasks are `not_started`.
+
+## Inventory
+
+- 47 requirement IDs, 14 tracks, 108 tasks and 30 new detailed task cards.
+- 11 Draft 2020-12 schemas: seven inherited schemas unchanged; four additive types.
+- Four positive fictional record examples and 18 deliberately invalid variants.
+- Literature/source register and targeted repository-reuse register, including inspected file blob hashes.
+
+## Checks executed on this revision
+
+- `python3 scripts/validate_scaffold.py`: passed; exact-ID dependencies, cycle checks, registry agreement, requirement references/coverage and independent core lane closure.
+- `python3 -m unittest discover -s scripts -p test_validate_scaffold.py -v`: eight checks passed. Seven mutation cases first failed against the inherited validator and passed after the validator was extended.
+- `python3 scripts/validate_contract_examples.py`: all 11 schemas passed Draft 2020-12 metaschema checks; four positive examples accepted and 18 negative examples rejected. Missing calibration-record and retraction-prior-hash cases first exposed absent constraints; the new schemas were tightened before passing.
+- `git diff --check`: passed before commit.
+- Distribution bundle and archive are verified separately after export; an export receipt accompanies the downloadable artifacts.
+
+These development checks do not execute the planned Rust test commands or prove cross-record semantics, evidence truth, privacy enforcement, model accuracy, process fidelity or a production deployment. Python and jsonschema are development-only validators, not proposed application dependencies.
+
+## Conductor and publication state
+
+The inherited Git submodule entry remains mode `160000`, pinned to `7a5c560a4fdf5297be58594cc37527eb12790272` at `.agents/plugins/conductor`; `.gitmodules` retains its upstream URL. The upstream checkout is uninitialized. A compatible networked development environment must initialize it and separately qualify any host plugin registration. This revision did not install or execute a Gemini/Conductor host runtime.
+
+No GitHub repository was created or mutated; the inspected repositories were read-only sources. No corpus, source email, attachment, embedding or model weights were downloaded. No Rust workspace/application, extraction model, live provider or benchmark is claimed implemented, compiled or tested.

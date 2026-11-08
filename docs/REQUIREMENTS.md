@@ -1,4 +1,4 @@
-# Requirements — version 0.1
+# Requirements — version 0.2 (additive plan refinement)
 
 Priorities: **MUST** for Stage 1 release, **SHOULD** for next increment, **OPTIONAL** for research lanes. Every REQ is covered by a Conductor task and a test or reasoned deferral.
 
@@ -35,6 +35,22 @@ Priorities: **MUST** for Stage 1 release, **SHOULD** for next increment, **OPTIO
 | R29 | SHOULD | Extract salutations, sign-offs and signature contact/organisational hints without treating them as authoritative identities or deleting their source content. |
 | R30 | SHOULD | Apply multi-label utterance-level dialogue/speech acts using historical taxonomies; identify likely actors, reported actions, temporality and negation, preserving abstention. |
 | R31 | SHOULD | Benchmark functional zoning, identity linking and task-to-person mapping using permitted, independently annotated corpora (Quagga, Forge, EPA) and synthetic fixtures with no leakage. |
+| R32 | MUST | Core release is independent of NLP, attachments content conversion, real-corpus access, graph retrieval, research, UI and sibling repositories; validate dependency closure. |
+| R33 | MUST | Keep mailbox/address/group, human identity, header role, text addressee and action responsibility distinct; never infer verified person/authority from address or signature alone. |
+| R34 | SHOULD | Classify message genre, body zone, utterance act and conversation interaction as separate versioned vocabularies with explicit unknown/multi-label outputs. |
+| R35 | SHOULD | Every exported semantic assertion has a verifiable evidence receipt linking exact source/rendition spans, extractor configuration, attribution and projection decision. |
+| R36 | SHOULD | Represent request-response, acknowledgement, commitment, delegation, withdrawal and completion-reported interactions without inferring actual obligation fulfilment or authority. |
+| R37 | SHOULD | Keep alternative actor/work-item links and temporal intervals/partial orders; no arbitrary timestamp or most-likely entity is silently made an observed fact. |
+| R38 | SHOULD | Append-only interpretation revisions support supersession, retraction, deterministic replay and invalidation of affected derived outputs; raw observations remain immutable within retention policy. |
+| R39 | SHOULD | Copied/quoted/forwarded evidence shares dependence lineage; repeated copies or agreeing models do not count as independent corroboration. |
+| R40 | SHOULD | Support bounded rules-to-statistical-to-local-model extraction with calibrated abstention, measured risk/coverage, budgets and model/runtime provenance; scores are not assumed probabilities. |
+| R41 | MUST | For enabled semantic profiles, metamorphic tests change To/Cc, actor mention, quotation, tense and negation one at a time, asserting expected changes and invariants rather than guessing global accuracy. |
+| R42 | SHOULD | Evaluate extraction errors through downstream object/event/edge distortion and process-conclusion sensitivity, not just token F1 or overall accuracy. |
+| R43 | SHOULD | Enforce evidence-scoped retrieval, Bcc view restrictions and deletion propagation into indexes/summaries/derived artifacts; preserve coverage-qualified absence claims. |
+| R44 | OPTIONAL | Research comparisons include 2026 text-to-OCEL collector/refiner work, object-centric quality classifications and matched-cost ablations; no frontier superiority claim without evidence. |
+| R45 | OPTIONAL | Reuse existing repository components only through separately qualified, one-way, default-disabled contracts; no domain leakage or mandatory Python runtime. |
+| R46 | SHOULD | Use bounded incremental processing, content/interpretation cache versioning and impact-based recomputation; optimization must preserve canonical equivalence. |
+| R47 | MUST | Task manifest uses exact existing task IDs, acyclic dependencies, requirement coverage and checked test commands; no missing external capability can be reported as passed. |
 
 
 ## Non-functional targets

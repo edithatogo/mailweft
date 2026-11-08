@@ -1,0 +1,119 @@
+{
+  "reviewed_on": "2026-11-08",
+  "method": "Authenticated GitHub reads of named files; blob hashes identify inspected source, not tested commits. No upstream runtime tests or integrations executed.",
+  "repositories": [
+    {
+      "repository": "edithatogo/foi-process",
+      "ref": "main",
+      "inspected_path": "README.md",
+      "blob_sha": "24ecbbba3e7c46be19f7d32a87e7845b588de813",
+      "evidence_url": "https://github.com/edithatogo/foi-process/blob/main/README.md",
+      "relevance": "Rust replay, revisions/retractions and optional Rust4PM projection",
+      "decision": "Reuse candidate after source audit; prefer neutral patterns/interfaces over a FOI-domain dependency.",
+      "qualification_boundary": "src/rust4pm.rs inspected: snapshot output deliberately passes empty attribute vectors. It is NOT an attribute-complete OCEL adapter. Cargo.toml pins process_mining=0.6.0 and declares Apache-2.0. No tests executed in this review.",
+      "integration_status": "not_implemented"
+    },
+    {
+      "repository": "edithatogo/sourceright",
+      "ref": "main",
+      "inspected_path": "README.md",
+      "blob_sha": "41c011ecb434f2377a90df1155d522bb4f70a80b",
+      "evidence_url": "https://github.com/edithatogo/sourceright/blob/main/README.md",
+      "relevance": "Verification sidecars, conflict resolution and review queues",
+      "decision": "Reuse provenance/review conventions only after a contract audit.",
+      "qualification_boundary": "Reference/citation verification does not verify that an email assertion is true. Technical preview; not a generic email identity service.",
+      "integration_status": "not_implemented"
+    },
+    {
+      "repository": "edithatogo/citeweft",
+      "ref": "main",
+      "inspected_path": "README.md",
+      "blob_sha": "7c2c3e505424c824785ce0e516b3b24a7c0bad5d",
+      "evidence_url": "https://github.com/edithatogo/citeweft/blob/main/README.md",
+      "relevance": "Rust source spans, uncertainty and backend-neutral scholarly extraction",
+      "decision": "Optional scholarly-attachment evidence adapter.",
+      "qualification_boundary": "Technical preview; scholarly scope. Do not assume general PDF/Office extraction or production backend parity.",
+      "integration_status": "not_implemented"
+    },
+    {
+      "repository": "edithatogo/fe-reader",
+      "ref": "main",
+      "inspected_path": "README.md",
+      "blob_sha": "6a36d44e21607cd7bf8121a53d3d31bc263130d8",
+      "evidence_url": "https://github.com/edithatogo/fe-reader/blob/main/README.md",
+      "relevance": "Headless Rust document/PDF workflow contracts",
+      "decision": "Optional attachment provider behind read-only extraction interface.",
+      "qualification_boundary": "Technical preview; qualify actual text/OCR/geometry capability using its parity registry, not README feature names.",
+      "integration_status": "not_implemented"
+    },
+    {
+      "repository": "edithatogo/nlp-policy-nz",
+      "ref": "master",
+      "inspected_path": "README.md",
+      "blob_sha": "481b143cbf5d64e861571656f2a7e402adce7562",
+      "evidence_url": "https://github.com/edithatogo/nlp-policy-nz/blob/master/README.md",
+      "relevance": "Existing NLP, language and evidence mapping experiments",
+      "decision": "Evaluation reference or separate opt-in service only.",
+      "qualification_boundary": "README specifies a Python production runtime with Rust acceleration. Never import it into the Rust-only default binary; policy-specific models need email-domain tests.",
+      "integration_status": "not_implemented"
+    },
+    {
+      "repository": "edithatogo/searchright",
+      "ref": "main",
+      "inspected_path": "README.md",
+      "blob_sha": "9360e42b0b20d562e5e9bd0895fd502e5410da1c",
+      "evidence_url": "https://github.com/edithatogo/searchright/blob/main/README.md",
+      "relevance": "Rust evidence-search contracts, retrieval and provenance conventions",
+      "decision": "Optional literature/benchmark discovery and evidence-restricted retrieval.",
+      "qualification_boundary": "Technical alpha; scholarly search/review semantics are not mailbox semantics. Do not depend on its full workspace.",
+      "integration_status": "not_implemented"
+    },
+    {
+      "repository": "edithatogo/rcagent",
+      "ref": "master",
+      "inspected_path": "README.md",
+      "blob_sha": "4532c18a0e1374e8e312e0e2134b11bbc164a92b",
+      "evidence_url": "https://github.com/edithatogo/rcagent/blob/master/README.md",
+      "relevance": "Investigation chronology, source/account separation and research protocols",
+      "decision": "Downstream consumer of evidence exports and optional evaluation scenarios.",
+      "qualification_boundary": "Released core is a Markdown skill, not a Rust engine or independently validated business-event extractor.",
+      "integration_status": "not_implemented"
+    },
+    {
+      "repository": "edithatogo/kairos",
+      "ref": "main",
+      "inspected_path": "README.md",
+      "blob_sha": "63d14c64c6a84a08518014dfba98c21d2b3ae774",
+      "evidence_url": "https://github.com/edithatogo/kairos/blob/main/README.md",
+      "relevance": "Deterministic Rust DES/ABM",
+      "decision": "Optional synthetic workflow generator with independently authored email renderer.",
+      "qualification_boundary": "Alpha; use latent event ledger as truth, not generated emails or a second LLM as an oracle. No simulation dependency for extraction.",
+      "integration_status": "not_implemented"
+    },
+    {
+      "repository": "edithatogo/process-mappings",
+      "ref": "main",
+      "inspected_path": "README.md",
+      "blob_sha": "4e245583bd7a825e9babbd368c95318d124c0710",
+      "evidence_url": "https://github.com/edithatogo/process-mappings/blob/main/README.md",
+      "relevance": "Domain profile registry idea",
+      "decision": "Future optional domain mappings only.",
+      "qualification_boundary": "README explicitly describes a non-canonical incubator and says no substantive mappings implemented. Not a reusable mapping library today.",
+      "integration_status": "not_implemented"
+    }
+  ],
+  "additional_discovery": [
+    {
+      "repository": "edithatogo/rust4pm",
+      "status": "found by repository search; fork delta/licence/current API not audited; upstream release remains preferred unless patches justified"
+    },
+    {
+      "repository": "edithatogo/propel",
+      "status": "found by repository search; optional viewer only, no UI/core dependency"
+    },
+    {
+      "repository": "edithatogo/careops",
+      "status": "previous-turn maintained path modules/careops-process; optional downstream consumer; not reaudited in this turn"
+    }
+  ]
+}

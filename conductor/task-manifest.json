@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0.0",
-  "execution_rule": "one task per agent invocation, only after dependencies accepted",
+  "schema_version": "1.1.0",
+  "execution_rule": "One eligible task per invocation; prerequisites use exact task IDs. Core release closure excludes corpus/enrichment/research/integration lanes.",
   "tasks": [
     {
       "id": "T00.01",
@@ -15,7 +15,14 @@
       "acceptance": "Validate upstream source licences; no unlicensed code copied. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T00.01: <concise result>"
+      "commit": "T00.01: <concise result>",
+      "requirements": [
+        "R10",
+        "R12",
+        "R13",
+        "R15"
+      ],
+      "lane": "core"
     },
     {
       "id": "T00.02",
@@ -32,7 +39,14 @@
       "acceptance": "Separate rights status and permitted uses, no download. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T00.02: <concise result>"
+      "commit": "T00.02: <concise result>",
+      "requirements": [
+        "R10",
+        "R12",
+        "R13",
+        "R15"
+      ],
+      "lane": "corpus"
     },
     {
       "id": "T00.03",
@@ -40,7 +54,7 @@
       "title": "Record repository boundaries and source asset exclusions",
       "status": "not_started",
       "depends_on": [
-        "T00.02"
+        "T00.01"
       ],
       "allowed_paths": [
         "AGENTS.md",
@@ -50,7 +64,14 @@
       "acceptance": "No real-data files trackable by default. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T00.03: <concise result>"
+      "commit": "T00.03: <concise result>",
+      "requirements": [
+        "R10",
+        "R12",
+        "R13",
+        "R15"
+      ],
+      "lane": "core"
     },
     {
       "id": "T00.04",
@@ -58,6 +79,7 @@
       "title": "Create single minimal Rust workspace with email-ocel-core and CLI crates",
       "status": "not_started",
       "depends_on": [
+        "T00.01",
         "T00.03"
       ],
       "allowed_paths": [
@@ -68,7 +90,14 @@
       "acceptance": "cargo metadata --no-deps succeeds; avoid unused crates. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T00.04: <concise result>"
+      "commit": "T00.04: <concise result>",
+      "requirements": [
+        "R10",
+        "R12",
+        "R13",
+        "R15"
+      ],
+      "lane": "core"
     },
     {
       "id": "T00.05",
@@ -86,7 +115,14 @@
       "acceptance": "Locked build reproducible on chosen toolchain. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T00.05: <concise result>"
+      "commit": "T00.05: <concise result>",
+      "requirements": [
+        "R10",
+        "R12",
+        "R13",
+        "R15"
+      ],
+      "lane": "core"
     },
     {
       "id": "T00.06",
@@ -103,7 +139,14 @@
       "acceptance": "CI requires no real mailbox/corpus data. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T00.06: <concise result>"
+      "commit": "T00.06: <concise result>",
+      "requirements": [
+        "R10",
+        "R12",
+        "R13",
+        "R15"
+      ],
+      "lane": "core"
     },
     {
       "id": "T00.07",
@@ -120,7 +163,14 @@
       "acceptance": "gitlink/tag/sha and track files verified. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T00.07: <concise result>"
+      "commit": "T00.07: <concise result>",
+      "requirements": [
+        "R10",
+        "R12",
+        "R13",
+        "R15"
+      ],
+      "lane": "core"
     },
     {
       "id": "T01.01",
@@ -128,7 +178,8 @@
       "title": "Implement source envelope types and bounded file reader",
       "status": "not_started",
       "depends_on": [
-        "00"
+        "T00.05",
+        "T00.03"
       ],
       "allowed_paths": [
         "crates/email-ocel-core/src/source.rs"
@@ -137,7 +188,15 @@
       "acceptance": "Hash byte-exact source content; source only local. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T01.01: <concise result>"
+      "commit": "T01.01: <concise result>",
+      "requirements": [
+        "R01",
+        "R02",
+        "R03",
+        "R09",
+        "R11"
+      ],
+      "lane": "core"
     },
     {
       "id": "T01.02",
@@ -154,7 +213,15 @@
       "acceptance": "No traversal outside root; reproducible ordering. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T01.02: <concise result>"
+      "commit": "T01.02: <concise result>",
+      "requirements": [
+        "R01",
+        "R02",
+        "R03",
+        "R09",
+        "R11"
+      ],
+      "lane": "core"
     },
     {
       "id": "T01.03",
@@ -171,7 +238,15 @@
       "acceptance": "Malformed samples reject with stable codes. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T01.03: <concise result>"
+      "commit": "T01.03: <concise result>",
+      "requirements": [
+        "R01",
+        "R02",
+        "R03",
+        "R09",
+        "R11"
+      ],
+      "lane": "core"
     },
     {
       "id": "T01.04",
@@ -188,7 +263,15 @@
       "acceptance": "Synthetic multipart EML matches expected structure. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T01.04: <concise result>"
+      "commit": "T01.04: <concise result>",
+      "requirements": [
+        "R01",
+        "R02",
+        "R03",
+        "R09",
+        "R11"
+      ],
+      "lane": "core"
     },
     {
       "id": "T01.05",
@@ -205,7 +288,15 @@
       "acceptance": "No incorrect delivery/sent event. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T01.05: <concise result>"
+      "commit": "T01.05: <concise result>",
+      "requirements": [
+        "R01",
+        "R02",
+        "R03",
+        "R09",
+        "R11"
+      ],
+      "lane": "core"
     },
     {
       "id": "T01.06",
@@ -222,7 +313,15 @@
       "acceptance": "No remote fetch and no payload logging. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T01.06: <concise result>"
+      "commit": "T01.06: <concise result>",
+      "requirements": [
+        "R01",
+        "R02",
+        "R03",
+        "R09",
+        "R11"
+      ],
+      "lane": "core"
     },
     {
       "id": "T01.07",
@@ -239,7 +338,15 @@
       "acceptance": "Input=accepted+rejected, hash valid. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T01.07: <concise result>"
+      "commit": "T01.07: <concise result>",
+      "requirements": [
+        "R01",
+        "R02",
+        "R03",
+        "R09",
+        "R11"
+      ],
+      "lane": "core"
     },
     {
       "id": "T01.08",
@@ -256,7 +363,15 @@
       "acceptance": "cargo run ingest fixture works offline. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T01.08: <concise result>"
+      "commit": "T01.08: <concise result>",
+      "requirements": [
+        "R01",
+        "R02",
+        "R03",
+        "R09",
+        "R11"
+      ],
+      "lane": "core"
     },
     {
       "id": "T02.01",
@@ -264,7 +379,7 @@
       "title": "Implement domain-separated stable identity types",
       "status": "not_started",
       "depends_on": [
-        "01"
+        "T01.08"
       ],
       "allowed_paths": [
         "crates/email-ocel-core/src/identity.rs"
@@ -273,7 +388,14 @@
       "acceptance": "Same bytes+config => same ID; no raw identity in output. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/02_identity/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T02.01: <concise result>"
+      "commit": "T02.01: <concise result>",
+      "requirements": [
+        "R04",
+        "R05",
+        "R06",
+        "R19"
+      ],
+      "lane": "core"
     },
     {
       "id": "T02.02",
@@ -290,7 +412,14 @@
       "acceptance": "Two custodians retain separate copies. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/02_identity/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T02.02: <concise result>"
+      "commit": "T02.02: <concise result>",
+      "requirements": [
+        "R04",
+        "R05",
+        "R06",
+        "R19"
+      ],
+      "lane": "core"
     },
     {
       "id": "T02.03",
@@ -307,7 +436,14 @@
       "acceptance": "No silent data loss or overwrite. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/02_identity/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T02.03: <concise result>"
+      "commit": "T02.03: <concise result>",
+      "requirements": [
+        "R04",
+        "R05",
+        "R06",
+        "R19"
+      ],
+      "lane": "core"
     },
     {
       "id": "T02.04",
@@ -324,7 +460,17 @@
       "acceptance": "Roles round-trip without duplicates introduced. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/02_identity/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T02.04: <concise result>"
+      "commit": "T02.04: <concise result>",
+      "requirements": [
+        "R04",
+        "R05",
+        "R06",
+        "R19",
+        "R27",
+        "R33",
+        "R41"
+      ],
+      "lane": "core"
     },
     {
       "id": "T02.05",
@@ -341,7 +487,14 @@
       "acceptance": "Truth graph fixtures pass. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/02_identity/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T02.05: <concise result>"
+      "commit": "T02.05: <concise result>",
+      "requirements": [
+        "R04",
+        "R05",
+        "R06",
+        "R19"
+      ],
+      "lane": "core"
     },
     {
       "id": "T02.06",
@@ -358,7 +511,14 @@
       "acceptance": "Ambiguous collisions abstain, links uncertain. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/02_identity/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T02.06: <concise result>"
+      "commit": "T02.06: <concise result>",
+      "requirements": [
+        "R04",
+        "R05",
+        "R06",
+        "R19"
+      ],
+      "lane": "core"
     },
     {
       "id": "T02.07",
@@ -375,7 +535,14 @@
       "acceptance": "Retain unresolved identity assertions, no false merges. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/02_identity/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T02.07: <concise result>"
+      "commit": "T02.07: <concise result>",
+      "requirements": [
+        "R04",
+        "R05",
+        "R06",
+        "R19"
+      ],
+      "lane": "core"
     },
     {
       "id": "T02.08",
@@ -392,7 +559,14 @@
       "acceptance": "No cycles passed as confirmed thread. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/02_identity/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T02.08: <concise result>"
+      "commit": "T02.08: <concise result>",
+      "requirements": [
+        "R04",
+        "R05",
+        "R06",
+        "R19"
+      ],
+      "lane": "core"
     },
     {
       "id": "T03.01",
@@ -400,7 +574,7 @@
       "title": "Lock Rust4PM process_mining API and audit supported formats",
       "status": "not_started",
       "depends_on": [
-        "02"
+        "T02.08"
       ],
       "allowed_paths": [
         "docs/OCEL_COMPAT.md"
@@ -409,7 +583,12 @@
       "acceptance": "Exact version and capabilities documented. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/03_ocel/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T03.01: <concise result>"
+      "commit": "T03.01: <concise result>",
+      "requirements": [
+        "R07",
+        "R08"
+      ],
+      "lane": "core"
     },
     {
       "id": "T03.02",
@@ -426,7 +605,12 @@
       "acceptance": "Typed E2O/O2O roles precise. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/03_ocel/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T03.02: <concise result>"
+      "commit": "T03.02: <concise result>",
+      "requirements": [
+        "R07",
+        "R08"
+      ],
+      "lane": "core"
     },
     {
       "id": "T03.03",
@@ -443,7 +627,12 @@
       "acceptance": "One source copy not falsely equal message delivered. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/03_ocel/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T03.03: <concise result>"
+      "commit": "T03.03: <concise result>",
+      "requirements": [
+        "R07",
+        "R08"
+      ],
+      "lane": "core"
     },
     {
       "id": "T03.04",
@@ -460,7 +649,12 @@
       "acceptance": "Independent import succeeds. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/03_ocel/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T03.04: <concise result>"
+      "commit": "T03.04: <concise result>",
+      "requirements": [
+        "R07",
+        "R08"
+      ],
+      "lane": "core"
     },
     {
       "id": "T03.05",
@@ -477,7 +671,12 @@
       "acceptance": "No dropped type/change history. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/03_ocel/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T03.05: <concise result>"
+      "commit": "T03.05: <concise result>",
+      "requirements": [
+        "R07",
+        "R08"
+      ],
+      "lane": "core"
     },
     {
       "id": "T03.06",
@@ -494,7 +693,12 @@
       "acceptance": "Equality of relation count and qualifiers. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/03_ocel/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T03.06: <concise result>"
+      "commit": "T03.06: <concise result>",
+      "requirements": [
+        "R07",
+        "R08"
+      ],
+      "lane": "core"
     },
     {
       "id": "T03.07",
@@ -511,7 +715,12 @@
       "acceptance": "Algorithm runs against emitted fixture. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/03_ocel/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T03.07: <concise result>"
+      "commit": "T03.07: <concise result>",
+      "requirements": [
+        "R07",
+        "R08"
+      ],
+      "lane": "core"
     },
     {
       "id": "T03.08",
@@ -528,7 +737,13 @@
       "acceptance": "Every unsupported field reported, not erased. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/03_ocel/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T03.08: <concise result>"
+      "commit": "T03.08: <concise result>",
+      "requirements": [
+        "R07",
+        "R08",
+        "R42"
+      ],
+      "lane": "core"
     },
     {
       "id": "T04.01",
@@ -536,7 +751,7 @@
       "title": "Invent version-controlled synthetic MIME corpus generator",
       "status": "not_started",
       "depends_on": [
-        "03"
+        "T00.05"
       ],
       "allowed_paths": [
         "tools/generate_fixture.rs"
@@ -545,7 +760,15 @@
       "acceptance": "No real addresses, reproducible deterministic files. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/04_data-validation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T04.01: <concise result>"
+      "commit": "T04.01: <concise result>",
+      "requirements": [
+        "R11",
+        "R13",
+        "R14",
+        "R24",
+        "R17"
+      ],
+      "lane": "core"
     },
     {
       "id": "T04.02",
@@ -553,6 +776,7 @@
       "title": "Write rights-gated raw corpus manifest template",
       "status": "not_started",
       "depends_on": [
+        "T00.02",
         "T04.01"
       ],
       "allowed_paths": [
@@ -562,7 +786,15 @@
       "acceptance": "Requires real source/version/rights and SHA256. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/04_data-validation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T04.02: <concise result>"
+      "commit": "T04.02: <concise result>",
+      "requirements": [
+        "R11",
+        "R13",
+        "R14",
+        "R24",
+        "R17"
+      ],
+      "lane": "corpus"
     },
     {
       "id": "T04.03",
@@ -579,7 +811,15 @@
       "acceptance": "Local source, no automatic download. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/04_data-validation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T04.03: <concise result>"
+      "commit": "T04.03: <concise result>",
+      "requirements": [
+        "R11",
+        "R13",
+        "R14",
+        "R24",
+        "R17"
+      ],
+      "lane": "corpus"
     },
     {
       "id": "T04.04",
@@ -596,7 +836,15 @@
       "acceptance": "Correlate source hashes and attachment metadata. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/04_data-validation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T04.04: <concise result>"
+      "commit": "T04.04: <concise result>",
+      "requirements": [
+        "R11",
+        "R13",
+        "R14",
+        "R24",
+        "R17"
+      ],
+      "lane": "corpus"
     },
     {
       "id": "T04.05",
@@ -613,7 +861,15 @@
       "acceptance": "No unsupported one-to-one claims. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/04_data-validation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T04.05: <concise result>"
+      "commit": "T04.05: <concise result>",
+      "requirements": [
+        "R11",
+        "R13",
+        "R14",
+        "R24",
+        "R17"
+      ],
+      "lane": "corpus"
     },
     {
       "id": "T04.06",
@@ -630,7 +886,15 @@
       "acceptance": "exact/likely/ambiguous/unmatched classes. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/04_data-validation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T04.06: <concise result>"
+      "commit": "T04.06: <concise result>",
+      "requirements": [
+        "R11",
+        "R13",
+        "R14",
+        "R24",
+        "R17"
+      ],
+      "lane": "corpus"
     },
     {
       "id": "T04.07",
@@ -647,7 +911,15 @@
       "acceptance": "Denominators and exclusions explicitly stated. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/04_data-validation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T04.07: <concise result>"
+      "commit": "T04.07: <concise result>",
+      "requirements": [
+        "R11",
+        "R13",
+        "R14",
+        "R24",
+        "R17"
+      ],
+      "lane": "corpus"
     },
     {
       "id": "T04.08",
@@ -664,7 +936,15 @@
       "acceptance": "Hardware/RSS/time/source SHA and exclusions. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/04_data-validation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T04.08: <concise result>"
+      "commit": "T04.08: <concise result>",
+      "requirements": [
+        "R11",
+        "R13",
+        "R14",
+        "R24",
+        "R17"
+      ],
+      "lane": "corpus"
     },
     {
       "id": "T05.01",
@@ -672,7 +952,7 @@
       "title": "Define explicit content-access classification and size policy",
       "status": "not_started",
       "depends_on": [
-        "04"
+        "T01.06"
       ],
       "allowed_paths": [
         "contracts/v1/content-policy.md"
@@ -681,7 +961,12 @@
       "acceptance": "Default denies source content beyond Stage 1. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/05_attachments/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T05.01: <concise result>"
+      "commit": "T05.01: <concise result>",
+      "requirements": [
+        "R16",
+        "R20"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05.02",
@@ -701,7 +986,12 @@
       "acceptance": "No remote images/execution, fallback charset safe. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/05_attachments/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T05.02: <concise result>"
+      "commit": "T05.02: <concise result>",
+      "requirements": [
+        "R16",
+        "R20"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05.03",
@@ -718,24 +1008,35 @@
       "acceptance": "Bounded recursion and source refs. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/05_attachments/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T05.03: <concise result>"
+      "commit": "T05.03: <concise result>",
+      "requirements": [
+        "R16",
+        "R20"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05.04",
       "track": "05_attachments",
-      "title": "Implement authored/quoted/forwarded/signature spans",
+      "title": "Expose decoded body-part boundary for the single 05b zoning implementation",
       "status": "not_started",
       "depends_on": [
+        "T05.02",
         "T05.03"
       ],
       "allowed_paths": [
         "crates/email-ocel-semantics/src/segments.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
-      "acceptance": "Offsets point back to original source. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
+      "acceptance": "Expose only a typed decoded-part boundary; do not implement a second signature/quote classifier. Track 05b owns zoning.",
       "evidence_path": "conductor/tracks/05_attachments/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T05.04: <concise result>"
+      "commit": "T05.04: <concise result>",
+      "requirements": [
+        "R16",
+        "R20"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05.05",
@@ -752,7 +1053,12 @@
       "acceptance": "No mandatory PDF/Office runtime. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/05_attachments/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T05.05: <concise result>"
+      "commit": "T05.05: <concise result>",
+      "requirements": [
+        "R16",
+        "R20"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05.06",
@@ -769,7 +1075,12 @@
       "acceptance": "Adversarial fixtures reject safely. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/05_attachments/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T05.06: <concise result>"
+      "commit": "T05.06: <concise result>",
+      "requirements": [
+        "R16",
+        "R20"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05.07",
@@ -786,7 +1097,12 @@
       "acceptance": "No external network by default. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/05_attachments/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T05.07: <concise result>"
+      "commit": "T05.07: <concise result>",
+      "requirements": [
+        "R16",
+        "R20"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05b.01",
@@ -794,7 +1110,7 @@
       "title": "Define nested email zone/participant contracts and Rust serde types",
       "status": "not_started",
       "depends_on": [
-        "05"
+        "T05.02"
       ],
       "allowed_paths": [
         "crates/email-ocel-semantics/src/zones_contract.rs",
@@ -805,7 +1121,14 @@
       "acceptance": "Synthetic JSON fixtures accepted/rejected by Draft 2020-12 and Rust serde; no raw body strings in evidence outputs.",
       "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
       "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
-      "commit": "T05b.01: <concise result>"
+      "commit": "T05b.01: <concise result>",
+      "requirements": [
+        "R27",
+        "R28",
+        "R29",
+        "R31"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05b.02",
@@ -813,7 +1136,7 @@
       "title": "Implement deterministic body zone baseline on decoded MIME parts",
       "status": "not_started",
       "depends_on": [
-        "T05b.01"
+        "T05b.03"
       ],
       "allowed_paths": [
         "crates/email-ocel-semantics/src/zones.rs"
@@ -822,7 +1145,14 @@
       "acceptance": "Return source-anchored authored, greeting, signoff, quoted, forwarded, signature, disclaimer, inline-header and unknown zones with full ordered coverage and no silent drop. Labels must include machine-generated/unknown and support a separate coarse multi-label genre summary without claiming an observed business event.",
       "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
       "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
-      "commit": "T05b.02: <concise result>"
+      "commit": "T05b.02: <concise result>",
+      "requirements": [
+        "R27",
+        "R28",
+        "R29",
+        "R31"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05b.03",
@@ -830,7 +1160,7 @@
       "title": "Preserve span/offset provenance through decoding and normalization",
       "status": "not_started",
       "depends_on": [
-        "T05b.02"
+        "T05b.01"
       ],
       "allowed_paths": [
         "crates/email-ocel-semantics/src/offsets.rs"
@@ -839,7 +1169,14 @@
       "acceptance": "Original MIME part bytes and normalized Unicode body segments can be linked with verified part hash; malformed UTF-8 and HTML alternatives tested.",
       "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
       "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
-      "commit": "T05b.03: <concise result>"
+      "commit": "T05b.03: <concise result>",
+      "requirements": [
+        "R27",
+        "R28",
+        "R29",
+        "R31"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05b.04",
@@ -847,7 +1184,7 @@
       "title": "Create separate authored, identity and conversation-context views",
       "status": "not_started",
       "depends_on": [
-        "T05b.03"
+        "T05b.02"
       ],
       "allowed_paths": [
         "crates/email-ocel-semantics/src/views.rs"
@@ -856,7 +1193,14 @@
       "acceptance": "Original protected content remains intact; signatures are excluded from speech-act view but contribute role hints only to permitted identity view; no double counting quoted history.",
       "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
       "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
-      "commit": "T05b.04: <concise result>"
+      "commit": "T05b.04: <concise result>",
+      "requirements": [
+        "R27",
+        "R28",
+        "R29",
+        "R31"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05b.05",
@@ -873,7 +1217,14 @@
       "acceptance": "Detect multi-person greetings, role titles, ambiguous name-only text, short closings, forwarded signatures; emit candidate assertions with calibrated uncertainty, never infer To/Cc headers.",
       "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
       "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
-      "commit": "T05b.05: <concise result>"
+      "commit": "T05b.05: <concise result>",
+      "requirements": [
+        "R27",
+        "R28",
+        "R29",
+        "R31"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05b.06",
@@ -890,7 +1241,14 @@
       "acceptance": "Explicit Bcc unknown/empty/present distinctions; header roles remain observed claims; in-text names are inferred; task actor is not assigned solely from To field.",
       "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
       "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
-      "commit": "T05b.06: <concise result>"
+      "commit": "T05b.06: <concise result>",
+      "requirements": [
+        "R27",
+        "R28",
+        "R29",
+        "R31"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05b.07",
@@ -907,7 +1265,14 @@
       "acceptance": "F1 and boundary agreement reported for synthetic gold; Bcc privacy, quote attribution, multilingual, false-actor and multiple-recipient adversarial cases covered.",
       "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
       "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
-      "commit": "T05b.07: <concise result>"
+      "commit": "T05b.07: <concise result>",
+      "requirements": [
+        "R27",
+        "R28",
+        "R29",
+        "R31"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T05b.08",
@@ -924,7 +1289,14 @@
       "acceptance": "Dataset rights and version gate explicit; benchmark scores marked UNRUN until acquired and evaluated; thread/person-level holdout prevents leakage.",
       "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
       "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
-      "commit": "T05b.08: <concise result>"
+      "commit": "T05b.08: <concise result>",
+      "requirements": [
+        "R27",
+        "R28",
+        "R29",
+        "R31"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T06.01",
@@ -932,7 +1304,7 @@
       "title": "Implement ExtractionClaim and EvidenceReference serde types",
       "status": "not_started",
       "depends_on": [
-        "05b"
+        "T05b.07"
       ],
       "allowed_paths": [
         "crates/email-ocel-semantics/src/contracts.rs"
@@ -941,7 +1313,13 @@
       "acceptance": "JSON schema validation and round trips. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/06_semantics/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T06.01: <concise result>"
+      "commit": "T06.01: <concise result>",
+      "requirements": [
+        "R20",
+        "R21",
+        "R22"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T06.02",
@@ -958,7 +1336,13 @@
       "acceptance": "Synthetic gold fixture precision measured. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/06_semantics/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T06.02: <concise result>"
+      "commit": "T06.02: <concise result>",
+      "requirements": [
+        "R20",
+        "R21",
+        "R22"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T06.03",
@@ -975,7 +1359,13 @@
       "acceptance": "No approval claimed from negative example. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/06_semantics/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T06.03: <concise result>"
+      "commit": "T06.03: <concise result>",
+      "requirements": [
+        "R20",
+        "R21",
+        "R22"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T06.04",
@@ -992,7 +1382,13 @@
       "acceptance": "No raw text in analytics logs. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/06_semantics/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T06.04: <concise result>"
+      "commit": "T06.04: <concise result>",
+      "requirements": [
+        "R20",
+        "R21",
+        "R22"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T06.05",
@@ -1009,7 +1405,13 @@
       "acceptance": "No default network/LLM dependency. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/06_semantics/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T06.05: <concise result>"
+      "commit": "T06.05: <concise result>",
+      "requirements": [
+        "R20",
+        "R21",
+        "R22"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T06.06",
@@ -1026,7 +1428,13 @@
       "acceptance": "Reject hallucinated IDs and absent sources. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/06_semantics/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T06.06: <concise result>"
+      "commit": "T06.06: <concise result>",
+      "requirements": [
+        "R20",
+        "R21",
+        "R22"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T06.07",
@@ -1043,7 +1451,13 @@
       "acceptance": "Never mutate observed email facts. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/06_semantics/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T06.07: <concise result>"
+      "commit": "T06.07: <concise result>",
+      "requirements": [
+        "R20",
+        "R21",
+        "R22"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T06.08",
@@ -1060,7 +1474,13 @@
       "acceptance": "Stage 1 output unchanged after rerun. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/06_semantics/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T06.08: <concise result>"
+      "commit": "T06.08: <concise result>",
+      "requirements": [
+        "R20",
+        "R21",
+        "R22"
+      ],
+      "lane": "enrichment"
     },
     {
       "id": "T07.01",
@@ -1068,7 +1488,7 @@
       "title": "Design blinded adjudication protocol and error taxonomy",
       "status": "not_started",
       "depends_on": [
-        "06"
+        "T06.08"
       ],
       "allowed_paths": [
         "research/ANNOTATION_PROTOCOL.md"
@@ -1077,7 +1497,15 @@
       "acceptance": "Gold labels not copied from LLM output. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/07_research/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T07.01: <concise result>"
+      "commit": "T07.01: <concise result>",
+      "requirements": [
+        "R18",
+        "R22",
+        "R23",
+        "R24",
+        "R26"
+      ],
+      "lane": "research"
     },
     {
       "id": "T07.02",
@@ -1094,7 +1522,15 @@
       "acceptance": "Per-task PR/F1 and calibration recorded. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/07_research/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T07.02: <concise result>"
+      "commit": "T07.02: <concise result>",
+      "requirements": [
+        "R18",
+        "R22",
+        "R23",
+        "R24",
+        "R26"
+      ],
+      "lane": "research"
     },
     {
       "id": "T07.03",
@@ -1111,7 +1547,15 @@
       "acceptance": "Model/version/hardware/cost/privacy controlled. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/07_research/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T07.03: <concise result>"
+      "commit": "T07.03: <concise result>",
+      "requirements": [
+        "R18",
+        "R22",
+        "R23",
+        "R24",
+        "R26"
+      ],
+      "lane": "research"
     },
     {
       "id": "T07.04",
@@ -1119,7 +1563,8 @@
       "title": "Compare no-graph, graph-only, vector and GraphRAG methods",
       "status": "not_started",
       "depends_on": [
-        "T07.03"
+        "T07.03",
+        "T07.05"
       ],
       "allowed_paths": [
         "research/GRAPH_EVAL.md"
@@ -1128,7 +1573,15 @@
       "acceptance": "No advantage claimed without evaluation. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/07_research/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T07.04: <concise result>"
+      "commit": "T07.04: <concise result>",
+      "requirements": [
+        "R18",
+        "R22",
+        "R23",
+        "R24",
+        "R26"
+      ],
+      "lane": "research"
     },
     {
       "id": "T07.05",
@@ -1136,7 +1589,7 @@
       "title": "Define optional temporal evidence graph contract",
       "status": "not_started",
       "depends_on": [
-        "T07.04"
+        "T06.08"
       ],
       "allowed_paths": [
         "contracts/v1/graph-contract.md"
@@ -1145,15 +1598,23 @@
       "acceptance": "Bitemporal, provenance, permissions, explicit alternatives. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/07_research/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T07.05: <concise result>"
+      "commit": "T07.05: <concise result>",
+      "requirements": [
+        "R18",
+        "R22",
+        "R23",
+        "R24",
+        "R26"
+      ],
+      "lane": "research"
     },
     {
       "id": "T07.06",
       "track": "07_research",
-      "title": "Fuzz parser and OCEL mapper under size/resource constraints",
+      "title": "Qualify default-feature parser/exporter fuzz and bounded resource regressions",
       "status": "not_started",
       "depends_on": [
-        "T07.05"
+        "T03.08"
       ],
       "allowed_paths": [
         "fuzz/README.md"
@@ -1162,15 +1623,24 @@
       "acceptance": "No crash or unbounded allocation on samples. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/07_research/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T07.06: <concise result>"
+      "commit": "T07.06: <concise result>",
+      "requirements": [
+        "R18",
+        "R22",
+        "R23",
+        "R24",
+        "R26"
+      ],
+      "lane": "core"
     },
     {
       "id": "T07.07",
       "track": "07_research",
-      "title": "Run supply-chain and licence audit across feature sets",
+      "title": "Audit default-feature supply chain; optional feature audits remain separate",
       "status": "not_started",
       "depends_on": [
-        "T07.06"
+        "T00.06",
+        "T03.08"
       ],
       "allowed_paths": [
         "docs/SUPPLY_CHAIN.md"
@@ -1179,7 +1649,15 @@
       "acceptance": "Only explicitly approved licences/features. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/07_research/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T07.07: <concise result>"
+      "commit": "T07.07: <concise result>",
+      "requirements": [
+        "R18",
+        "R22",
+        "R23",
+        "R24",
+        "R26"
+      ],
+      "lane": "core"
     },
     {
       "id": "T07.08",
@@ -1187,6 +1665,9 @@
       "title": "Produce reproducibility bundle and limitations report",
       "status": "not_started",
       "depends_on": [
+        "T07.03",
+        "T07.04",
+        "T07.06",
         "T07.07"
       ],
       "allowed_paths": [
@@ -1196,7 +1677,15 @@
       "acceptance": "Cite data and exact code commit. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/07_research/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T07.08: <concise result>"
+      "commit": "T07.08: <concise result>",
+      "requirements": [
+        "R18",
+        "R22",
+        "R23",
+        "R24",
+        "R26"
+      ],
+      "lane": "research"
     },
     {
       "id": "T08.01",
@@ -1204,7 +1693,7 @@
       "title": "Document stable library API and SemVer mapping",
       "status": "not_started",
       "depends_on": [
-        "07"
+        "T03.08"
       ],
       "allowed_paths": [
         "docs/API.md"
@@ -1213,7 +1702,13 @@
       "acceptance": "No Enron-specific types in public API. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/08_release/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T08.01: <concise result>"
+      "commit": "T08.01: <concise result>",
+      "requirements": [
+        "R12",
+        "R16",
+        "R25"
+      ],
+      "lane": "core"
     },
     {
       "id": "T08.02",
@@ -1230,7 +1725,13 @@
       "acceptance": "Streaming, byte-exact item provenance. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/08_release/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T08.02: <concise result>"
+      "commit": "T08.02: <concise result>",
+      "requirements": [
+        "R12",
+        "R16",
+        "R25"
+      ],
+      "lane": "integration"
     },
     {
       "id": "T08.03",
@@ -1238,7 +1739,7 @@
       "title": "Add native OCEL XML/SQLite adapters where supported",
       "status": "not_started",
       "depends_on": [
-        "T08.02"
+        "T08.01"
       ],
       "allowed_paths": [
         "crates/email-ocel-core/src/formats.rs"
@@ -1247,7 +1748,13 @@
       "acceptance": "Loss ledger and qualified parity tests. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/08_release/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T08.03: <concise result>"
+      "commit": "T08.03: <concise result>",
+      "requirements": [
+        "R12",
+        "R16",
+        "R25"
+      ],
+      "lane": "integration"
     },
     {
       "id": "T08.04",
@@ -1255,7 +1762,7 @@
       "title": "Create optional cross-engine reference validation",
       "status": "not_started",
       "depends_on": [
-        "T08.03"
+        "T08.01"
       ],
       "allowed_paths": [
         "tests/pm4py_optional.md"
@@ -1264,7 +1771,13 @@
       "acceptance": "Licensed isolated run, no Python runtime requirement. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/08_release/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T08.04: <concise result>"
+      "commit": "T08.04: <concise result>",
+      "requirements": [
+        "R12",
+        "R16",
+        "R25"
+      ],
+      "lane": "integration"
     },
     {
       "id": "T08.05",
@@ -1272,7 +1785,7 @@
       "title": "Document independent CareOps adapter interface only",
       "status": "not_started",
       "depends_on": [
-        "T08.04"
+        "T08.01"
       ],
       "allowed_paths": [
         "docs/CONSUMERS.md"
@@ -1281,7 +1794,13 @@
       "acceptance": "No CareOps dependency. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/08_release/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T08.05: <concise result>"
+      "commit": "T08.05: <concise result>",
+      "requirements": [
+        "R12",
+        "R16",
+        "R25"
+      ],
+      "lane": "integration"
     },
     {
       "id": "T08.06",
@@ -1289,7 +1808,8 @@
       "title": "Add macOS arm64, Linux x64, Windows x64 CI matrix",
       "status": "not_started",
       "depends_on": [
-        "T08.05"
+        "T08.01",
+        "T00.06"
       ],
       "allowed_paths": [
         ".github/workflows/ci.yml"
@@ -1298,7 +1818,13 @@
       "acceptance": "All synthetic stages pass or blocked explicitly. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/08_release/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T08.06: <concise result>"
+      "commit": "T08.06: <concise result>",
+      "requirements": [
+        "R12",
+        "R16",
+        "R25"
+      ],
+      "lane": "core"
     },
     {
       "id": "T08.07",
@@ -1306,16 +1832,28 @@
       "title": "Package crate release with notices and docs",
       "status": "not_started",
       "depends_on": [
-        "T08.06"
+        "T08.01",
+        "T08.06",
+        "T07.06",
+        "T07.07",
+        "T04.01"
       ],
       "allowed_paths": [
         "docs/RELEASE.md"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
-      "acceptance": "No source data included, licence audit pass. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
+      "acceptance": "Package the core candidate only after synthetic parser/OCEL fidelity, offline resource/privacy checks and selected platform checks pass. Optional NLP, datasets and adapters do not gate it. Release publication itself needs the user-selected destination and authority.",
       "evidence_path": "conductor/tracks/08_release/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T08.07: <concise result>"
+      "commit": "T08.07: <concise result>",
+      "requirements": [
+        "R12",
+        "R16",
+        "R25",
+        "R32",
+        "R47"
+      ],
+      "lane": "core"
     },
     {
       "id": "T08.08",
@@ -1329,10 +1867,821 @@
         "docs/ACCEPTANCE.md"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
-      "acceptance": "Every requirement R01-R26 verified or deferred. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
+      "acceptance": "Record core-only independent synthetic end-to-end acceptance. State separately that all optional lanes and real-corpus benchmarks may remain unrun.",
       "evidence_path": "conductor/tracks/08_release/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
-      "commit": "T08.08: <concise result>"
+      "commit": "T08.08: <concise result>",
+      "requirements": [
+        "R12",
+        "R16",
+        "R25"
+      ],
+      "lane": "core"
+    },
+    {
+      "id": "T09.01",
+      "track": "09_patterns",
+      "title": "Version the four independent classification vocabularies",
+      "status": "not_started",
+      "depends_on": [
+        "T06.01"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R30",
+        "R34"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/taxonomy.rs",
+        "crates/email-ocel-semantics/tests/task_t09_01.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Unknown external labels return Unmapped; no nearest-label guessing.; A genre named approval_request cannot be used as an utterance act or zone without an explicit crosswalk.",
+      "evidence_path": "conductor/tracks/09_patterns/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_01 && cargo fmt --all -- --check",
+      "commit": "T09.01: Version the four independent classification vocabularies",
+      "task_card": "conductor/tasks/T09.01.md",
+      "interface": "map_label(profile: &TaxonomyProfile, label: &str) -> MappingDecision"
+    },
+    {
+      "id": "T09.02",
+      "track": "09_patterns",
+      "title": "Identify structured message kinds without inventing intent",
+      "status": "not_started",
+      "depends_on": [
+        "T09.01",
+        "T01.04"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R33",
+        "R34"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/genre.rs",
+        "crates/email-ocel-semantics/tests/task_t09_02.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "A calendar MIME part yields calendar_invitation kind, not a personal commitment.; An auto-response header yields automated_reply; CompletionReported remains absent.",
+      "evidence_path": "conductor/tracks/09_patterns/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_02 && cargo fmt --all -- --check",
+      "commit": "T09.02: Identify structured message kinds without inventing intent",
+      "task_card": "conductor/tasks/T09.02.md",
+      "interface": "classify_message_kind(message: &ObservedMessage, mime: &MimeMetadata) -> Vec<MessageKindCandidate>"
+    },
+    {
+      "id": "T09.03",
+      "track": "09_patterns",
+      "title": "Attach multi-label acts to attributed utterances",
+      "status": "not_started",
+      "depends_on": [
+        "T09.01",
+        "T06.04",
+        "T06.03"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R30",
+        "R35"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/acts.rs",
+        "crates/email-ocel-semantics/tests/task_t09_03.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Two authored clauses can produce request and commit with different spans.; A quoted request retains origin=quoted and is excluded from a new-authored-act projection.",
+      "evidence_path": "conductor/tracks/09_patterns/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_03 && cargo fmt --all -- --check",
+      "commit": "T09.03: Attach multi-label acts to attributed utterances",
+      "task_card": "conductor/tasks/T09.03.md",
+      "interface": "classify_utterances(view: &AnalysisView, taxonomy: &TaxonomyProfile) -> Vec<AttributedCommunicationAct>"
+    },
+    {
+      "id": "T09.04",
+      "track": "09_patterns",
+      "title": "Resolve candidate actor roles separately from recipients",
+      "status": "not_started",
+      "depends_on": [
+        "T09.03",
+        "T05b.06"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R27",
+        "R33",
+        "R37"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/actors.rs",
+        "crates/email-ocel-semantics/tests/task_t09_04.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Moving the same address from To to Cc changes header role, not an explicit body-named actor.; Two Alex identities retain two candidate IDs with unresolved status; neither is silently selected.",
+      "evidence_path": "conductor/tracks/09_patterns/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_04 && cargo fmt --all -- --check",
+      "commit": "T09.04: Resolve candidate actor roles separately from recipients",
+      "task_card": "conductor/tasks/T09.04.md",
+      "interface": "link_act_roles(act: &AttributedCommunicationAct, mentions: &[ParticipantAssertion]) -> RoleCandidates"
+    },
+    {
+      "id": "T09.05",
+      "track": "09_patterns",
+      "title": "Link dialogue responses to antecedents",
+      "status": "not_started",
+      "depends_on": [
+        "T09.04",
+        "T10.01"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R36",
+        "R39"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/interactions.rs",
+        "crates/email-ocel-semantics/tests/task_t09_05.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Thanks produces acknowledgement candidate, not a verified fulfilment/approval event.; A quoted antecedent and its original share dependence lineage.",
+      "evidence_path": "conductor/tracks/09_patterns/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_05 && cargo fmt --all -- --check",
+      "commit": "T09.05: Link dialogue responses to antecedents",
+      "task_card": "conductor/tasks/T09.05.md",
+      "interface": "link_interactions(acts: &[AttributedCommunicationAct], context: &InteractionContext) -> Vec<InteractionLink>"
+    },
+    {
+      "id": "T09.06",
+      "track": "09_patterns",
+      "title": "Model commitment and withdrawal candidates",
+      "status": "not_started",
+      "depends_on": [
+        "T09.05"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R36",
+        "R37"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/commitments.rs",
+        "crates/email-ocel-semantics/tests/task_t09_06.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "I will send can support commitment, never task-complete.; A later withdrawal supersedes the candidate state without editing the earlier source act.",
+      "evidence_path": "conductor/tracks/09_patterns/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_06 && cargo fmt --all -- --check",
+      "commit": "T09.06: Model commitment and withdrawal candidates",
+      "task_card": "conductor/tasks/T09.06.md",
+      "interface": "infer_commitment_transition(prior: &CommitmentCandidate, link: &InteractionLink) -> TransitionDecision"
+    },
+    {
+      "id": "T09.07",
+      "track": "09_patterns",
+      "title": "Separate work-item links from thread/topic links",
+      "status": "not_started",
+      "depends_on": [
+        "T09.05"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R33",
+        "R36",
+        "R37"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/work_items.rs",
+        "crates/email-ocel-semantics/tests/task_t09_07.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Two explicit task IDs remain two work-item candidates even in one email thread.; An independently matching task reference may link across threads with evidence and uncertainty, not merge source copies.",
+      "evidence_path": "conductor/tracks/09_patterns/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_07 && cargo fmt --all -- --check",
+      "commit": "T09.07: Separate work-item links from thread/topic links",
+      "task_card": "conductor/tasks/T09.07.md",
+      "interface": "propose_work_item_links(acts: &[AttributedCommunicationAct], context: &InteractionContext) -> Vec<WorkItemLinkCandidate>"
+    },
+    {
+      "id": "T09.08",
+      "track": "09_patterns",
+      "title": "Project selected interactions without OCEL information loss",
+      "status": "not_started",
+      "depends_on": [
+        "T09.06",
+        "T09.07",
+        "T06.08",
+        "T10.02"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R07",
+        "R35",
+        "R36"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/interaction_projection.rs",
+        "crates/email-ocel-semantics/tests/task_t09_08.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Candidate-only links are omitted with a recorded reason under accepted-only policy.; Selected E2O/O2O qualifiers and typed/history attributes survive canonical round trips; sidecar references remain resolvable.",
+      "evidence_path": "conductor/tracks/09_patterns/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t09_08 && cargo fmt --all -- --check",
+      "commit": "T09.08: Project selected interactions without OCEL information loss",
+      "task_card": "conductor/tasks/T09.08.md",
+      "interface": "project_interactions(links: &[InteractionLink], policy: &ProjectionPolicy) -> ProjectionResult"
+    },
+    {
+      "id": "T10.01",
+      "track": "10_evidence-incremental",
+      "title": "Add evidence receipt types and semantic checker",
+      "status": "not_started",
+      "depends_on": [
+        "T06.01",
+        "T05b.03"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R35"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/receipts.rs",
+        "crates/email-ocel-semantics/tests/task_t10_01.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Unknown evidence IDs cause missing_evidence diagnostic; no admission.; A structurally valid candidate receipt remains a candidate, not a verified business event.",
+      "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_01 && cargo fmt --all -- --check",
+      "commit": "T10.01: Add evidence receipt types and semantic checker",
+      "task_card": "conductor/tasks/T10.01.md",
+      "interface": "validate_receipt(receipt: &InferenceReceipt, context: &EvidenceContext) -> ValidationDecision"
+    },
+    {
+      "id": "T10.02",
+      "track": "10_evidence-incremental",
+      "title": "Check authorization, anchoring and source-map fidelity",
+      "status": "not_started",
+      "depends_on": [
+        "T10.01",
+        "T06.04"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R35",
+        "R43"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/receipt_policy.rs",
+        "crates/email-ocel-semantics/tests/task_t10_02.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Source hash mismatch or non-UTF8 boundary prevents admission.; A mandatory attribution/authorization check marked not_run cannot produce admit_to_enriched_view.",
+      "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_02 && cargo fmt --all -- --check",
+      "commit": "T10.02: Check authorization, anchoring and source-map fidelity",
+      "task_card": "conductor/tasks/T10.02.md",
+      "interface": "admit_receipt(receipt: &InferenceReceipt, policy: &ProjectionPolicy) -> AdmissionDecision"
+    },
+    {
+      "id": "T10.03",
+      "track": "10_evidence-incremental",
+      "title": "Track dependent copied and quoted evidence",
+      "status": "not_started",
+      "depends_on": [
+        "T02.02",
+        "T05b.03"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R39"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/dependence.rs",
+        "crates/email-ocel-semantics/tests/task_t10_03.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Ten identical copied source claims contribute one dependence group, not ten independent corroborations.; Two classifiers on one span preserve one source lineage.",
+      "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_03 && cargo fmt --all -- --check",
+      "commit": "T10.03: Track dependent copied and quoted evidence",
+      "task_card": "conductor/tasks/T10.03.md",
+      "interface": "group_evidence_dependence(refs: &[EvidenceReference], links: &[CopyOrQuoteLink]) -> DependenceIndex"
+    },
+    {
+      "id": "T10.04",
+      "track": "10_evidence-incremental",
+      "title": "Preserve temporal intervals and partial order",
+      "status": "not_started",
+      "depends_on": [
+        "T06.03",
+        "T01.05"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R37"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/temporal.rs",
+        "crates/email-ocel-semantics/tests/task_t10_04.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Without disambiguating locale/reference context, Friday stays unresolved or a candidate interval; never a fabricated point.; Equal timestamps use stable serialization order while causal ordering remains unknown.",
+      "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_04 && cargo fmt --all -- --check",
+      "commit": "T10.04: Preserve temporal intervals and partial order",
+      "task_card": "conductor/tasks/T10.04.md",
+      "interface": "resolve_time_candidates(input: &TemporalMention, context: &TemporalContext) -> TemporalResolution"
+    },
+    {
+      "id": "T10.05",
+      "track": "10_evidence-incremental",
+      "title": "Define revision and retraction ledger",
+      "status": "not_started",
+      "depends_on": [
+        "T06.01"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R38"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/deltas.rs",
+        "crates/email-ocel-semantics/tests/task_t10_05.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "An identical delta replay is a no-op; conflicting bytes with the same key produce conflict.; A supersession referencing the wrong prior hash does not alter active state.",
+      "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_05 && cargo fmt --all -- --check",
+      "commit": "T10.05: Define revision and retraction ledger",
+      "task_card": "conductor/tasks/T10.05.md",
+      "interface": "apply_interpretation_delta(state: &mut InterpretationState, delta: &InterpretationDelta) -> DeltaOutcome"
+    },
+    {
+      "id": "T10.06",
+      "track": "10_evidence-incremental",
+      "title": "Materialize current and as-of interpretation snapshots",
+      "status": "not_started",
+      "depends_on": [
+        "T10.05",
+        "T10.03"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R38",
+        "R39"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/replay.rs",
+        "crates/email-ocel-semantics/tests/task_t10_06.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Upsert followed by retract leaves no active claim; prior as-of snapshot remains explainable.; Replay cannot update raw ObservedMessage or its source-copy identity.",
+      "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_06 && cargo fmt --all -- --check",
+      "commit": "T10.06: Materialize current and as-of interpretation snapshots",
+      "task_card": "conductor/tasks/T10.06.md",
+      "interface": "materialize_interpretations(deltas: &[InterpretationDelta], at: SnapshotBoundary) -> Result<InterpretationSnapshot, ReplayError>"
+    },
+    {
+      "id": "T10.07",
+      "track": "10_evidence-incremental",
+      "title": "Propagate restricted scope and permitted deletion",
+      "status": "not_started",
+      "depends_on": [
+        "T10.02",
+        "T10.06"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R18",
+        "R43"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/scope.rs",
+        "crates/email-ocel-semantics/tests/task_t10_07.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "A downstream path/summary containing restricted Bcc evidence is unavailable to an unauthorized scope.; Purge plan includes derived embeddings/indexes/summaries and retains only permitted tombstone metadata; no automatic destructive apply.",
+      "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_07 && cargo fmt --all -- --check",
+      "commit": "T10.07: Propagate restricted scope and permitted deletion",
+      "task_card": "conductor/tasks/T10.07.md",
+      "interface": "derive_access_scope(inputs: &[AccessScope]) -> AccessScope; plan_retention_purge(subject: &SubjectId, index: &DerivationIndex) -> PurgePlan"
+    },
+    {
+      "id": "T10.08",
+      "track": "10_evidence-incremental",
+      "title": "Invalidate caches and bound incremental recomputation",
+      "status": "not_started",
+      "depends_on": [
+        "T10.06",
+        "T10.07"
+      ],
+      "lane": "enrichment",
+      "requirements": [
+        "R38",
+        "R46"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/incremental.rs",
+        "crates/email-ocel-semantics/tests/task_t10_08.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Changed parser/model/prompt/taxonomy configuration cannot reuse an old interpretation cache key.; Exceeded work budget produces explicit pending/partial state, never a complete result.",
+      "evidence_path": "conductor/tracks/10_evidence-incremental/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t10_08 && cargo fmt --all -- --check",
+      "commit": "T10.08: Invalidate caches and bound incremental recomputation",
+      "task_card": "conductor/tasks/T10.08.md",
+      "interface": "plan_recompute(changes: &[InterpretationDelta], dependencies: &DerivationIndex, budget: &WorkBudget) -> RecomputePlan"
+    },
+    {
+      "id": "T11.01",
+      "track": "11_frontier-validation",
+      "title": "Freeze independent annotation and split manifests",
+      "status": "not_started",
+      "depends_on": [
+        "T05b.07",
+        "T09.03"
+      ],
+      "lane": "research",
+      "requirements": [
+        "R31",
+        "R44"
+      ],
+      "allowed_paths": [
+        "research/splits.md",
+        "scripts/check_task_t11_01.py"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Duplicate/quote/conversation connected components cannot span training and held-out evaluation.; Annotation manifest records independent adjudication and freeze before model-output review.",
+      "evidence_path": "conductor/tracks/11_frontier-validation/evidence.md",
+      "tests": "python3 scripts/check_task_t11_01.py && python3 scripts/validate_scaffold.py",
+      "commit": "T11.01: Freeze independent annotation and split manifests",
+      "task_card": "conductor/tasks/T11.01.md",
+      "interface": "Research artifact: contracts for SplitManifest and AnnotationProtocol; no runtime model"
+    },
+    {
+      "id": "T11.02",
+      "track": "11_frontier-validation",
+      "title": "Implement controlled semantic perturbation fixtures",
+      "status": "not_started",
+      "depends_on": [
+        "T09.04",
+        "T09.05",
+        "T10.04"
+      ],
+      "lane": "research",
+      "requirements": [
+        "R41"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/metamorphic.rs",
+        "crates/email-ocel-semantics/tests/task_t11_02.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "To/Cc swap changes only eligible header qualifiers, not a body-explicit actor.; Inserting negation or moving text into quotation changes only the declared polarity/origin expectations and never creates verified events.",
+      "evidence_path": "conductor/tracks/11_frontier-validation/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t11_02 && cargo fmt --all -- --check",
+      "commit": "T11.02: Implement controlled semantic perturbation fixtures",
+      "task_card": "conductor/tasks/T11.02.md",
+      "interface": "generate_perturbation_pairs(seed: u64, profile: &PerturbationProfile) -> Vec<ExpectedDeltaPair>"
+    },
+    {
+      "id": "T11.03",
+      "track": "11_frontier-validation",
+      "title": "Measure calibration, abstention and group-level uncertainty",
+      "status": "not_started",
+      "depends_on": [
+        "T11.01",
+        "T09.03"
+      ],
+      "lane": "research",
+      "requirements": [
+        "R40"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/calibration.rs",
+        "crates/email-ocel-semantics/tests/task_t11_03.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "No eligible gold labels yields metric=null with denominator=0, not perfect accuracy.; Uncalibrated scores are reported as scores; no probability or universal guarantee label.",
+      "evidence_path": "conductor/tracks/11_frontier-validation/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t11_03 && cargo fmt --all -- --check",
+      "commit": "T11.03: Measure calibration, abstention and group-level uncertainty",
+      "task_card": "conductor/tasks/T11.03.md",
+      "interface": "evaluate_selective_predictions(predictions: &[ScoredPrediction], gold: &GoldSet, policy: &EvalPolicy) -> CalibrationReport"
+    },
+    {
+      "id": "T11.04",
+      "track": "11_frontier-validation",
+      "title": "Qualify bounded rule-to-local-model routing",
+      "status": "not_started",
+      "depends_on": [
+        "T06.05",
+        "T11.03",
+        "T10.02"
+      ],
+      "lane": "research",
+      "requirements": [
+        "R40",
+        "R46"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/routing.rs",
+        "crates/email-ocel-semantics/tests/task_t11_04.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Exhausted token/time budget abstains without cloud fallback.; Absent model capability reports unavailable for that lane and leaves Stage 1 usable.",
+      "evidence_path": "conductor/tracks/11_frontier-validation/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t11_04 && cargo fmt --all -- --check",
+      "commit": "T11.04: Qualify bounded rule-to-local-model routing",
+      "task_card": "conductor/tasks/T11.04.md",
+      "interface": "route_extraction(input: &ExtractionRequest, providers: &ProviderSet, budget: &InferenceBudget) -> ExtractionOutcome"
+    },
+    {
+      "id": "T11.05",
+      "track": "11_frontier-validation",
+      "title": "Measure downstream process-distortion sensitivity",
+      "status": "not_started",
+      "depends_on": [
+        "T09.08",
+        "T11.02",
+        "T11.03"
+      ],
+      "lane": "research",
+      "requirements": [
+        "R42"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/process_metrics.rs",
+        "crates/email-ocel-semantics/tests/task_t11_05.rs",
+        "crates/email-ocel-semantics/src/lib.rs"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Synthetic duplicate acts cause detected edge/event inflation versus a frozen truth log.; Different event-view policies or object-vocabulary versions block paired comparisons unless an explicit crosswalk exists.",
+      "evidence_path": "conductor/tracks/11_frontier-validation/evidence.md",
+      "tests": "cargo test --locked -p email-ocel-semantics --test task_t11_05 && cargo fmt --all -- --check",
+      "commit": "T11.05: Measure downstream process-distortion sensitivity",
+      "task_card": "conductor/tasks/T11.05.md",
+      "interface": "compare_process_projections(reference: &OcelProjection, candidate: &OcelProjection, policy: &ComparisonPolicy) -> ProcessDistortionReport"
+    },
+    {
+      "id": "T11.06",
+      "track": "11_frontier-validation",
+      "title": "Register and reproduce current text-to-OCEL comparators",
+      "status": "not_started",
+      "depends_on": [
+        "T11.01"
+      ],
+      "lane": "research",
+      "requirements": [
+        "R44"
+      ],
+      "allowed_paths": [
+        "research/comparators.md",
+        "scripts/check_task_t11_06.py"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Unknown comparator rights or runtime is blocked/not_run; no copied/translated upstream source.; Register collector/refiner variants where reproducible, equal input scope and no unsupported email-specific ground truth.",
+      "evidence_path": "conductor/tracks/11_frontier-validation/evidence.md",
+      "tests": "python3 scripts/check_task_t11_06.py && python3 scripts/validate_scaffold.py",
+      "commit": "T11.06: Register and reproduce current text-to-OCEL comparators",
+      "task_card": "conductor/tasks/T11.06.md",
+      "interface": "Research artifact: ComparatorManifest with exact source/data/runtime/licence versions and status"
+    },
+    {
+      "id": "T11.07",
+      "track": "11_frontier-validation",
+      "title": "Benchmark graph value and retrieval scope leakage",
+      "status": "not_started",
+      "depends_on": [
+        "T07.05",
+        "T11.05",
+        "T10.07"
+      ],
+      "lane": "research",
+      "requirements": [
+        "R23",
+        "R43",
+        "R44"
+      ],
+      "allowed_paths": [
+        "research/graph-value.md",
+        "scripts/check_task_t11_07.py"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "All arms use the same permitted source set and declared budget; unavailable arm stays not_run.; Generated answers cannot be admitted as new observed source evidence; uncited answers abstain.",
+      "evidence_path": "conductor/tracks/11_frontier-validation/evidence.md",
+      "tests": "python3 scripts/check_task_t11_07.py && python3 scripts/validate_scaffold.py",
+      "commit": "T11.07: Benchmark graph value and retrieval scope leakage",
+      "task_card": "conductor/tasks/T11.07.md",
+      "interface": "Research artifact: GraphBenchmarkProtocol with no-graph, graph-only, vector and GraphRAG arms"
+    },
+    {
+      "id": "T11.08",
+      "track": "11_frontier-validation",
+      "title": "Define latent-truth simulation and independent renderers",
+      "status": "not_started",
+      "depends_on": [
+        "T11.01",
+        "T12.06"
+      ],
+      "lane": "research",
+      "requirements": [
+        "R41",
+        "R44",
+        "R45"
+      ],
+      "allowed_paths": [
+        "research/synthetic-worlds.md",
+        "scripts/check_task_t11_08.py"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Latent workflow ledger is gold; generated email or LLM judge is not gold.; Synthetic templates/paraphrase families remain isolated across train/test; Kairos absence does not block core fixtures.",
+      "evidence_path": "conductor/tracks/11_frontier-validation/evidence.md",
+      "tests": "python3 scripts/check_task_t11_08.py && python3 scripts/validate_scaffold.py",
+      "commit": "T11.08: Define latent-truth simulation and independent renderers",
+      "task_card": "conductor/tasks/T11.08.md",
+      "interface": "Research artifact: LatentWorkflowFixture and independent MessageRenderingProfile"
+    },
+    {
+      "id": "T12.01",
+      "track": "12_ecosystem-reuse",
+      "title": "Qualify FOI replay patterns and full-fidelity Rust4PM boundary",
+      "status": "not_started",
+      "depends_on": [
+        "T03.08"
+      ],
+      "lane": "integration",
+      "requirements": [
+        "R07",
+        "R38",
+        "R45"
+      ],
+      "allowed_paths": [
+        "docs/integrations/foi-process.md",
+        "scripts/check_task_t12_01.py"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Fixture with event string/number values and time-varying object attribute fails if copied adapter drops attributes.; Snapshot sink is not advertised as revision/retraction store; no downstream code changed.",
+      "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
+      "tests": "python3 scripts/check_task_t12_01.py && python3 scripts/validate_scaffold.py",
+      "commit": "T12.01: Qualify FOI replay patterns and full-fidelity Rust4PM boundary",
+      "task_card": "conductor/tasks/T12.01.md",
+      "interface": "Adapter qualification packet: no FOI domain type in core; full OCEL compatibility fixture"
+    },
+    {
+      "id": "T12.02",
+      "track": "12_ecosystem-reuse",
+      "title": "Qualify Fe Reader and CiteWeft attachment evidence contracts",
+      "status": "not_started",
+      "depends_on": [
+        "T05.05",
+        "T05b.03"
+      ],
+      "lane": "integration",
+      "requirements": [
+        "R20",
+        "R35",
+        "R45"
+      ],
+      "allowed_paths": [
+        "docs/integrations/documents.md",
+        "scripts/check_task_t12_02.py"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Unsupported format/OCR/geometry produces unsupported, not synthesized extraction.; Provider output includes source hash and rendition/geometry mapping with exact/approximate fidelity.",
+      "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
+      "tests": "python3 scripts/check_task_t12_02.py && python3 scripts/validate_scaffold.py",
+      "commit": "T12.02: Qualify Fe Reader and CiteWeft attachment evidence contracts",
+      "task_card": "conductor/tasks/T12.02.md",
+      "interface": "Two separate provider capability packets, not a mandatory shared runtime"
+    },
+    {
+      "id": "T12.03",
+      "track": "12_ecosystem-reuse",
+      "title": "Map SourceRight and Searchright evidence conventions",
+      "status": "not_started",
+      "depends_on": [
+        "T10.01"
+      ],
+      "lane": "integration",
+      "requirements": [
+        "R35",
+        "R43",
+        "R45"
+      ],
+      "allowed_paths": [
+        "docs/integrations/evidence.md",
+        "scripts/check_task_t12_03.py"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Reference/provider verification never changes an email claim into verified task completion.; Export to a consumer with insufficient scope is refused; summary evidence lineage is retained.",
+      "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
+      "tests": "python3 scripts/check_task_t12_03.py && python3 scripts/validate_scaffold.py",
+      "commit": "T12.03: Map SourceRight and Searchright evidence conventions",
+      "task_card": "conductor/tasks/T12.03.md",
+      "interface": "Neutral evidence/review export profile; no CSL or scholarly-review object required in email core"
+    },
+    {
+      "id": "T12.04",
+      "track": "12_ecosystem-reuse",
+      "title": "Define optional NLP/RCA consumer contracts",
+      "status": "not_started",
+      "depends_on": [
+        "T09.08"
+      ],
+      "lane": "integration",
+      "requirements": [
+        "R21",
+        "R25",
+        "R45"
+      ],
+      "allowed_paths": [
+        "docs/integrations/nlp-rca.md",
+        "scripts/check_task_t12_04.py"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Rust default-feature build and fixture execution require no Python/model service.; RCA receives source/claim distinction and cannot silently overwrite source events.",
+      "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
+      "tests": "python3 scripts/check_task_t12_04.py && python3 scripts/validate_scaffold.py",
+      "commit": "T12.04: Define optional NLP/RCA consumer contracts",
+      "task_card": "conductor/tasks/T12.04.md",
+      "interface": "Optional artifact/service boundary for nlp-policy-nz and rcagent; default binaries do not load either"
+    },
+    {
+      "id": "T12.05",
+      "track": "12_ecosystem-reuse",
+      "title": "Document downstream CareOps and viewer interoperability",
+      "status": "not_started",
+      "depends_on": [
+        "T08.01",
+        "T03.08"
+      ],
+      "lane": "integration",
+      "requirements": [
+        "R25",
+        "R32",
+        "R45"
+      ],
+      "allowed_paths": [
+        "docs/integrations/consumers.md",
+        "scripts/check_task_t12_05.py"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "Absent all downstream repos, core raw-to-OCEL fixtures still run.; Fork SHA/API/patch status recorded before adoption; no assumption of upstream parity or UI compliance.",
+      "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
+      "tests": "python3 scripts/check_task_t12_05.py && python3 scripts/validate_scaffold.py",
+      "commit": "T12.05: Document downstream CareOps and viewer interoperability",
+      "task_card": "conductor/tasks/T12.05.md",
+      "interface": "Versioned OCEL+sidecar consumer manifest; fork-delta audit checklist for owned rust4pm/propel"
+    },
+    {
+      "id": "T12.06",
+      "track": "12_ecosystem-reuse",
+      "title": "Decide reuse after bounded evidence, without new core coupling",
+      "status": "not_started",
+      "depends_on": [
+        "T12.01",
+        "T12.02",
+        "T12.03",
+        "T12.04",
+        "T12.05"
+      ],
+      "lane": "integration",
+      "requirements": [
+        "R32",
+        "R45",
+        "R47"
+      ],
+      "allowed_paths": [
+        "docs/integrations/qualification.md",
+        "scripts/check_task_t12_06.py"
+      ],
+      "action": "Execute the task card using synthetic input, a failing regression, minimal implementation and actual verification; do not widen scope.",
+      "acceptance": "README claims cannot be labeled fresh runtime qualification; exact test receipt required.; All core task dependencies remain core after adapter planning; no optional integration becomes a release gate.",
+      "evidence_path": "conductor/tracks/12_ecosystem-reuse/evidence.md",
+      "tests": "python3 scripts/check_task_t12_06.py && python3 scripts/validate_scaffold.py",
+      "commit": "T12.06: Decide reuse after bounded evidence, without new core coupling",
+      "task_card": "conductor/tasks/T12.06.md",
+      "interface": "ReuseDecision records per provider: adopt/adapter/reference/defer, versions, losses, fallback"
     }
   ]
 }

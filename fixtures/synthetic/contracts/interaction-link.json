@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "link_id": "link:syn-1",
+  "antecedent_act_id": "act:syn-1",
+  "response_act_id": "act:syn-2",
+  "relationship": "commits_to",
+  "evidence_refs": [
+    "evidence:syn-1",
+    "evidence:syn-2"
+  ],
+  "status": "candidate",
+  "independence_group_ids": [
+    "lineage:syn-1"
+  ],
+  "receipt_id": "receipt:syn-2"
+}

@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "$id": "https://example.invalid/email-ocel/contracts/v1/interaction-link.schema.json",
+  "title": "CandidateInteractionLink",
+  "required": [
+    "schema_version",
+    "link_id",
+    "antecedent_act_id",
+    "response_act_id",
+    "relationship",
+    "evidence_refs",
+    "status",
+    "independence_group_ids",
+    "receipt_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "link_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "antecedent_act_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "response_act_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "relationship": {
+      "enum": [
+        "responds_to",
+        "clarifies",
+        "accepts",
+        "declines",
+        "commits_to",
+        "delegates",
+        "reminds",
+        "withdraws",
+        "supersedes",
+        "reports_completion_of",
+        "ambiguous"
+      ]
+    },
+    "work_item_candidate_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "status": {
+      "enum": [
+        "candidate",
+        "reviewed_supported",
+        "disputed",
+        "rejected"
+      ]
+    },
+    "independence_group_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

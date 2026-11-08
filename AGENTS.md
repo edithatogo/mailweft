@@ -14,3 +14,8 @@
 12. Use exact documented errors rather than asserting success. A dataset crosswalk may be partial or impossible; do not fake per-message matches.
 13. Changes to externally visible formats require contract tests, a version bump and a migration note. Prefer stable machine-readable diagnostic codes.
 14. Definition of Done: required tests and lint pass, acceptance evidenced, docs reflect behaviour, no unresolved severe security/rights issues, commit scoped.
+
+15. Read `docs/EXECUTION-ORDER.md` before scheduling. Dependencies are exact task IDs in `task-manifest.json`; never replace them with whole-track approval gates or make the core wait for optional research/data.
+16. For tasks with `task_card`, read that exact card and its named types/tests. Run the specified regression command; a filtered Cargo command must report a nonzero test count. For older cards marked `needs_interface_expansion`, specify interfaces and exact tests first; do not guess cross-task APIs.
+17. Evidence validation proves traceability/structural checks, not claim truth. To/Cc does not assign responsibility; quote copies are not independent evidence; authority and business completion need separate evidence.
+18. This refinement changes plans/contracts and their validation helpers only. No Rust implementation or production integration is implied.

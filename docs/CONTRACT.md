@@ -37,3 +37,8 @@ Convert a **raw RFC 5322/MIME message corpus** into reproducible, correctly type
 - Independent engine reads exported logs; repeat runs on same bytes/config yield byte-identical canonical output and receipt after excluding declared run-time fields.
 - Enron processed datasets are independent **benchmarks only**; exact-population matching is required for record-level comparisons. Otherwise publish structural/aggregate comparisons labelled non-paired.
 - No Stage 2 action changes Stage 1 raw observation records; unknown findings are abstentions.
+
+## Additive refinement 0.2: independent release and evidence semantics
+Core raw-email/OCEL 2.0 inputs and outputs remain unchanged. The extension contracts in `contracts/v1` add attributed acts, interaction candidates, inference receipts and interpretation deltas. They never mutate Stage 1 or turn source assertions into verified events. Structural validation is not factual verification. Scope and retention restrictions propagate to derived outputs. The current full-data/attribute-preservation requirement also applies when borrowing another repository's adapter.
+
+Core release must not depend on obtaining a real corpus, human annotation, NLP, graph infrastructure, attachment content conversion, UI or a sibling repository. The synthetic baseline is independently releasable. See `FRONTIER-DESIGN.md`, `FRONTIER-EVALUATION.md` and `REPOSITORY-REUSE.md` for optional extension and evidence boundaries.

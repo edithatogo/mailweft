@@ -1,0 +1,30 @@
+{
+  "id": "12_ecosystem-reuse",
+  "title": "Optional repository reuse qualification",
+  "status": "not_started",
+  "requirements": [
+    "R07",
+    "R20",
+    "R21",
+    "R25",
+    "R32",
+    "R35",
+    "R38",
+    "R43",
+    "R45",
+    "R47"
+  ],
+  "tasks": [
+    "T12.01",
+    "T12.02",
+    "T12.03",
+    "T12.04",
+    "T12.05",
+    "T12.06"
+  ],
+  "depends_on": [
+    "03_ocel"
+  ],
+  "notes": "Planning only; task manifest owns executable dependencies. Optional track never gates core release.",
+  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+}

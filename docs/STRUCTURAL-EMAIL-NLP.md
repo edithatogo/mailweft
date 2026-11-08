@@ -30,10 +30,10 @@ Genres are **multi-label contextual summaries**, not proof of individual events:
 
 ## Historical reference classifications
 
-- **Lampert, Dale and Paris (EMNLP 2009), Zebra:** nine functional email zones: authored text, signature, disclaimer, advertising, greeting, sign-off, quoted reply, forward and attachment-related text. Report per-zone precision/recall rather than only aggregate accuracy. https://aclanthology.org/D09-1096/
+- **Lampert, Dale and Paris (EMNLP 2009), Zebra:** nine-zone historical classifier. Our detailed zone labels below are a proposed project vocabulary; verify a crosswalk against the paper before claiming equivalence. https://aclanthology.org/D09-1096/
 - **Repke and Krestel (ECIR 2018), Quagga:** two-/five-zone email segmentation, including detailed Enron/ASF annotations and entity aliases; GPL-3.0 code. Reference/benchmarks only pending dataset-licence assessment, not a runtime dependency. https://github.com/HPI-Information-Systems/Quagga
 - **Cohen, Carvalho and Mitchell (EMNLP 2004):** email speech acts as verb–noun combinations, including request, commit, propose and deliver. https://aclanthology.org/W04-3240/
-- **Carvalho and Cohen (2006):** conversation context can improve email-act classification; compare contextual to message-local baselines. https://aclanthology.org/W06-34/
+- **Carvalho and Cohen (2006):** n-gram selection for speech-act classification; use the specific paper, not whole proceedings. https://aclanthology.org/W06-3406/
 - **Lampert, Dale and Paris (AAAI 2008):** utterance-level request and commitment definitions for Enron. https://researchers.mq.edu.au/en/publications/the-nature-of-requests-and-commitments-in-email-messages/
 - **Rameshkumar, Bailey, Jha and Quirk (W-NUT 2018), EPA:** Enron People Assignment benchmark for linking task intent to responsible person. https://aclanthology.org/W18-6104/ and https://github.com/RevRameshkumar/EPADataset
 - **Talon / Forge:** signature and quotation segmentation methods and annotated Enron-derived examples; independently verify dataset/code licences and reuse restrictions. https://github.com/mailgun/talon and https://github.com/mailgun/forge
@@ -47,3 +47,8 @@ Genres are **multi-label contextual summaries**, not proof of individual events:
 - Discourse-act metrics: multi-label precision/recall and calibration; require specific negative examples (quoted request, hypothetical, negated commitment, delegated/collective tasks, polite question vs actual request).
 - Evaluate deterministic/rule-only baseline before local model; compare Quagga/Zebra/Talon only as reference if reproducible and legally usable; never ship their code or corpus in this repository by default.
 - Prioritise **minimising false new events and wrong addressees**. High-confidence extraction plus abstention is more useful than silently filling all missing roles.
+
+## 0.2 integration into the wider pipeline
+This document's label vocabulary is project-proposed; historical crosswalks must be verified against each paper/annotation guide rather than attributed verbatim. Use [RELATED-WORK.md](RELATED-WORK.md) for corrected, specific references. In particular, the previously cited whole 2006 workshop is not a precise collective-classification experiment reference.
+
+Add an independent interaction layer after utterance acts, per [FRONTIER-DESIGN.md](FRONTIER-DESIGN.md). No whole-email genre determines all utterance acts. No To/Cc position assigns responsibility. Non-destructive source maps precede zoning; bottom-posted and inline responses survive segmentation. A hypothesis that two messages concern the same work item is not an identity fact.

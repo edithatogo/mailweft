@@ -4,7 +4,8 @@
   "status": "not_started",
   "requirements": [
     "R07",
-    "R08"
+    "R08",
+    "R42"
   ],
   "tasks": [
     "T03.01",
@@ -17,7 +18,8 @@
     "T03.08"
   ],
   "depends_on": [
-    "02"
+    "02_identity"
   ],
-  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence."
+  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence.",
+  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
 }

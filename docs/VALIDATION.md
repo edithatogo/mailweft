@@ -15,3 +15,6 @@
 - Report all excluded/failed messages and denominator. Missing/mismatched corpus scope is NOT zero events.
 - Benchmark sets: tiny invented synthetic fixture; 10k/100k appropriately sampled raw corpus; full corpus only after rights and resource qualification.
 - CI runs synthetic tests only. Enron/full-corpus tests are external reproducible jobs with no raw data uploaded to GitHub Actions.
+
+## 0.2 benchmark and boundary refinements
+See [FRONTIER-EVALUATION.md](FRONTIER-EVALUATION.md) for metamorphic cases, independent component-level splits, downstream process-error metrics, calibration and contemporary comparators. Preserve cross-population matchability gates. Distinguish a library feature being implemented, executed, externally benchmarked and scientifically superior.
