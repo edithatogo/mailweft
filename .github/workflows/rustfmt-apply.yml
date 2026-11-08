@@ -24,3 +24,5 @@ jobs:
             git commit -m 'style: apply rustfmt to initial email-OCEL implementation'
             git push origin HEAD:feat/rust-eml-ocel-slice
           fi
+
+# Second one-time formatting pass for Rust4PM interop test.
