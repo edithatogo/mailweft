@@ -17,5 +17,8 @@ fn rust4pm_imports_exported_ocel_with_roles_and_objects() {
     let imported = OCEL::import_from_path(file.path()).unwrap();
     assert_eq!(imported.events.len(), 1);
     assert_eq!(imported.objects.len(), conversion.log.objects.len());
-    assert_eq!(imported.events[0].relationships.len(), conversion.log.events[0].relationships.len());
+    assert_eq!(
+        imported.events[0].relationships.len(),
+        conversion.log.events[0].relationships.len()
+    );
 }
