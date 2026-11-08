@@ -195,7 +195,13 @@ pub fn convert_eml(
         push_address_links(&mut relationships, &mut objects, role, addresses);
     }
     relationships.sort_by(|a, b| (&a.qualifier, &a.object_id).cmp(&(&b.qualifier, &b.object_id)));
-    let event_id = format!("event_{}", identity("source-observation", &source_copy_id));
+    let event_id = format!(
+        "event_{}",
+        identity(
+            "source-observation",
+            &format!("{source_copy_id}\\0{}", observed_at.to_rfc3339())
+        )
+    );
 
     Ok(Conversion {
         schema_version: "1.0.0",
