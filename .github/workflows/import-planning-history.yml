@@ -17,6 +17,7 @@ jobs:
     env:
       SOURCE_HEAD: 5adfc5a777040fe33c64c4fb860f8fd071c2e790
       SOURCE_TREE: 8b99bbfb69b3e0847f524a202cae6af14c7051e1
+      PATCHED_TREE: 56af9e4fb410d284b39cbcf08c3fcda611653879
       CONDUCTOR_SHA: 7a5c560a4fdf5297be58594cc37527eb12790272
     steps:
       - name: Check out bootstrap commit
@@ -65,6 +66,18 @@ jobs:
           subprocess.run(['git', '-C', str(dest), 'checkout', '-q', 'main'], check=True)
           subprocess.run(['git', '-C', str(dest), 'fsck', '--full'], check=True)
           print('Verified all nine transport parts and preserved source commit/tree identities.')
+          patch = pathlib.Path('.bootstrap/qualification.patch').read_bytes()
+          if hashlib.sha256(patch).hexdigest() != '6db4c198a1f0dcde5f312963574f553714794a293823de15f87b8285312d0f90':
+              raise SystemExit('Qualification patch integrity mismatch')
+          subprocess.run(['git', '-C', str(dest), 'apply', '--index', '-'], input=patch, check=True)
+          tree = subprocess.check_output(['git', '-C', str(dest), 'write-tree'], text=True).strip()
+          if tree != os.environ['PATCHED_TREE']:
+              raise SystemExit(f'Qualification tree mismatch: {tree}')
+          subprocess.run(['git', '-C', str(dest), '-c', 'user.name=github-actions[bot]', '-c', 'user.email=41898282+github-actions[bot]@users.noreply.github.com', 'commit', '-m', 'fix: qualify clean-host date-time validation and record partner handoffs'], check=True)
+          head = subprocess.check_output(['git', '-C', str(dest), 'rev-parse', 'HEAD'], text=True).strip()
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as env:
+              env.write(f'QUALIFIED_HEAD={head}\n')
+          print(f'Qualification patch applied; source history retained. Qualified head: {head}')
           PY
       - name: Verify pinned Conductor source checkout
         shell: bash
@@ -91,21 +104,21 @@ jobs:
         run: |
           set -euo pipefail
           git fetch "$RUNNER_TEMP/mailweft-import" refs/heads/main:refs/remotes/imported/main
-          test "$(git rev-parse refs/remotes/imported/main)" = "$SOURCE_HEAD"
+          test "$(git rev-parse refs/remotes/imported/main)" = "$QUALIFIED_HEAD"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           # Retain unchanged bootstrap workflows. The connected publisher removes
           # them afterwards; this token does not change workflow definitions.
           export GIT_INDEX_FILE="$RUNNER_TEMP/mailweft-publication.index"
-          git read-tree "$SOURCE_TREE"
+          git read-tree "$PATCHED_TREE"
           for path in .github/workflows/publication-preflight.yml .github/workflows/import-planning-history.yml; do
             blob=$(git rev-parse "$GITHUB_SHA:$path")
             git update-index --add --cacheinfo "100644,$blob,$path"
           done
           tree=$(git write-tree)
           unset GIT_INDEX_FILE
-          test "$(git rev-parse "$GITHUB_SHA:.github/workflows/planning-checks.yml")" = "$(git rev-parse "$SOURCE_HEAD:.github/workflows/planning-checks.yml")"
-          merge=$(printf 'Import verified Mailweft planning history; preserve seven source commits\n\nSource head: %s\nSource tree: %s\nPlanning checks and pinned Conductor checkout passed. No application implementation certified.\n' "$SOURCE_HEAD" "$SOURCE_TREE" | git commit-tree "$tree" -p "$GITHUB_SHA" -p "$SOURCE_HEAD")
+          test "$(git rev-parse "$GITHUB_SHA:.github/workflows/planning-checks.yml")" = "$(git rev-parse "$QUALIFIED_HEAD:.github/workflows/planning-checks.yml")"
+          merge=$(printf 'Import verified Mailweft planning history and qualification fix\n\nOriginal source: %s\nQualified source: %s\nQualified tree: %s\nPlanning checks and pinned Conductor checkout passed. No application implementation certified.\n' "$SOURCE_HEAD" "$QUALIFIED_HEAD" "$PATCHED_TREE" | git commit-tree "$tree" -p "$GITHUB_SHA" -p "$QUALIFIED_HEAD")
           current=$(git ls-remote origin refs/heads/main | awk '{print $1}')
           test "$current" = "$GITHUB_SHA"
           git push origin "$merge:refs/heads/main"
@@ -114,8 +127,9 @@ jobs:
             echo '## Verified Mailweft publication'
             echo "Published merge: $merge"
             echo "Preserved source: $SOURCE_HEAD"
-            echo "Source tree: $SOURCE_TREE"
+            echo "Qualified source: $QUALIFIED_HEAD"
+            echo "Qualified tree: $PATCHED_TREE"
             echo "Conductor checkout: $CONDUCTOR_SHA"
-            echo 'Planning checks passed: 53 requirements, 15 tracks, 116 tasks; 15 validator tests; 11 schemas, four positive and 18 negative cases.'
+            echo 'Planning checks passed: 53 requirements, 15 tracks, 116 tasks; 17 validator tests; 11 schemas, four positive and 18 negative cases.'
             echo 'Transient bootstrap workflows remain for connected-publisher cleanup. No Rust converter or live processing was executed.'
           } >> "$GITHUB_STEP_SUMMARY"
