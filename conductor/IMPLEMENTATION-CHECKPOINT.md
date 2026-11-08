@@ -35,3 +35,11 @@ The initial standard Rust test suite passed in GitHub Actions. The Rust4PM indep
 This checkpoint does not mark all of T00/T01/T03 complete. It overlaps a small vertical slice of foundation, EML parsing, participant roles, CLI and OCEL projection; detailed tasks requiring manifests, source receipt completeness, formal fidelity and format parity remain open. An agent must record exact tested commits and evidence before changing task checkboxes.
 
 The core contract stays: **a Rust email-to-OCEL converter**. Enron is an external example/verification corpus, not a product dependency.
+
+## Second implementation checkpoint: bounded multi-source assembly
+
+Branch `feat/multi-eml-batch` adds `SourceInput` and `convert_batch`, merging source-copy OCEL observations deterministically. Exact duplicate observations are idempotent; identical raw messages seen in two custodians share one provisional message object but retain two copy objects, events and O2O qualifiers. Input ordering does not change the exported log. The CLI supports `mailweft batch <RFC3339 observed_at> <file.eml>...` with explicit bounded inputs.
+
+Hosted Rust converter checks **passed** for commit `3e88747e2f0ea4b4766d71cc0847a3a3ed612d53`, including unit/integration tests, explicit batch acceptance, Rust4PM 0.6.2 import of the combined OCEL, rustfmt and clippy -D warnings (run 42528662115). Planning tests passed at that stage. The later temporary CI helper removal and documentation changes must be verified independently; they do not modify converter source.
+
+This does not complete the Conductor source-manifest, header chronology, MIME attachment, source validation, full OCEL attribute/history or dataset benchmark tracks. The Conductor track task registry remains conservative; no blanket track completion is claimed. See `docs/BATCH-IMPLEMENTATION.md`.
