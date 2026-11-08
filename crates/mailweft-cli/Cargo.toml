@@ -1,0 +1,25 @@
+[package]
+name = "mailweft-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Local-only Mailweft converter CLI"
+publish = false
+
+[[bin]]
+name = "mailweft"
+path = "src/main.rs"
+
+[dependencies]
+mailweft-core = { path = "../mailweft-core" }
+chrono.workspace = true
+serde_json.workspace = true
+clap.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[lints]
+workspace = true
