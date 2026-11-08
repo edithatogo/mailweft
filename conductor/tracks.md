@@ -14,7 +14,9 @@ Status: [ ] not started; [~] in progress; [x] accepted. Agent should complete fi
 
 - [ ] **05 — Opt-in text and attachment content extraction** ([spec](tracks/05_attachments/spec.md), [plan](tracks/05_attachments/plan.md)); requirements: R16 R20; prerequisite: 00 foundation; 04 previous track baseline
 
-- [ ] **06 — Versioned NLP claims, entity resolution and evidence sidecar** ([spec](tracks/06_semantics/spec.md), [plan](tracks/06_semantics/plan.md)); requirements: R20 R21 R22; prerequisite: 00 foundation; 05 previous track baseline
+- [ ] **05b — Email zoning, signatures and in-text participant evidence** ([spec](tracks/05b_email-structure/spec.md), [plan](tracks/05b_email-structure/plan.md)); requirements: R27 R28 R29 R31; prerequisite: 05 content extraction.
+
+- [ ] **06 — Versioned NLP claims, entity resolution and evidence sidecar** ([spec](tracks/06_semantics/spec.md), [plan](tracks/06_semantics/plan.md)); requirements: R20 R21 R22; prerequisite: 00 foundation; 05b previous track baseline
 
 - [ ] **07 — Quality, security, scaling and optional knowledge graph** ([spec](tracks/07_research/spec.md), [plan](tracks/07_research/plan.md)); requirements: R18 R22 R23 R24 R26; prerequisite: 00 foundation; 06 previous track baseline
 

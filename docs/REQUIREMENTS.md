@@ -30,6 +30,12 @@ Priorities: **MUST** for Stage 1 release, **SHOULD** for next increment, **OPTIO
 | R24 | SHOULD | Benchmark scaling on 10k/100k/full matched corpora, import/export fidelity, memory, time and failure rates. |
 | R25 | OPTIONAL | Python/R/Julia bindings, Power BI/Fabric integration, Outlook/Graph connector, CareOps adapter through versioned independent contracts. |
 | R26 | OPTIONAL | Rust4PM advanced OC algorithms, graph-assisted retrieval, uncertainty-aware conformance and simulation interoperability. |
+| R27 | SHOULD | Model header participants, in-text addressees and task actors as three separate relationship classes; preserve Bcc uncertainty and privacy restrictions, and support Resent headers. |
+| R28 | SHOULD | Segment decoded email parts into non-destructive, source-anchored functional zones, with original/semantic/identity/context views and nested quote provenance. |
+| R29 | SHOULD | Extract salutations, sign-offs and signature contact/organisational hints without treating them as authoritative identities or deleting their source content. |
+| R30 | SHOULD | Apply multi-label utterance-level dialogue/speech acts using historical taxonomies; identify likely actors, reported actions, temporality and negation, preserving abstention. |
+| R31 | SHOULD | Benchmark functional zoning, identity linking and task-to-person mapping using permitted, independently annotated corpora (Quagga, Forge, EPA) and synthetic fixtures with no leakage. |
+
 
 ## Non-functional targets
 - Minimal production dependencies: qualify `mail-parser`, `mail-threading`, `process_mining` and required serialization/CLI crates only; avoid custom parsers where robust upstream exists.
@@ -37,3 +43,5 @@ Priorities: **MUST** for Stage 1 release, **SHOULD** for next increment, **OPTIO
 - Idempotent replay: same source bytes and mapping version yield same logical IDs and event payloads; manifest generation timestamp is excluded from comparison.
 - Security gates: fail closed on unknown scope/rights in production ingest; test fixtures can declare `synthetic`.
 - Quality: Rust `fmt`, `clippy -D warnings`, tests, cargo audit/deny and fixture reproducibility; code coverage target to be qualified (do not invent thresholds from an empty project).
+
+See [structural NLP design and benchmark bibliography](STRUCTURAL-EMAIL-NLP.md) for R27–R31.

@@ -18,7 +18,7 @@
     "T06.08"
   ],
   "depends_on": [
-    "05"
+    "05b"
   ],
   "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence."
 }

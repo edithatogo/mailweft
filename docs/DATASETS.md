@@ -20,3 +20,10 @@ Record per source: dataset_id, title, steward, canonical URL, source/version/dat
 
 ## Data never committed
 Actual raw Enron messages, archive extracts, personal identifiers, extracted content, sensitive examples, URL tokens, model embeddings, paid API credentials, or legal/licensing notices copied from third-party datasets into a public code fixture. Citation and checksum receipts only where permitted.
+
+## Additional task-oriented validation (proposed, subject to rights review)
+- Quagga Enron and Apache annotated **email zones**, including identity aliases and detailed metadata: https://github.com/HPI-Information-Systems/Quagga ; GPL-3.0 source; assess corpus rights independently and do not add GPL code to an Apache-2.0 runtime.
+- Talon/Forge Enron-derived **signature** annotations: https://github.com/mailgun/forge ; check repository and original source licences before any use or redistribution.
+- Enron People Assignment (EPA), **task-to-person** gold labels: https://github.com/RevRameshkumar/EPADataset ; assess rights and corpus-version crosswalk before testing. https://aclanthology.org/W18-6104/
+- Zebra nine-zone segmentation methodology: https://aclanthology.org/D09-1096/ ; paper metrics are historical reference points, not pass thresholds.
+- Additional synthetic cases for missing Bcc, quoted/forwarded speakers, signature-derived role hints, aliases, rhetorical requests, multi-actor tasks and negated commitments. Keep evaluation split by thread/person, not random message alone.

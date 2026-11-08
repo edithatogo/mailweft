@@ -28,3 +28,8 @@
 | R24 | 04_data-validation, 07_research |
 | R25 | 08_release |
 | R26 | 07_research |
+| R27 | 02_identity, 05b_email-structure |
+| R28 | 05b_email-structure |
+| R29 | 05b_email-structure |
+| R30 | 06_semantics, 05b_email-structure |
+| R31 | 05b_email-structure, 07_research |

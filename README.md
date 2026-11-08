@@ -46,3 +46,7 @@ No language packages have yet been chosen or locked. Agent task T00.04 creates t
 - jamtho/enron-emails: https://github.com/jamtho/enron-emails (behavioural reference only; explicit software licence not verified; no translated source)
 
 This repository's source does not contain or redistribute any Enron email data.
+
+## Stage 1.5: structural email and participant evidence
+
+Before task/decision NLP, the library will identify authored text, greetings, sign-offs, signatures, reply/forward history, inline headers and disclaimers as non-destructive spans, then infer in-text addressees separately from RFC header roles. See [structural NLP specification](docs/STRUCTURAL-EMAIL-NLP.md) and [Conductor track 05b](conductor/tracks/05b_email-structure/plan.md). No implementation is claimed.

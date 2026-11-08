@@ -789,12 +789,150 @@
       "commit": "T05.07: <concise result>"
     },
     {
+      "id": "T05b.01",
+      "track": "05b_email-structure",
+      "title": "Define nested email zone/participant contracts and Rust serde types",
+      "status": "not_started",
+      "depends_on": [
+        "05"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/zones_contract.rs",
+        "contracts/v1/email-zone.schema.json",
+        "contracts/v1/intext-participant.schema.json"
+      ],
+      "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
+      "acceptance": "Synthetic JSON fixtures accepted/rejected by Draft 2020-12 and Rust serde; no raw body strings in evidence outputs.",
+      "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
+      "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
+      "commit": "T05b.01: <concise result>"
+    },
+    {
+      "id": "T05b.02",
+      "track": "05b_email-structure",
+      "title": "Implement deterministic body zone baseline on decoded MIME parts",
+      "status": "not_started",
+      "depends_on": [
+        "T05b.01"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/zones.rs"
+      ],
+      "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
+      "acceptance": "Return source-anchored authored, greeting, signoff, quoted, forwarded, signature, disclaimer, inline-header and unknown zones with full ordered coverage and no silent drop. Labels must include machine-generated/unknown and support a separate coarse multi-label genre summary without claiming an observed business event.",
+      "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
+      "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
+      "commit": "T05b.02: <concise result>"
+    },
+    {
+      "id": "T05b.03",
+      "track": "05b_email-structure",
+      "title": "Preserve span/offset provenance through decoding and normalization",
+      "status": "not_started",
+      "depends_on": [
+        "T05b.02"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/offsets.rs"
+      ],
+      "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
+      "acceptance": "Original MIME part bytes and normalized Unicode body segments can be linked with verified part hash; malformed UTF-8 and HTML alternatives tested.",
+      "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
+      "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
+      "commit": "T05b.03: <concise result>"
+    },
+    {
+      "id": "T05b.04",
+      "track": "05b_email-structure",
+      "title": "Create separate authored, identity and conversation-context views",
+      "status": "not_started",
+      "depends_on": [
+        "T05b.03"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/views.rs"
+      ],
+      "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
+      "acceptance": "Original protected content remains intact; signatures are excluded from speech-act view but contribute role hints only to permitted identity view; no double counting quoted history.",
+      "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
+      "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
+      "commit": "T05b.04: <concise result>"
+    },
+    {
+      "id": "T05b.05",
+      "track": "05b_email-structure",
+      "title": "Detect salutations, vocatives, signatures and sign-off markers",
+      "status": "not_started",
+      "depends_on": [
+        "T05b.04"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/address_in_text.rs"
+      ],
+      "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
+      "acceptance": "Detect multi-person greetings, role titles, ambiguous name-only text, short closings, forwarded signatures; emit candidate assertions with calibrated uncertainty, never infer To/Cc headers.",
+      "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
+      "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
+      "commit": "T05b.05: <concise result>"
+    },
+    {
+      "id": "T05b.06",
+      "track": "05b_email-structure",
+      "title": "Reconcile header roles and in-text participant candidates without conflation",
+      "status": "not_started",
+      "depends_on": [
+        "T05b.05"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/src/person_link.rs"
+      ],
+      "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
+      "acceptance": "Explicit Bcc unknown/empty/present distinctions; header roles remain observed claims; in-text names are inferred; task actor is not assigned solely from To field.",
+      "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
+      "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
+      "commit": "T05b.06: <concise result>"
+    },
+    {
+      "id": "T05b.07",
+      "track": "05b_email-structure",
+      "title": "Add synthetic zone and participant benchmark with per-class errors",
+      "status": "not_started",
+      "depends_on": [
+        "T05b.06"
+      ],
+      "allowed_paths": [
+        "crates/email-ocel-semantics/tests/zones_and_participants.rs"
+      ],
+      "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
+      "acceptance": "F1 and boundary agreement reported for synthetic gold; Bcc privacy, quote attribution, multilingual, false-actor and multiple-recipient adversarial cases covered.",
+      "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
+      "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
+      "commit": "T05b.07: <concise result>"
+    },
+    {
+      "id": "T05b.08",
+      "track": "05b_email-structure",
+      "title": "Document independent Quagga, Zebra, Forge and EPA evaluation protocols",
+      "status": "not_started",
+      "depends_on": [
+        "T05b.07"
+      ],
+      "allowed_paths": [
+        "docs/EMAIL-ZONING-EVALUATION.md"
+      ],
+      "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
+      "acceptance": "Dataset rights and version gate explicit; benchmark scores marked UNRUN until acquired and evaluated; thread/person-level holdout prevents leakage.",
+      "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
+      "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
+      "commit": "T05b.08: <concise result>"
+    },
+    {
       "id": "T06.01",
       "track": "06_semantics",
       "title": "Implement ExtractionClaim and EvidenceReference serde types",
       "status": "not_started",
       "depends_on": [
-        "05"
+        "05b"
       ],
       "allowed_paths": [
         "crates/email-ocel-semantics/src/contracts.rs"

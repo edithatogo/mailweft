@@ -19,3 +19,6 @@ As a maintainer of an offline, reusable raw-email-to-OCEL Rust library, I need v
 - Every step T06.xx has passing exact acceptance; non-sensitive evidence recorded.
 - Formatting, clippy, tests and privacy checks passing for changed code; errors documented without fake success.
 - No loss of evidence IDs or OCEL 2.0 semantics; no silently invented event assertions.
+
+## Prerequisite: structural email interpretation
+Track 05b_email-structure must be accepted first; speech acts apply to attributed authored spans, never indiscriminately to entire quoted thread text. Role inference must distinguish header To/Cc/Bcc, in-text addressee and extracted task performer.

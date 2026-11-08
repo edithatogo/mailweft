@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/email-ocel/contracts/v1/email-zone.schema.json",
+  "title": "EmailZoneSpan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "segment_id", "source_copy_id", "body_part_id", "decoded_sha256", "start_byte", "end_byte", "zone", "origin_scope", "basis", "confidence"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "segment_id": { "type": "string", "minLength": 1 },
+    "source_copy_id": { "type": "string", "minLength": 1 },
+    "body_part_id": { "type": "string", "minLength": 1 },
+    "decoded_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "start_byte": { "type": "integer", "minimum": 0 },
+    "end_byte": { "type": "integer", "minimum": 1 },
+    "parent_segment_id": { "type": ["string", "null"] },
+    "zone": { "enum": ["authored", "greeting", "signoff", "signature", "disclaimer", "advertisement", "quoted_reply", "forward", "inline_header", "attachment_notice", "auto_generated", "unknown"] },
+    "origin_scope": { "enum": ["new_author_content", "quoted_prior_content", "forwarded_third_party", "generated_or_unknown"] },
+    "claimed_author_id": { "type": ["string", "null"] },
+    "basis": { "enum": ["deterministic_rule", "statistical_model", "local_llm", "human_review"] },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "extractor_version": { "type": ["string", "null"] }
+  }
+}

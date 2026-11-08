@@ -1,7 +1,7 @@
 # Plan — 06: Versioned NLP claims, entity resolution and evidence sidecar
 
 **Execution rule:** One task per agent turn/commit. Complete tasks in numeric order. Update checkboxes only after acceptance and record actual commands/results in `evidence.md`.
-**Initial state:** Not started. Any unavailable requirement/tool is BLOCKED, not a pass.
+**Prerequisite:** 05b email zoning/participant assertions accepted. **Initial state:** Not started. Any unavailable requirement/tool is BLOCKED, not a pass.
 
 - [ ] **T06.01 — Implement ExtractionClaim and EvidenceReference serde types**
   - **Edit only:** `crates/email-ocel-semantics/src/contracts.rs` (and same-track tests/docs when necessary).
