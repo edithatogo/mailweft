@@ -24,9 +24,9 @@ jobs:
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
             git add crates
-            git commit -m 'style: format native converter checkpoint'
+            git commit -m 'style: format CLI checkpoint'
             test "$(git ls-remote origin refs/heads/feat/raw-email-ocel | cut -f1)" = "$GITHUB_SHA"
             git push origin HEAD:refs/heads/feat/raw-email-ocel
           fi
-      - name: Verify current red-green checkpoint
-        run: cargo test --workspace --all-targets --locked
+      - name: Run all test targets to observe each red-green boundary
+        run: cargo test --workspace --all-targets --locked --no-fail-fast
