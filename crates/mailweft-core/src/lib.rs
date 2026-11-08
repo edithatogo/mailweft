@@ -1,5 +1,8 @@
 //! Mailweft: an offline, corpus-independent EML-to-OCEL 2.0 converter.
 //! Stage 1 records archive observation, not proof of sending, delivery or business action.
+mod batch;
+pub use batch::{SourceInput, convert_batch};
+
 use chrono::{DateTime, Utc};
 use mail_parser::{AddressList, MessageParser};
 use serde::{Deserialize, Serialize};
@@ -14,6 +17,10 @@ pub enum Error {
     InvalidSource,
     #[error("source identifier must be non-empty")]
     InvalidSourceId,
+    #[error("cannot convert an empty input batch")]
+    EmptyBatch,
+    #[error("conflicting data mapped to the same deterministic identifier")]
+    IdentityCollision,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
