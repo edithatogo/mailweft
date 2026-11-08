@@ -28,6 +28,8 @@ jobs:
           rustc --version
       - name: Test
         run: cargo test --workspace --all-targets
+      - name: Rust4PM independent OCEL import
+        run: cargo test -p mailweft-core --features rust4pm-validation --test rust4pm_interop
       - name: Format
         run: cargo fmt --all -- --check
       - name: Lint
