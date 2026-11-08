@@ -21,12 +21,16 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def main() -> int:
+    checker = FormatChecker()
+    if "date-time" not in checker.checkers:
+        print("BLOCKED: date-time validation requires pinned rfc3339-validator", file=sys.stderr)
+        return 2
     schemas = {}
     for path in sorted((ROOT / "contracts/v1").glob("*.schema.json")):
         schema = json.loads(path.read_text(encoding="utf-8"))
         Draft202012Validator.check_schema(schema)
         schemas[path.name.removesuffix(".schema.json")] = Draft202012Validator(
-            schema, format_checker=FormatChecker()
+            schema, format_checker=checker
         )
     examples = {}
     for path in sorted((ROOT / "fixtures/synthetic/contracts").glob("*.json")):

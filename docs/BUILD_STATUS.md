@@ -29,3 +29,22 @@ The read-only planning CI verifies the gitlink/checkout and the planning tests. 
 Mailweft remains **an email-to-OCEL converter written in Rust**. Enron is a canonical verification/example corpus, never required input or the product domain. `foi-process` is the first consumer; legacy outputs are explicitly excluded from reference/oracle/teacher/equality roles. `fyi-cli` and the archive boundary retain acquisition/preservation ownership; `foi-o` owns reviewed ontology promotion. GraphRAG is optional and outside the core dependency closure.
 
 No Rust application was implemented or compiled; no real-data processing, external model execution, FOI migration, ontology update or collaboration email was performed by the planning revision.
+
+## Clean-host validation correction
+
+The initial hosted history import, run `42475424694`, verified all nine transport
+parts, reconstructed the exact source commit/tree, and initialized the pinned
+Conductor checkout. The scaffold check and 15 planning tests passed. Publication
+stopped because the negative `bad timestamp` example was incorrectly accepted.
+
+Root cause: `jsonschema.FormatChecker` registers RFC 3339 date-time checks only
+when its optional checker is installed. The local environment contained it, but
+the clean-host requirements omitted it. The corrective change pins
+`rfc3339-validator==0.1.4` and `six==1.17.0`, and explicitly returns BLOCKED if the
+date-time checker is missing. Two new regression tests first failed for the
+missing dependency pins and absent fail-closed behavior.
+
+After the correction, the local planning suite passes **17 tests**, and all
+11 schema checks / four positive / 18 negative examples pass. The source
+application remains unimplemented. A successful rerun and remote publication
+readback must be recorded separately; this correction does not imply they ran.
