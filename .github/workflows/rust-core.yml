@@ -1,0 +1,34 @@
+name: Rust converter checks
+on:
+  push:
+    branches: [main, feat/rust-eml-ocel-slice]
+    paths:
+      - 'Cargo.toml'
+      - 'crates/**'
+      - '.github/workflows/rust-core.yml'
+  pull_request:
+    paths:
+      - 'Cargo.toml'
+      - 'crates/**'
+      - '.github/workflows/rust-core.yml'
+permissions:
+  contents: read
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+      - name: Install Rust toolchain supporting mail-parser 1.0
+        run: |
+          rustup toolchain install stable --profile minimal --component rustfmt --component clippy
+          rustup default stable
+          rustc --version
+      - name: Test
+        run: cargo test --workspace --all-targets
+      - name: Format
+        run: cargo fmt --all -- --check
+      - name: Lint
+        run: cargo clippy --workspace --all-targets -- -D warnings
