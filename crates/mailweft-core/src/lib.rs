@@ -1,14 +1,22 @@
 //! Raw-email conversion interfaces. Initial red-test checkpoint, not a converter.
 use chrono::{DateTime, FixedOffset};
-use serde::{Deserialize, Serialize};
 pub use process_mining::core::event_data::object_centric::OCEL;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
-pub enum EventView { Observed, HeaderAsserted, Both }
+pub enum EventView {
+    Observed,
+    HeaderAsserted,
+    Both,
+}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Permission { Synthetic, AuthorisedLocal, Unknown }
+pub enum Permission {
+    Synthetic,
+    AuthorisedLocal,
+    Unknown,
+}
 
 /// Caller-supplied bytes and explicit provenance; deliberately not Debug/Serialize.
 pub struct RawEmail {
@@ -31,9 +39,16 @@ pub struct Config {
 }
 impl Config {
     pub fn new(scope: String, key: [u8; 32], view: EventView) -> Self {
-        Self { scope, key, view, max_message_bytes: 8 * 1024 * 1024,
-            max_total_bytes: 64 * 1024 * 1024, max_messages: 1024,
-            max_parts: 1024, max_depth: 16 }
+        Self {
+            scope,
+            key,
+            view,
+            max_message_bytes: 8 * 1024 * 1024,
+            max_total_bytes: 64 * 1024 * 1024,
+            max_messages: 1024,
+            max_parts: 1024,
+            max_depth: 16,
+        }
     }
 }
 
@@ -107,7 +122,9 @@ pub struct Conversion {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Error(pub &'static str);
 impl std::fmt::Display for Error {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.0) }
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.0)
+    }
 }
 impl std::error::Error for Error {}
 
