@@ -10,3 +10,7 @@ description = "Offline EML to OCEL 2.0 JSON command-line interface"
 mailweft-core = { path = "../mailweft-core" }
 chrono = "0.4"
 serde_json = "1"
+
+[[bin]]
+name = "mailweft"
+path = "src/main.rs"
