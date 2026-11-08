@@ -1,0 +1,74 @@
+//! Deterministic multi-message OCEL assembly. Do not turn copy counts into message counts.
+use crate::{Error, Event, Object, Ocel, Relationship, convert_eml};
+use chrono::{DateTime, Utc};
+use std::collections::{BTreeMap, btree_map::Entry};
+
+#[derive(Clone, Debug)]
+pub struct SourceInput<'a> {
+    pub raw: &'a [u8],
+    pub source_id: &'a str,
+    pub observed_at: DateTime<Utc>,
+}
+
+fn sort_relations(links: &mut Vec<Relationship>) {
+    links.sort_by(|a, b| (&a.qualifier, &a.object_id).cmp(&(&b.qualifier, &b.object_id)));
+    links.dedup();
+}
+
+/// Combine source copies into a single OCEL, preserving both source-specific
+/// observations and object-to-object copy relations. Exact repeated observations
+/// are idempotent; probable duplicates are not silently merged.
+pub fn convert_batch(inputs: &[SourceInput<'_>]) -> Result<Ocel, Error> {
+    if inputs.is_empty() {
+        return Err(Error::EmptyBatch);
+    }
+
+    let mut objects: BTreeMap<String, Object> = BTreeMap::new();
+    let mut events: BTreeMap<String, Event> = BTreeMap::new();
+    let mut object_types = Vec::new();
+    let mut event_types = Vec::new();
+
+    for source in inputs {
+        let mut log = convert_eml(source.raw, source.source_id, source.observed_at)?.log;
+        if object_types.is_empty() {
+            object_types = log.object_types.clone();
+            event_types = log.event_types.clone();
+        }
+        for object in log.objects.drain(..) {
+            match objects.entry(object.id.clone()) {
+                Entry::Vacant(v) => {
+                    v.insert(object);
+                }
+                Entry::Occupied(mut o) => {
+                    let previous = o.get_mut();
+                    if previous.object_type != object.object_type
+                        || previous.attributes != object.attributes
+                    {
+                        return Err(Error::IdentityCollision);
+                    }
+                    previous.relationships.extend(object.relationships);
+                    sort_relations(&mut previous.relationships);
+                }
+            }
+        }
+        for event in log.events {
+            match events.entry(event.id.clone()) {
+                Entry::Vacant(v) => {
+                    v.insert(event);
+                }
+                Entry::Occupied(o) => {
+                    if o.get() != &event {
+                        return Err(Error::IdentityCollision);
+                    }
+                }
+            }
+        }
+    }
+
+    Ok(Ocel {
+        object_types,
+        event_types,
+        objects: objects.into_values().collect(),
+        events: events.into_values().collect(),
+    })
+}
