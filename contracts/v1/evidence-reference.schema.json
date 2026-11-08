@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/email-ocel/contracts/v1/evidence-reference.schema.json",
+  "title": "EvidenceReference",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "evidence_id",
+    "source_copy_id",
+    "content_sha256",
+    "classification",
+    "locator_kind"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "evidence_id": {
+      "type": "string"
+    },
+    "source_copy_id": {
+      "type": "string"
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "classification": {
+      "enum": [
+        "synthetic",
+        "public_restricted",
+        "private",
+        "sensitive"
+      ]
+    },
+    "locator_kind": {
+      "enum": [
+        "header",
+        "body_span",
+        "quote_span",
+        "mime_part",
+        "source_record"
+      ]
+    },
+    "byte_offset": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "byte_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "source_vault_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

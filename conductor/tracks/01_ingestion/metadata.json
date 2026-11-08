@@ -1,0 +1,26 @@
+{
+  "id": "01_ingestion",
+  "title": "Raw EML and maildir input, manifests and parse boundaries",
+  "status": "not_started",
+  "requirements": [
+    "R01",
+    "R02",
+    "R03",
+    "R09",
+    "R11"
+  ],
+  "tasks": [
+    "T01.01",
+    "T01.02",
+    "T01.03",
+    "T01.04",
+    "T01.05",
+    "T01.06",
+    "T01.07",
+    "T01.08"
+  ],
+  "depends_on": [
+    "00"
+  ],
+  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence."
+}

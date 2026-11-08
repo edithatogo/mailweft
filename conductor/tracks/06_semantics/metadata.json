@@ -1,0 +1,24 @@
+{
+  "id": "06_semantics",
+  "title": "Versioned NLP claims, entity resolution and evidence sidecar",
+  "status": "not_started",
+  "requirements": [
+    "R20",
+    "R21",
+    "R22"
+  ],
+  "tasks": [
+    "T06.01",
+    "T06.02",
+    "T06.03",
+    "T06.04",
+    "T06.05",
+    "T06.06",
+    "T06.07",
+    "T06.08"
+  ],
+  "depends_on": [
+    "05"
+  ],
+  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence."
+}

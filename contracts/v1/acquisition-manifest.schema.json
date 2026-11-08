@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/email-ocel/contracts/v1/acquisition-manifest.schema.json",
+  "title": "AcquisitionManifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "source_id",
+    "source_version",
+    "source_rights_status",
+    "input_count",
+    "parsed_count",
+    "rejected_count",
+    "duplicate_copy_count",
+    "output_count",
+    "completeness",
+    "config_sha256",
+    "producer_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "source_version": {
+      "type": "string"
+    },
+    "source_rights_status": {
+      "enum": [
+        "synthetic",
+        "authorised",
+        "unknown",
+        "prohibited"
+      ]
+    },
+    "input_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "parsed_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "rejected_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "duplicate_copy_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "output_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "completeness": {
+      "enum": [
+        "complete_for_admitted_scope",
+        "partial",
+        "unknown"
+      ]
+    },
+    "config_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "producer_version": {
+      "type": "string"
+    },
+    "input_manifest_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "result_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 140
+      }
+    }
+  }
+}

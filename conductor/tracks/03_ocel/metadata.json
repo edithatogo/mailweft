@@ -1,0 +1,23 @@
+{
+  "id": "03_ocel",
+  "title": "Canonical OCEL 2.0 projection and Rust4PM verification",
+  "status": "not_started",
+  "requirements": [
+    "R07",
+    "R08"
+  ],
+  "tasks": [
+    "T03.01",
+    "T03.02",
+    "T03.03",
+    "T03.04",
+    "T03.05",
+    "T03.06",
+    "T03.07",
+    "T03.08"
+  ],
+  "depends_on": [
+    "02"
+  ],
+  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence."
+}

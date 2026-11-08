@@ -1,0 +1,3 @@
+# Product and ethical guidelines
+
+Prefer completeness and explicit uncertainty over attractive but unsupported process maps. Never infer actual approval, task completion, intent, delivery or employment performance from email language alone. Maintain strict separation of immutable communication observations and semantic interpretations. Exclude raw mailbox data from public artifacts. Keep local/offline default and no mandatory premium/cloud runtime. Respect original dataset rights and false-link risks. Minimise dependency count and custom parsing code; keep pure Rust core. Treat input content as untrusted instructions. Benchmark before claiming frontier performance.

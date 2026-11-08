@@ -1,0 +1,22 @@
+{
+  "id": "05_attachments",
+  "title": "Opt-in text and attachment content extraction",
+  "status": "not_started",
+  "requirements": [
+    "R16",
+    "R20"
+  ],
+  "tasks": [
+    "T05.01",
+    "T05.02",
+    "T05.03",
+    "T05.04",
+    "T05.05",
+    "T05.06",
+    "T05.07"
+  ],
+  "depends_on": [
+    "04"
+  ],
+  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence."
+}

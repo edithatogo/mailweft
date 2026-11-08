@@ -1,0 +1,25 @@
+{
+  "id": "02_identity",
+  "title": "Message/custodian identity, duplicates and conversation inference",
+  "status": "not_started",
+  "requirements": [
+    "R04",
+    "R05",
+    "R06",
+    "R19"
+  ],
+  "tasks": [
+    "T02.01",
+    "T02.02",
+    "T02.03",
+    "T02.04",
+    "T02.05",
+    "T02.06",
+    "T02.07",
+    "T02.08"
+  ],
+  "depends_on": [
+    "01"
+  ],
+  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence."
+}
