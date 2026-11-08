@@ -1,0 +1,24 @@
+[package]
+name = "mailweft-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Offline raw email to evidence-linked OCEL 2.0"
+publish = false
+
+[dependencies]
+mail-parser.workspace = true
+process_mining.workspace = true
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+hmac.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[lints]
+workspace = true

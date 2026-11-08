@@ -1,7 +1,7 @@
 {
   "id": "02_identity",
   "title": "Message/custodian identity, duplicates and conversation inference",
-  "status": "not_started",
+  "status": "in_progress",
   "requirements": [
     "R04",
     "R05",

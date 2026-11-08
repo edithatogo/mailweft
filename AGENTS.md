@@ -18,7 +18,7 @@
 15. Read `docs/EXECUTION-ORDER.md` before scheduling. Dependencies are exact task IDs in `task-manifest.json`; never replace them with whole-track approval gates or make the core wait for optional research/data.
 16. For tasks with `task_card`, read that exact card and its named types/tests. Run the specified regression command; a filtered Cargo command must report a nonzero test count. For older cards marked `needs_interface_expansion`, specify interfaces and exact tests first; do not guess cross-task APIs.
 17. Evidence validation proves traceability/structural checks, not claim truth. To/Cc does not assign responsibility; quote copies are not independent evidence; authority and business completion need separate evidence.
-18. This refinement changes plans/contracts and their validation helpers only. No Rust implementation or production integration is implied.
+18. A bounded native converter now exists. Read docs/CORE-CHECKPOINT.md and conductor/execution/20261108-core-slice.md. Do not treat the historic planning scaffold as current status or overstate the preview as full implementation. Security issue #4 remains a release blocker.
 
 19. Only `foi-process` is an active owned-repository integration. It consumes this library; never add a reverse dependency. Historical repository audits are not instructions to integrate those projects. Read `docs/FOI-SCOPE-AND-ROBUSTNESS.md` for current scope and evaluation design.
 20. Never label a rendered FYI page as a raw RFC message or invent unavailable headers. Do not use an input platform status as independent gold truth. Error injection runs on isolated copies with manifests, never live sources.

@@ -1,11 +1,11 @@
 # Conductor track registry — Mailweft
 
-The task manifest owns exact prerequisites. All application implementation remains not_started. Optional research/integration cannot block core release.
+The task manifest owns exact prerequisites. Core conversion is implemented in a bounded preview; foundation completion and partial tasks are recorded in task-manifest.json. Security issue #4 remains blocking. No complete track or release is claimed. Optional research/integration cannot block core release.
 
-- [ ] **00_foundation: Foundation, legal/source gates and Rust workspace** — [spec](tracks/00_foundation/spec.md), [plan](tracks/00_foundation/plan.md), 7 tasks.
-- [ ] **01_ingestion: Raw EML and maildir input, manifests and parse boundaries** — [spec](tracks/01_ingestion/spec.md), [plan](tracks/01_ingestion/plan.md), 8 tasks.
-- [ ] **02_identity: Message/custodian identity, duplicates and conversation inference** — [spec](tracks/02_identity/spec.md), [plan](tracks/02_identity/plan.md), 8 tasks.
-- [ ] **03_ocel: Canonical OCEL 2.0 projection and Rust4PM verification** — [spec](tracks/03_ocel/spec.md), [plan](tracks/03_ocel/plan.md), 8 tasks.
+- [~] **00_foundation: Foundation, legal/source gates and Rust workspace** — [spec](tracks/00_foundation/spec.md), [plan](tracks/00_foundation/plan.md), 7 tasks.
+- [~] **01_ingestion: Raw EML and maildir input, manifests and parse boundaries** — [spec](tracks/01_ingestion/spec.md), [plan](tracks/01_ingestion/plan.md), 8 tasks.
+- [~] **02_identity: Message/custodian identity, duplicates and conversation inference** — [spec](tracks/02_identity/spec.md), [plan](tracks/02_identity/plan.md), 8 tasks.
+- [~] **03_ocel: Canonical OCEL 2.0 projection and Rust4PM verification** — [spec](tracks/03_ocel/spec.md), [plan](tracks/03_ocel/plan.md), 8 tasks.
 - [ ] **04_data-validation: Synthetic and Enron raw-to-processed validation** — [spec](tracks/04_data-validation/spec.md), [plan](tracks/04_data-validation/plan.md), 8 tasks.
 - [ ] **05_attachments: Opt-in text and attachment content extraction** — [spec](tracks/05_attachments/spec.md), [plan](tracks/05_attachments/plan.md), 7 tasks.
 - [ ] **05b_email-structure: Email zoning and participant enrichment before speech-act NLP** — [spec](tracks/05b_email-structure/spec.md), [plan](tracks/05b_email-structure/plan.md), 8 tasks.

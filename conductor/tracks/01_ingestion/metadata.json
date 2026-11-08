@@ -1,7 +1,7 @@
 {
   "id": "01_ingestion",
   "title": "Raw EML and maildir input, manifests and parse boundaries",
-  "status": "not_started",
+  "status": "in_progress",
   "requirements": [
     "R01",
     "R02",

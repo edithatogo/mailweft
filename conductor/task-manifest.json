@@ -6,7 +6,7 @@
       "id": "T00.01",
       "track": "00_foundation",
       "title": "Inventory dependency licences and record SPDX + exact pinned candidate versions",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [],
       "allowed_paths": [
         "docs/DEPENDENCIES.md"
@@ -22,7 +22,8 @@
         "R13",
         "R15"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T00.02",
@@ -52,7 +53,7 @@
       "id": "T00.03",
       "track": "00_foundation",
       "title": "Record repository boundaries and source asset exclusions",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [
         "T00.01"
       ],
@@ -71,13 +72,14 @@
         "R13",
         "R15"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T00.04",
       "track": "00_foundation",
-      "title": "Create single minimal Rust workspace with email-ocel-core and CLI crates",
-      "status": "not_started",
+      "title": "Create minimal Rust workspace with mailweft-core and mailweft-cli",
+      "status": "completed",
       "depends_on": [
         "T00.01",
         "T00.03"
@@ -87,7 +89,7 @@
         "crates/*"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
-      "acceptance": "cargo metadata --no-deps succeeds; avoid unused crates. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED. Planned package root is crates/mailweft; no Enron or FOI-specific default is allowed.",
+      "acceptance": "cargo metadata --no-deps, locked native tests and fmt pass for two packages. Components remain modules; no unused microcrates, Enron, FOI, Python, model or graph core dependency.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
       "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
       "commit": "T00.04: <concise result>",
@@ -97,13 +99,14 @@
         "R13",
         "R15"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T00.05",
       "track": "00_foundation",
       "title": "Add rust-toolchain pin and deterministic dependency lock",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [
         "T00.04"
       ],
@@ -122,18 +125,24 @@
         "R13",
         "R15"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T00.06",
       "track": "00_foundation",
       "title": "Add CI synthetic lint/test/contract and dependency security scans",
-      "status": "not_started",
+      "status": "blocked",
       "depends_on": [
         "T00.05"
       ],
       "allowed_paths": [
-        ".github/workflows/ci.yml"
+        ".github/workflows/rust.yml",
+        ".github/workflows/planning-checks.yml",
+        "deny.toml",
+        "Cargo.toml",
+        "Cargo.lock",
+        "docs/DEPENDENCIES.md"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "CI requires no real mailbox/corpus data. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -146,7 +155,9 @@
         "R13",
         "R15"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md",
+      "blocker": "https://github.com/edithatogo/mailweft/issues/4"
     },
     {
       "id": "T00.07",
@@ -176,13 +187,15 @@
       "id": "T01.01",
       "track": "01_ingestion",
       "title": "Implement source envelope types and bounded file reader",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T00.05",
         "T00.03"
       ],
       "allowed_paths": [
-        "crates/mailweft-core/src/source.rs"
+        "crates/mailweft-core/src/lib.rs",
+        "crates/mailweft-core/src/pipeline.rs",
+        "crates/mailweft-cli/src/main.rs"
       ],
       "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
       "acceptance": "Hash byte-exact source content; source only local. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -196,7 +209,8 @@
         "R09",
         "R11"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T01.02",
@@ -227,7 +241,7 @@
       "id": "T01.03",
       "track": "01_ingestion",
       "title": "Integrate mail-parser with error map",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T01.02"
       ],
@@ -247,13 +261,14 @@
         "R11",
         "R48"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T01.04",
       "track": "01_ingestion",
       "title": "Capture all essential message header and address fields",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T01.03"
       ],
@@ -272,13 +287,14 @@
         "R09",
         "R11"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T01.05",
       "track": "01_ingestion",
       "title": "Separate header time from source observation and source receipt",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T01.04"
       ],
@@ -297,13 +313,14 @@
         "R09",
         "R11"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T01.06",
       "track": "01_ingestion",
       "title": "Extract bounded attachment metadata, never execute or fetch",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T01.05"
       ],
@@ -322,13 +339,14 @@
         "R09",
         "R11"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T01.07",
       "track": "01_ingestion",
       "title": "Emit canonical acquisition manifest with complete/partial status",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T01.06"
       ],
@@ -347,13 +365,14 @@
         "R09",
         "R11"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T01.08",
       "track": "01_ingestion",
       "title": "Add CLI ingest and non-sensitive diagnostic output",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T01.07"
       ],
@@ -372,13 +391,14 @@
         "R09",
         "R11"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T02.01",
       "track": "02_identity",
       "title": "Implement domain-separated stable identity types",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T01.08"
       ],
@@ -396,13 +416,14 @@
         "R06",
         "R19"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T02.02",
       "track": "02_identity",
       "title": "Differentiate source copies and logical message candidates",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T02.01"
       ],
@@ -420,13 +441,14 @@
         "R06",
         "R19"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T02.03",
       "track": "02_identity",
       "title": "Handle missing and colliding Message-ID values",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T02.02"
       ],
@@ -444,13 +466,14 @@
         "R06",
         "R19"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T02.04",
       "track": "02_identity",
       "title": "Implement explicit To/Cc/Bcc role assertions",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T02.03"
       ],
@@ -471,7 +494,8 @@
         "R33",
         "R41"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T02.05",
@@ -573,7 +597,7 @@
       "id": "T03.01",
       "track": "03_ocel",
       "title": "Lock Rust4PM process_mining API and audit supported formats",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T02.08"
       ],
@@ -589,13 +613,14 @@
         "R07",
         "R08"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T03.02",
       "track": "03_ocel",
       "title": "Define type and qualifier vocabulary in mapping contract",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T03.01"
       ],
@@ -611,13 +636,14 @@
         "R07",
         "R08"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T03.03",
       "track": "03_ocel",
       "title": "Map Stage 1 message/source/participant objects and events",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T03.02"
       ],
@@ -633,13 +659,14 @@
         "R07",
         "R08"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T03.04",
       "track": "03_ocel",
       "title": "Produce full OCEL 2.0 native JSON using Rust4PM",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T03.03"
       ],
@@ -655,7 +682,8 @@
         "R07",
         "R08"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T03.05",
@@ -683,7 +711,7 @@
       "id": "T03.06",
       "track": "03_ocel",
       "title": "Round-trip E2O/O2O qualifiers and multiplicity",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T03.05"
       ],
@@ -699,7 +727,8 @@
         "R07",
         "R08"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T03.07",
@@ -727,7 +756,7 @@
       "id": "T03.08",
       "track": "03_ocel",
       "title": "Add loss ledger and format compatibility matrix",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T03.07"
       ],
@@ -744,7 +773,8 @@
         "R08",
         "R42"
       ],
-      "lane": "core"
+      "lane": "core",
+      "execution_evidence": "conductor/execution/20261108-core-slice.md"
     },
     {
       "id": "T04.01",

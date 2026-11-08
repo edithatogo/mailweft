@@ -2,42 +2,66 @@
 
 **An email-to-OCEL converter written in Rust.**
 
-Mailweft is a standalone, corpus-neutral library and CLI design: raw RFC 5322/MIME email -> typed, evidence-linked OCEL 2.0 communication logs. Optional structural NLP, semantic enrichment and GraphRAG build on that output without replacing the converter or rewriting its observations.
+Mailweft is a standalone, corpus-neutral Rust library and CLI. It converts supplied raw RFC 5322/MIME messages into evidence-linked OCEL 2.0 communication logs using Rust4PM's full native data structures. Enron is a verification/example corpus, not a required input or the product domain.
 
-**Status:** contracts and granular Conductor planning scaffold. No Rust application, extraction benchmark, model evaluation or live FOI migration has been implemented by this publication. Planning tests are not runtime validation.
+## Current implementation checkpoint
 
-## Core contract
-- Local EML/maildir input; no processed-data prerequisite. Preserve source hashes, actual participant roles, claimed versus observed times, duplicate/copy identity and completeness.
-- Native OCEL 2.0 JSON with typed attributes, event/object relationship qualifiers and object histories; report every lossy or unsupported mapping.
-- Offline Rust-only production core; no required Python, LLM, graph database, cloud, UI, FOI project or Enron corpus.
-- Enron is a **canonical verification and example dataset**, not the subject or schema of Mailweft. Dataset-specific recipes stay outside the core; no real email data is committed.
-- Original source stays immutable. Optional interpretations retain evidence, attribution, uncertainty, correction history and review state.
+The first native slice is on `feat/raw-email-ocel` / [PR #3](https://github.com/edithatogo/mailweft/pull/3). It includes bounded EML parsing, From/Sender/To/Cc/Bcc/Reply-To roles, explicit observation and header-asserted chronology, scoped keyed pseudonyms, exact-copy lineage, MIME attachment metadata, JSON OCEL projection and a local-only CLI.
 
-## First consumer and ownership
-`foi-process` will depend on Mailweft. Its existing unvalidated output is **not** a reference or correctness oracle. Independently adjudicated source evidence and synthetic fixtures govern migration.
+**Development preview, not a production release.** The dependency advisory gate is blocked by Rust4PM's transitive quick-xml dependency: [issue #4](https://github.com/edithatogo/mailweft/issues/4). Native tests passing does not waive that gate. No real corpus, model, FOI migration or GraphRAG runtime has been evaluated. See [implemented scope and limitations](docs/CORE-CHECKPOINT.md) and [execution evidence](conductor/execution/20261108-core-slice.md).
 
-`fyi-cli` retains acquisition/capture; the `fyi-archive` boundary retains archival manifests/provenance/distribution (or a verified successor). `foi-process` maps generic results into a pinned FOI-O profile and sends evidence-linked ontology improvement candidates to `foi-o`. No automatic ontology changes or legal conclusions are inferred. See [FOI boundaries and handover ambiguity](docs/FOI-BOUNDARIES.md).
+## Try a fictional example
 
-## Start here
-- [Product scope](docs/PRODUCT-SCOPE.md), [contract](docs/CONTRACT.md), [requirements](docs/REQUIREMENTS.md), [design](docs/DESIGN.md)
-- [Conductor index](conductor/index.md), [tracks](conductor/tracks.md), [task manifest](conductor/task-manifest.json), [execution order](docs/EXECUTION-ORDER.md)
-- [GraphRAG design](docs/GRAPHRAG.md), [FOI and error-injection protocol](docs/FOI-SCOPE-AND-ROBUSTNESS.md)
-- [Dataset verification](docs/DATASETS.md), [validation](docs/VALIDATION.md), [planning status](docs/BUILD_STATUS.md)
-
-## Conductor
-Gemini Conductor is a real Git submodule at `.agents/plugins/conductor`, pinned to commit `7a5c560a4fdf5297be58594cc37527eb12790272` (`conductor-v0.4.1`). Project context and task plans are already populated; do not run setup that overwrites them.
+The current implementation requires the pinned Rust toolchain and registry access for its first dependency build. Conversion itself needs no network. The commands below target the implementation branch while the PR is unmerged:
 
 ```sh
-git clone --recurse-submodules https://github.com/edithatogo/mailweft.git
+git clone --branch feat/raw-email-ocel --recurse-submodules https://github.com/edithatogo/mailweft.git
 cd mailweft
-python3 scripts/validate_scaffold.py
-python3 -m unittest discover -s scripts -p 'test_*.py'
+cargo test --workspace --all-targets --locked
+
+# Unix example: keep this private key outside the repository.
+(umask 077; openssl rand 32 > /tmp/mailweft-example.key)
+cargo run --locked -p mailweft-cli -- convert \
+  --synthetic --scope fictional-example \
+  --key-file /tmp/mailweft-example.key \
+  --observed-at 2026-11-08T00:00:00Z --view both \
+  fixtures/synthetic/basic.eml
 ```
 
-Python is only an initial planning-validation helper, not the proposed application runtime. Registering a host-specific Conductor extension is a separate optional action; the submodule does not prove it is installed in the user's agent host. See [naming and submodule details](docs/NAME-MIGRATION.md).
+The default output bundles `ocel`, pseudonymous message evidence and a receipt. `--ocel-only` emits standalone OCEL JSON. The CLI currently accepts individual regular files, not directories or archives. `--observed-at` is explicitly supplied source-observation metadata, never a guessed sent or delivery date. Choose `observed`, `header-asserted` or `both` deliberately; these are distinct clocks.
 
-## Agent execution
-Read `AGENTS.md` and the single eligible task card; implement only that task, write the specified failing tests first, record real exit codes, and leave unavailable execution blocked. The core lane is independently releasable; dataset rights, human annotation, research, graphs and downstream consumers are not core release prerequisites.
+`--synthetic` declares fictional fixtures. Independently authorised real local processing uses `--authorised-local`; the flag does not obtain consent or organisational approval. Output is pseudonymous, not anonymous or automatically publishable. Use a trusted, quiescent local source directory. See the limitations before processing any non-fictional material.
 
-## Licence and references
-Original work: Apache-2.0. Upstream dependencies and datasets retain separate licences and rights. `mail-parser`, `mail-threading` and Rust4PM `process_mining` are candidates pending exact-version qualification. No upstream unlicensed implementation or email corpus is bundled. Existing version-1 schema identifiers retain the earlier email-ocel namespace as stable aliases.
+## Core contract
+
+- Offline Rust-only production code; no required Python, LLM, graph database, cloud, UI, FOI project or Enron corpus.
+- Raw source stays unchanged; source hashes and observed/claimed times remain distinct.
+- Header recipients are not task assignees; an address is not a verified person; missing Bcc is not proof of no blind recipients.
+- Native OCEL event/object attributes and qualified relationships are retained. Unimplemented/lossy paths are rejected or explicitly diagnosed.
+- Optional interpretations cannot overwrite observations. Text/attachment semantic extraction, GraphRAG and ontology feedback remain separate future work.
+
+## First consumer and ownership
+
+`foi-process` will depend on Mailweft. Its existing unvalidated output is not a correctness reference, teacher or migration oracle. Independent source annotation and fictional fixtures govern acceptance.
+
+`fyi-cli` retains acquisition; the `fyi-archive` boundary retains preservation/manifests/distribution, or an explicitly verified successor. `foi-process` owns pinned FOI mappings and sends reviewed evidence-backed candidate improvements to `foi-o`. See [FOI boundaries](docs/FOI-BOUNDARIES.md). No partner runtime was changed in this slice.
+
+## Conductor and development
+
+- [Contract](docs/CONTRACT.md), [requirements](docs/REQUIREMENTS.md), [design](docs/DESIGN.md)
+- [Conductor index](conductor/index.md), [tracks](conductor/tracks.md), [task manifest](conductor/task-manifest.json), [execution order](docs/EXECUTION-ORDER.md)
+- [Dependency qualification](docs/DEPENDENCIES.md), [GraphRAG design](docs/GRAPHRAG.md), [FOI/error-injection protocol](docs/FOI-SCOPE-AND-ROBUSTNESS.md)
+
+Gemini Conductor is a real submodule at `.agents/plugins/conductor`, pinned to `7a5c560a4fdf5297be58594cc37527eb12790272`. Existing context/plans must not be overwritten by setup. Host-specific extension registration is separate.
+
+```sh
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets --locked -- -D warnings
+python3 scripts/validate_scaffold.py
+python3 -m unittest discover -s scripts -p 'test_*.py'
+python3 scripts/validate_contract_examples.py
+```
+
+Python checks are development-only contract tooling, not an application runtime. CI checks the real CLI output against independent evidence schemas and tests Linux, macOS and Windows. Read exact-head CI results rather than assuming every branch is green.
+
+Original work is Apache-2.0. Upstream software/data retain their rights. No real correspondence, dataset archive, private key or unlicensed source implementation is bundled. Existing v1 schema identifiers retain their stable email-ocel aliases.
