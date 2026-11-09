@@ -5,7 +5,12 @@ use mailweft_core::source::{
     read_bounded_file,
 };
 use mailweft_core::{SourceInput, convert_batch, convert_eml, inspect_body_zones};
-use std::{env, io::{self, Write}, path::Path, process::ExitCode};
+use std::{
+    env,
+    io::{self, Write},
+    path::Path,
+    process::ExitCode,
+};
 
 fn parse_instant(value: &str) -> Result<DateTime<Utc>, &'static str> {
     DateTime::parse_from_rfc3339(value)
@@ -39,7 +44,9 @@ fn run(args: &[String]) -> Result<String, &'static str> {
         }
         Some("batch") => {
             if args.len() < 4 || args.len() > 1027 {
-                return Err("Usage: mailweft batch <observed-at:RFC3339> <file.eml> [file2.eml ...]");
+                return Err(
+                    "Usage: mailweft batch <observed-at:RFC3339> <file.eml> [file2.eml ...]",
+                );
             }
             let at = parse_instant(&args[2])?;
             let mut remaining = 256 * 1024 * 1024usize;
@@ -49,9 +56,15 @@ fn run(args: &[String]) -> Result<String, &'static str> {
                 remaining -= bytes.len();
                 contents.push(bytes);
             }
-            let inputs: Vec<_> = contents.iter().zip(&args[3..]).map(|(bytes, source_id)| {
-                SourceInput { raw: bytes, source_id, observed_at: at }
-            }).collect();
+            let inputs: Vec<_> = contents
+                .iter()
+                .zip(&args[3..])
+                .map(|(bytes, source_id)| SourceInput {
+                    raw: bytes,
+                    source_id,
+                    observed_at: at,
+                })
+                .collect();
             let log = convert_batch(&inputs).map_err(|_| "SOURCE_CONVERSION_FAILED")?;
             serde_json::to_string_pretty(&log).map_err(|_| "OUTPUT_SERIALIZATION_FAILED")
         }
@@ -62,8 +75,8 @@ fn run(args: &[String]) -> Result<String, &'static str> {
             let at = parse_instant(&args[2])?;
             let raw = read_file(&args[1], MAX_SOURCE_BYTES)?;
             let source_id = args.get(3).unwrap_or(&args[1]);
-            let conversion = convert_eml(&raw, source_id, at)
-                .map_err(|_| "SOURCE_CONVERSION_FAILED")?;
+            let conversion =
+                convert_eml(&raw, source_id, at).map_err(|_| "SOURCE_CONVERSION_FAILED")?;
             serde_json::to_string_pretty(&conversion.log).map_err(|_| "OUTPUT_SERIALIZATION_FAILED")
         }
     }
@@ -74,7 +87,11 @@ fn main() -> ExitCode {
     match run(&args) {
         Ok(json) => {
             let mut output = io::stdout().lock();
-            if output.write_all(json.as_bytes()).and_then(|_| output.write_all(b"\n")).is_err() {
+            if output
+                .write_all(json.as_bytes())
+                .and_then(|_| output.write_all(b"\n"))
+                .is_err()
+            {
                 eprintln!("error: OUTPUT_WRITE_FAILED");
                 return ExitCode::FAILURE;
             }

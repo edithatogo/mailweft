@@ -1,7 +1,12 @@
-use mailweft_core::{convert_eml, source::{SourceEnvelope, convert_with_envelope, parse_envelope_json}};
+use mailweft_core::{
+    convert_eml,
+    source::{SourceEnvelope, convert_with_envelope, parse_envelope_json},
+};
 
-const RAW: &[u8] = b"From: alice@example.invalid\r\nTo: bob@example.invalid\r\nSubject: Fixture\r\n\r\nHello\r\n";
-const ENVELOPE: &[u8] = include_bytes!("../../../fixtures/synthetic/contracts/source-envelope.json");
+const RAW: &[u8] =
+    b"From: alice@example.invalid\r\nTo: bob@example.invalid\r\nSubject: Fixture\r\n\r\nHello\r\n";
+const ENVELOPE: &[u8] =
+    include_bytes!("../../../fixtures/synthetic/contracts/source-envelope.json");
 
 #[test]
 fn evidence_bundle_preserves_the_existing_ocel_projection() {
@@ -18,8 +23,14 @@ fn metadata_revisions_change_receipt_not_observed_events() {
     envelope.rights_ref = "revised-scope-record".into();
     let second = convert_with_envelope(RAW, &envelope).unwrap();
     assert_eq!(first.conversion, second.conversion);
-    assert_ne!(first.receipt.metadata_sha256, second.receipt.metadata_sha256);
-    assert_ne!(first.receipt.rights_ref_sha256, second.receipt.rights_ref_sha256);
+    assert_ne!(
+        first.receipt.metadata_sha256,
+        second.receipt.metadata_sha256
+    );
+    assert_ne!(
+        first.receipt.rights_ref_sha256,
+        second.receipt.rights_ref_sha256
+    );
 }
 
 #[test]
@@ -27,8 +38,10 @@ fn json_field_order_does_not_change_semantic_metadata_fingerprint() {
     let original = parse_envelope_json(ENVELOPE).unwrap();
     let value: serde_json::Value = serde_json::from_slice(ENVELOPE).unwrap();
     let reordered: SourceEnvelope = serde_json::from_value(value).unwrap();
-    assert_eq!(convert_with_envelope(RAW, &original).unwrap().receipt,
-        convert_with_envelope(RAW, &reordered).unwrap().receipt);
+    assert_eq!(
+        convert_with_envelope(RAW, &original).unwrap().receipt,
+        convert_with_envelope(RAW, &reordered).unwrap().receipt
+    );
 }
 
 #[test]

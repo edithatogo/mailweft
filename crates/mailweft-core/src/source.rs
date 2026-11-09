@@ -134,13 +134,18 @@ impl SourceEnvelope {
             &self.producer.version,
             &self.rights_ref,
             &self.scope_ref,
-        ].into_iter().all(|v| valid_ref(v))
+        ]
+        .into_iter()
+        .all(|v| valid_ref(v))
             || self.custodian_ref.as_deref().is_some_and(|v| !valid_ref(v))
             || self.locator_ref.as_deref().is_some_and(|v| !valid_ref(v))
             || self.transformation_refs.len() > 64
             || self.transformation_refs.iter().any(|v| !valid_ref(v))
             || self.source_sha256.len() != 64
-            || !self.source_sha256.bytes().all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
+            || !self
+                .source_sha256
+                .bytes()
+                .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
         {
             return Err(SourceError::InvalidEnvelope);
         }
@@ -155,8 +160,8 @@ pub fn parse_envelope_json(raw: &[u8]) -> Result<SourceEnvelope, SourceError> {
     if raw.len() > MAX_ENVELOPE_BYTES {
         return Err(SourceError::SizeLimit);
     }
-    let envelope: SourceEnvelope = serde_json::from_slice(raw)
-        .map_err(|_| SourceError::InvalidEnvelope)?;
+    let envelope: SourceEnvelope =
+        serde_json::from_slice(raw).map_err(|_| SourceError::InvalidEnvelope)?;
     envelope.validate()?;
     Ok(envelope)
 }
@@ -181,8 +186,8 @@ pub fn convert_with_envelope(
     // Serde struct field order and UTC datetime normalization define this version's
     // semantic metadata fingerprint. This is not a generic JSON canonicalizer.
     let metadata = serde_json::to_vec(envelope).map_err(|_| SourceError::InvalidEnvelope)?;
-    let producer = serde_json::to_vec(&envelope.producer)
-        .map_err(|_| SourceError::InvalidEnvelope)?;
+    let producer =
+        serde_json::to_vec(&envelope.producer).map_err(|_| SourceError::InvalidEnvelope)?;
     let receipt = SourceReceipt {
         schema_version: "1.0.0".into(),
         source_sha256: envelope.source_sha256.clone(),
@@ -201,7 +206,10 @@ pub fn convert_with_envelope(
         parser_version: "mail-parser/1.0.1".into(),
         assurance: "bytes_matched_metadata_caller_asserted".into(),
     };
-    Ok(ProvenancedConversion { conversion, receipt })
+    Ok(ProvenancedConversion {
+        conversion,
+        receipt,
+    })
 }
 
 /// Read at most limit+1 bytes, including when input length metadata is absent or stale.
@@ -211,7 +219,9 @@ pub fn read_bounded(reader: impl Read, limit: usize) -> Result<Vec<u8>, SourceEr
         return Err(SourceError::SizeLimit);
     }
     let mut out = Vec::with_capacity(limit.min(8192));
-    reader.take(limit as u64 + 1).read_to_end(&mut out)
+    reader
+        .take(limit as u64 + 1)
+        .read_to_end(&mut out)
         .map_err(|_| SourceError::ReadFailed)?;
     if out.len() > limit {
         return Err(SourceError::SizeLimit);

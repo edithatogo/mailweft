@@ -7,7 +7,8 @@ pub mod source;
 mod zones;
 pub use batch::{SourceInput, convert_batch};
 pub use zones::{
-    BodyEvidence, OffsetQuality, SourceZone, TextPartEvidence, ZoneKind, inspect_body_zones,
+    BodyEvidence, OffsetQuality, OriginScope, SkipReason, SkippedPart, SourceZone,
+    TextPartEvidence, ZoneKind, inspect_body_zones,
 };
 
 use chrono::{DateTime, Utc};

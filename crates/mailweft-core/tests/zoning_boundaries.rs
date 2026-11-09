@@ -8,7 +8,9 @@ fn inspect(body: &str) -> Value {
 
 #[test]
 fn forwarded_history_never_becomes_new_authored_content() {
-    let doc = inspect("My introduction\n---------- Forwarded message ---------\nFrom: earlier@example.invalid\nHi Jane,\nPlease approve.\nKind regards,\nEarlier Author\n");
+    let doc = inspect(
+        "My introduction\n---------- Forwarded message ---------\nFrom: earlier@example.invalid\nHi Jane,\nPlease approve.\nKind regards,\nEarlier Author\n",
+    );
     let zones = doc["parts"][0]["zones"].as_array().unwrap();
     for zone in &zones[2..] {
         assert_ne!(zone["kind"], "authored");
@@ -30,7 +32,9 @@ fn quote_depth_is_preserved_and_inline_response_is_not_quoted() {
 
 #[test]
 fn disclaimer_after_signature_is_not_signature_identity() {
-    let doc = inspect("Hello Jane,\nMain text\nKind regards,\nAuthor\nThis message is confidential and intended only for the addressee.\n");
+    let doc = inspect(
+        "Hello Jane,\nMain text\nKind regards,\nAuthor\nThis message is confidential and intended only for the addressee.\n",
+    );
     let zones = doc["parts"][0]["zones"].as_array().unwrap();
     assert_eq!(zones.last().unwrap()["kind"], "disclaimer");
 }

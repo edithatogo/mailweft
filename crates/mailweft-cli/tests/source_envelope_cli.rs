@@ -1,7 +1,8 @@
 use serde_json::{Value, json};
 use std::process::{Command, Output};
 
-const RAW: &[u8] = b"From: alice@example.invalid\r\nTo: bob@example.invalid\r\nSubject: Fixture\r\n\r\nHello\r\n";
+const RAW: &[u8] =
+    b"From: alice@example.invalid\r\nTo: bob@example.invalid\r\nSubject: Fixture\r\n\r\nHello\r\n";
 
 fn envelope() -> Value {
     // Fixture SHA-256 independently computed with Python hashlib.
@@ -29,7 +30,11 @@ fn run(raw: &[u8], env: &Value) -> Output {
     std::fs::write(&mail, raw).unwrap();
     std::fs::write(&meta, serde_json::to_vec(env).unwrap()).unwrap();
     Command::new(env!("CARGO_BIN_EXE_mailweft"))
-        .arg("convert-evidence").arg(mail).arg(meta).output().unwrap()
+        .arg("convert-evidence")
+        .arg(mail)
+        .arg(meta)
+        .output()
+        .unwrap()
 }
 
 #[test]
@@ -42,19 +47,42 @@ fn verified_bytes_have_deterministic_receipt_without_private_locators() {
     assert_eq!(doc["receipt"]["schema_version"], "1.0.0");
     assert_eq!(doc["receipt"]["source_sha256"], envelope()["source_sha256"]);
     assert_eq!(doc["receipt"]["coverage_claim"], "unknown");
-    assert_eq!(doc["receipt"]["assurance"], "bytes_matched_metadata_caller_asserted");
-    assert_eq!(doc["receipt"]["source_copy_id"], doc["conversion"]["source_copy_id"]);
-    assert_eq!(doc["receipt"]["observation_event_id"], doc["conversion"]["log"]["events"][0]["id"]);
-    assert_eq!(doc["conversion"]["log"]["events"][0]["time"], "2026-11-09T07:00:00Z");
+    assert_eq!(
+        doc["receipt"]["assurance"],
+        "bytes_matched_metadata_caller_asserted"
+    );
+    assert_eq!(
+        doc["receipt"]["source_copy_id"],
+        doc["conversion"]["source_copy_id"]
+    );
+    assert_eq!(
+        doc["receipt"]["observation_event_id"],
+        doc["conversion"]["log"]["events"][0]["id"]
+    );
+    assert_eq!(
+        doc["conversion"]["log"]["events"][0]["time"],
+        "2026-11-09T07:00:00Z"
+    );
     let output = String::from_utf8(a.stdout).unwrap();
-    for secret in ["private-custodian", "private-rights-record", "private-authorized-scope", "private-archive", "alice@example.invalid", "Hello"] {
+    for secret in [
+        "private-custodian",
+        "private-rights-record",
+        "private-authorized-scope",
+        "private-archive",
+        "alice@example.invalid",
+        "Hello",
+    ] {
         assert!(!output.contains(secret));
     }
 }
 
 #[test]
 fn tampered_source_is_rejected_without_returning_partial_ocel() {
-    let raw = RAW.iter().copied().chain(b"tampered".iter().copied()).collect::<Vec<_>>();
+    let raw = RAW
+        .iter()
+        .copied()
+        .chain(b"tampered".iter().copied())
+        .collect::<Vec<_>>();
     let output = run(&raw, &envelope());
     assert!(!output.status.success());
     assert!(output.stdout.is_empty());
@@ -100,7 +128,10 @@ fn malformed_missing_or_unknown_metadata_fails_closed() {
 fn normal_input_modes_reject_non_regular_files_without_sensitive_diagnostics() {
     let dir = tempfile::tempdir().unwrap();
     let out = Command::new(env!("CARGO_BIN_EXE_mailweft"))
-        .arg("inspect").arg(dir.path()).output().unwrap();
+        .arg("inspect")
+        .arg(dir.path())
+        .output()
+        .unwrap();
     assert!(!out.status.success());
     assert!(String::from_utf8_lossy(&out.stderr).contains("SOURCE_NOT_REGULAR"));
     assert!(!String::from_utf8_lossy(&out.stderr).contains(dir.path().to_str().unwrap()));
