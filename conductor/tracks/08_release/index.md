@@ -1,6 +1,8 @@
-# Interoperability, packaging and downstream consumer boundaries
+# Track 08_release Context
 
-- [Specification](spec.md)
-- [Plan](plan.md)
-- [Metadata](metadata.json)
-- [Execution evidence](evidence.md)
+- [Specification](./spec.md)
+- [Implementation Plan](./plan.md)
+- [Metadata](./metadata.json)
+- [Evidence](./evidence.md)
+
+Status: new. Consult exact task prerequisites; do not redo completed tasks.

@@ -2,23 +2,9 @@ name: Rust converter checks
 on:
   push:
     branches: [main, 'feat/**']
-    paths:
-      - 'Cargo.toml'
-      - 'Cargo.lock'
-      - 'crates/**'
-      - 'contracts/**'
-      - 'fixtures/synthetic/**'
-      - 'scripts/validate_runtime_contracts.py'
-      - '.github/workflows/rust-core.yml'
+    paths: ['Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml', 'crates/**', 'contracts/**', 'fixtures/synthetic/**', 'scripts/validate_runtime_contracts.py', 'scripts/validate_selection_outputs.py', '.github/workflows/rust-core.yml']
   pull_request:
-    paths:
-      - 'Cargo.toml'
-      - 'Cargo.lock'
-      - 'crates/**'
-      - 'contracts/**'
-      - 'fixtures/synthetic/**'
-      - 'scripts/validate_runtime_contracts.py'
-      - '.github/workflows/rust-core.yml'
+    paths: ['Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml', 'crates/**', 'contracts/**', 'fixtures/synthetic/**', 'scripts/validate_runtime_contracts.py', 'scripts/validate_selection_outputs.py', '.github/workflows/rust-core.yml']
 permissions:
   contents: read
 concurrency:
@@ -32,17 +18,18 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           persist-credentials: false
-      - name: Install Rust toolchain supporting mail-parser 1.0
+      - name: Install pinned Rust toolchain
         run: |
-          rustup toolchain install stable --profile minimal --component rustfmt --component clippy
-          rustup default stable
+          rustup toolchain install 1.99.1 --profile minimal --component rustfmt --component clippy
           rustc --version
       - name: Test
         run: cargo test --locked --workspace --all-targets --no-fail-fast
-      - name: Explicit source-integrity and batch acceptance
+      - name: Explicit source-integrity, corpus and mapping acceptance
         run: |
           cargo test --locked -p mailweft-core --test source_integrity
           cargo test --locked -p mailweft-core --test batch
+          cargo test --locked -p mailweft-cli --test corpus_reconciliation
+          cargo test --locked -p mailweft-core --test transfer_provenance
       - name: Rust4PM independent OCEL import
         run: cargo test --locked -p mailweft-core --features rust4pm-validation --test rust4pm_interop
       - name: Actual Rust output contract validation
@@ -50,6 +37,7 @@ jobs:
           python3 -m pip install --disable-pip-version-check -r requirements-planning.txt
           cargo build --locked -p mailweft-cli
           python3 scripts/validate_runtime_contracts.py
+          python3 scripts/validate_selection_outputs.py
       - name: Format
         run: cargo fmt --all -- --check
       - name: Lint

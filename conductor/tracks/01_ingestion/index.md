@@ -1,6 +1,8 @@
-# Raw EML and maildir input, manifests and parse boundaries
+# Track 01_ingestion Context
 
-- [Specification](spec.md)
-- [Plan](plan.md)
-- [Metadata](metadata.json)
-- [Execution evidence](evidence.md)
+- [Specification](./spec.md)
+- [Implementation Plan](./plan.md)
+- [Metadata](./metadata.json)
+- [Evidence](./evidence.md)
+
+Status: in_progress. Consult exact task prerequisites; do not redo completed tasks.

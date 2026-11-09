@@ -1,7 +1,12 @@
 {
+  "track_id": "06_semantics",
   "id": "06_semantics",
+  "type": "feature",
   "title": "Versioned NLP claims, entity resolution and evidence sidecar",
-  "status": "not_started",
+  "description": "Versioned NLP claims, entity resolution and evidence sidecar",
+  "status": "new",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
   "requirements": [
     "R20",
     "R21",
@@ -17,9 +22,5 @@
     "T06.07",
     "T06.08"
   ],
-  "depends_on": [
-    "05b_email-structure"
-  ],
-  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence.",
-  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
 }

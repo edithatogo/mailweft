@@ -1,14 +1,10 @@
-# Technology stack
+# Mailweft technical stack — implemented versus optional
 
-- Rust stable (version pin/edition chosen and recorded in T00.04; do not guess without qualification).
-- Cargo workspace. Core dependency candidates: `mail-parser` (Stalwart), `mail-threading` (RFC references), `process_mining` (Rust4PM), serde/serde_json, hashing crates, clap and bounded file walk. Exact versions/licences pinned and audited by task.
-- OCEL 2.0 canonical data structures and direct Rust import/export. Native JSON first, XML/SQLite qualified separately. No mandatory Python, JVM, WSL or CUDA.
-- Optional features: EDRM XML adapter, Parquet bulk output, MIME attachment document parsing, local NLP/LLM backends, evidence graph, Microsoft connectors, language bindings.
-- Conductor as pinned upstream Git submodule; only project-owned `conductor` context and tracks edited locally.
-- Testing: cargo fmt/clippy/test, proptest, cargo-fuzz where practical, cargo-deny/audit and platform matrix; Python standard library only for initial docs validator.
+- **Core/runtime:** Rust 2024; `mailweft-core` and `mailweft-cli`. The tested toolchain is pinned in rust-toolchain.toml; dependency resolution is committed in Cargo.lock. No Python runtime.
+- **MIME parsing:** Stalwart mail-parser =1.0.1. Mailweft projects parsed observations, bounded source-integrity receipts, optional zoning and transfer-unit evidence. It is not a new MIME decoder.
+- **OCEL:** corpus-neutral OCEL 2.0 JSON-shaped projection with explicit E2O/O2O qualifiers. Rust4PM process_mining =0.6.2 is feature-gated independent validation. Complete typed-value, cross-format and algorithm parity remain separate tasks.
+- **Ingestion:** explicit supplied files and versioned source envelopes. Selection-level accepted/rejected accounting does not prove whole-mailbox or FYI completeness. Network capture/archive preservation remain external.
+- **Validation tooling:** Python only for repository planning and JSON Schema checks of actual Rust outputs. Standard-library Conductor doctor synchronizes context; it does not implement or validate the scientific methods.
+- **Optional/future:** maildir traversal, broader threading and legacy addresses, semantic NLP, GraphRAG, vector services, and foi-process integration. These are not mandatory core dependencies.
 
-## Optional reuse audit (2026-11-08)
-Do not expand the three specialist Rust candidates merely to implement a roadmap. `foi-process` has a real Rust4PM adapter but currently omits attributes; only foi-process remains in the active owned-repository integration scope. Reuse via qualified consumer-owned contracts, never a reverse application dependency. No new runtime dependency is installed by this update. Draft 2020-12 validation via Python jsonschema is development-only; the stdlib planning checker is not a general JSON Schema validator.
-
-## Mailweft and optional GraphRAG
-The new repository name is accepted; preserve historical schema IDs. The core is a Rust email-to-OCEL converter. GraphRAG remains optional and has no selected mandatory library. First qualify deterministic graph projection/retrieval over the existing evidence records; Microsoft GraphRAG is a Python reference/comparator outside default production. FOI-O is consumer-owned ontology input/output, not a Mailweft runtime dependency. All source capture/archive activities stay outside Mailweft.
+Use docs/DEPENDENCIES.md for the exact resolved direct dependency/licence inventory. Do not replace pinned versions silently. Keep the converter independent of Enron schemas and FOI-specific semantics.

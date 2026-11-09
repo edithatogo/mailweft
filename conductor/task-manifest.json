@@ -1,20 +1,21 @@
 {
-  "schema_version": "1.2.0",
-  "execution_rule": "One eligible task per invocation; prerequisites use exact task IDs. Core release closure excludes corpus/enrichment/research/integration lanes.",
+  "schema_version": "1.3.0",
+  "execution_rule": "Resume one eligible task; canonical statuses and exact prerequisites drive generated Conductor context. Optional lanes never block the core.",
   "tasks": [
     {
       "id": "T00.01",
       "track": "00_foundation",
       "title": "Inventory dependency licences and record SPDX + exact pinned candidate versions",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [],
       "allowed_paths": [
-        "docs/DEPENDENCIES.md"
+        "docs/DEPENDENCIES.md",
+        "docs/dependency-inventory.json"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
       "acceptance": "Validate upstream source licences; no unlicensed code copied. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T00.01: <concise result>",
       "requirements": [
         "R10",
@@ -22,7 +23,24 @@
         "R13",
         "R15"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Resolved direct dependencies and declared SPDX/source licence file hashes inventoried from locked Cargo metadata.",
+        "remaining": "Transitive vulnerabilities and wider candidate evaluation are separate tasks.",
+        "files": [
+          "docs/DEPENDENCIES.md",
+          "docs/dependency-inventory.json"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T00.02",
@@ -52,18 +70,18 @@
       "id": "T00.03",
       "track": "00_foundation",
       "title": "Record repository boundaries and source asset exclusions",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [
         "T00.01"
       ],
       "allowed_paths": [
-        "AGENTS.md",
-        ".gitignore"
+        ".gitignore",
+        "AGENTS.md"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
       "acceptance": "No real-data files trackable by default. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T00.03: <concise result>",
       "requirements": [
         "R10",
@@ -71,25 +89,44 @@
         "R13",
         "R15"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Source/capture/FOI boundaries and private-data exclusions are recorded; representative ignore rules are checked.",
+        "remaining": "Ignore rules are not a data-loss prevention classifier; deliberately staged material still needs review.",
+        "files": [
+          "AGENTS.md",
+          ".gitignore"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T00.04",
       "track": "00_foundation",
-      "title": "Create single minimal Rust workspace with email-ocel-core and CLI crates",
-      "status": "not_started",
+      "title": "Maintain the minimal mailweft-core and CLI Rust workspace",
+      "status": "completed",
       "depends_on": [
         "T00.01",
         "T00.03"
       ],
       "allowed_paths": [
         "Cargo.toml",
-        "crates/*"
+        "crates/*",
+        "crates/mailweft-cli/Cargo.toml",
+        "crates/mailweft-core/Cargo.toml"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
-      "acceptance": "cargo metadata --no-deps succeeds; avoid unused crates. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED. Planned package root is crates/mailweft; no Enron or FOI-specific default is allowed.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
+      "acceptance": "Locked cargo metadata and workspace tests pass for the two existing generic Rust packages; no duplicate proposed crate.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T00.04: <concise result>",
       "requirements": [
         "R10",
@@ -97,24 +134,42 @@
         "R13",
         "R15"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "The two-package Rust workspace exists and builds; no duplicate proposed crate is required.",
+        "remaining": "Keep the existing mailweft-core/CLI names; do not recreate the original email-ocel scaffold.",
+        "files": [
+          "Cargo.toml",
+          "crates/mailweft-core/Cargo.toml",
+          "crates/mailweft-cli/Cargo.toml"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T00.05",
       "track": "00_foundation",
       "title": "Add rust-toolchain pin and deterministic dependency lock",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [
         "T00.04"
       ],
       "allowed_paths": [
-        "rust-toolchain.toml",
-        "Cargo.lock"
+        "Cargo.lock",
+        "rust-toolchain.toml"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
       "acceptance": "Locked build reproducible on chosen toolchain. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T00.05: <concise result>",
       "requirements": [
         "R10",
@@ -122,23 +177,42 @@
         "R13",
         "R15"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Tested Rust 1.99.1 toolchain and dependency resolution are pinned.",
+        "remaining": "Future upgrades require an explicit qualification change.",
+        "files": [
+          "rust-toolchain.toml",
+          "Cargo.lock"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T00.06",
       "track": "00_foundation",
       "title": "Add CI synthetic lint/test/contract and dependency security scans",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T00.05"
       ],
       "allowed_paths": [
-        ".github/workflows/ci.yml"
+        ".github/workflows/ci.yml",
+        ".github/workflows/planning-checks.yml",
+        ".github/workflows/rust-core.yml"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.",
       "acceptance": "CI requires no real mailbox/corpus data. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T00.06: <concise result>",
       "requirements": [
         "R10",
@@ -146,23 +220,44 @@
         "R13",
         "R15"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Read-only synthetic Rust, contracts, planning and Conductor checks run in CI.",
+        "remaining": "Dedicated dependency advisory/security scanning and broader fuzz gates remain open.",
+        "files": [
+          ".github/workflows/rust-core.yml",
+          ".github/workflows/planning-checks.yml"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T00.07",
       "track": "00_foundation",
       "title": "Verify Conductor submodule and project context integrity",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [
-        "T00.06"
+        "T00.04",
+        "T00.05"
       ],
       "allowed_paths": [
-        "scripts/check_conductor.sh"
+        "GEMINI.md",
+        "docs/CONDUCTOR-SETUP.md",
+        "scripts/check_conductor.sh",
+        "scripts/conductor_doctor.py"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
-      "acceptance": "gitlink/tag/sha and track files verified. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
+      "acceptance": "Conductor doctor validates real pinned checkout, command TOMLs, all track artifacts and synchronized status; no user-host installation claim.",
       "evidence_path": "conductor/tracks/00_foundation/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T00.07: <concise result>",
       "requirements": [
         "R10",
@@ -170,24 +265,43 @@
         "R13",
         "R15"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Pinned gitlink, actual checkout, upstream command manifests and generated project/track context are checked.",
+        "remaining": "Host extension registration on the user computer is explicitly unverified, not a repository prerequisite.",
+        "files": [
+          "scripts/conductor_doctor.py",
+          "docs/CONDUCTOR-SETUP.md",
+          "GEMINI.md"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T01.01",
       "track": "01_ingestion",
       "title": "Implement source envelope types and bounded file reader",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [
         "T00.05",
         "T00.03"
       ],
       "allowed_paths": [
-        "crates/mailweft-core/src/source.rs"
+        "crates/mailweft-core/src/source.rs",
+        "crates/mailweft-core/tests/source_integrity.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
       "acceptance": "Hash byte-exact source content; source only local. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T01.01: <concise result>",
       "requirements": [
         "R01",
@@ -196,7 +310,24 @@
         "R09",
         "R11"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Versioned source envelopes, byte integrity receipts and counted input readers are implemented.",
+        "remaining": "Rights/time/coverage remain caller assertions; hostile path races remain out of scope.",
+        "files": [
+          "crates/mailweft-core/src/source.rs",
+          "crates/mailweft-core/tests/source_integrity.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T01.02",
@@ -227,17 +358,19 @@
       "id": "T01.03",
       "track": "01_ingestion",
       "title": "Integrate mail-parser with error map",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [
-        "T01.02"
+        "T01.01"
       ],
       "allowed_paths": [
-        "crates/mailweft-core/src/parser.rs"
+        "crates/mailweft-core/src/lib.rs",
+        "crates/mailweft-core/src/parser.rs",
+        "crates/mailweft-core/src/source.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
       "acceptance": "Malformed samples reject with stable codes. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T01.03: <concise result>",
       "requirements": [
         "R01",
@@ -247,23 +380,42 @@
         "R11",
         "R48"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Pinned MIME parser is integrated with stable conversion/source diagnostics and negative fixtures.",
+        "remaining": "This task does not certify every malformed MIME edge case or full parser fuzzing.",
+        "files": [
+          "crates/mailweft-core/src/lib.rs",
+          "crates/mailweft-core/src/source.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T01.04",
       "track": "01_ingestion",
       "title": "Capture all essential message header and address fields",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T01.03"
       ],
       "allowed_paths": [
+        "crates/mailweft-core/src/header_claims.rs",
+        "crates/mailweft-core/src/lib.rs",
         "crates/mailweft-core/src/message.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.",
       "acceptance": "Synthetic multipart EML matches expected structure. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T01.04: <concise result>",
       "requirements": [
         "R01",
@@ -272,23 +424,42 @@
         "R09",
         "R11"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "From/Sender/To/Cc/Bcc/Reply-To and claimed Date/message identifiers are projected.",
+        "remaining": "Resent/envelope evidence, unresolved groups, full address edge cases and comprehensive source spans remain.",
+        "files": [
+          "crates/mailweft-core/src/header_claims.rs",
+          "crates/mailweft-core/src/lib.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T01.05",
       "track": "01_ingestion",
       "title": "Separate header time from source observation and source receipt",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [
-        "T01.04"
+        "T01.03"
       ],
       "allowed_paths": [
-        "crates/mailweft-core/src/time.rs"
+        "crates/mailweft-core/src/header_claims.rs",
+        "crates/mailweft-core/src/time.rs",
+        "crates/mailweft-core/tests/header_claims.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
       "acceptance": "No incorrect delivery/sent event. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T01.05: <concise result>",
       "requirements": [
         "R01",
@@ -297,23 +468,42 @@
         "R09",
         "R11"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Claimed header Date and caller observation time remain distinct; no fabricated delivery event.",
+        "remaining": "Independent verified transport timestamps require separate source evidence.",
+        "files": [
+          "crates/mailweft-core/src/header_claims.rs",
+          "crates/mailweft-core/tests/header_claims.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T01.06",
       "track": "01_ingestion",
       "title": "Extract bounded attachment metadata, never execute or fetch",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [
         "T01.05"
       ],
       "allowed_paths": [
-        "crates/mailweft-core/src/mime.rs"
+        "crates/mailweft-core/src/attachments.rs",
+        "crates/mailweft-core/src/mime.rs",
+        "crates/mailweft-core/tests/attachment_metadata.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
       "acceptance": "No remote fetch and no payload logging. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T01.06: <concise result>",
       "requirements": [
         "R01",
@@ -322,23 +512,42 @@
         "R09",
         "R11"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Bounded source-derived attachment metadata is emitted without fetching/executing/logging payloads.",
+        "remaining": "Content extraction, MIME adversarial corpus validation and content verification are separate work.",
+        "files": [
+          "crates/mailweft-core/src/attachments.rs",
+          "crates/mailweft-core/tests/attachment_metadata.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T01.07",
       "track": "01_ingestion",
       "title": "Emit canonical acquisition manifest with complete/partial status",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [
         "T01.06"
       ],
       "allowed_paths": [
+        "crates/mailweft-cli/tests/corpus_reconciliation.rs",
+        "crates/mailweft-core/src/corpus.rs",
         "crates/mailweft-core/src/manifest.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
-      "acceptance": "Input=accepted+rejected, hash valid. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
+      "acceptance": "Supplied equals accepted plus rejected; deterministic manifest and explicit partial projection; no rejected source becomes an event.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T01.07: <concise result>",
       "requirements": [
         "R01",
@@ -347,23 +556,41 @@
         "R09",
         "R11"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Each supplied slot has an accepted/rejected outcome, deterministic manifest digest and explicit partial/withheld projection.",
+        "remaining": "Completeness covers only the supplied selection; automatic discovery, streaming and archival attestation remain separate.",
+        "files": [
+          "crates/mailweft-core/src/corpus.rs",
+          "crates/mailweft-cli/tests/corpus_reconciliation.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T01.08",
       "track": "01_ingestion",
-      "title": "Add CLI ingest and non-sensitive diagnostic output",
-      "status": "not_started",
+      "title": "Expose supplied-email and selection-reconciliation CLI with non-sensitive diagnostics",
+      "status": "completed",
       "depends_on": [
         "T01.07"
       ],
       "allowed_paths": [
-        "crates/mailweft-cli/src/main.rs"
+        "crates/mailweft-cli/src/main.rs",
+        "crates/mailweft-cli/src/reconcile.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
-      "acceptance": "cargo run ingest fixture works offline. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
+      "acceptance": "Single/batch/convert-evidence/reconcile fictional fixtures run offline with documented exit codes and bounded input.",
       "evidence_path": "conductor/tracks/01_ingestion/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T01.08: <concise result>",
       "requirements": [
         "R01",
@@ -372,23 +599,42 @@
         "R09",
         "R11"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Offline CLI covers supplied single/batch emails, source verification and selection reconciliation with non-sensitive diagnostics.",
+        "remaining": "The command is reconcile rather than the originally proposed ingest; no acquisition/recursion is implied.",
+        "files": [
+          "crates/mailweft-cli/src/main.rs",
+          "crates/mailweft-cli/src/reconcile.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T02.01",
       "track": "02_identity",
       "title": "Implement domain-separated stable identity types",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [
         "T01.08"
       ],
       "allowed_paths": [
-        "crates/mailweft-core/src/identity.rs"
+        "crates/mailweft-core/src/identity.rs",
+        "crates/mailweft-core/src/lib.rs",
+        "crates/mailweft-core/tests/conversion.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
       "acceptance": "Same bytes+config => same ID; no raw identity in output. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/02_identity/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T02.01: <concise result>",
       "requirements": [
         "R04",
@@ -396,23 +642,42 @@
         "R06",
         "R19"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Domain-separated deterministic IDs have source-copy and event tests; raw identifiers are not emitted.",
+        "remaining": "Hashes are pseudonyms, not anonymity; keyed/scoped identity is a separate hardening step.",
+        "files": [
+          "crates/mailweft-core/src/lib.rs",
+          "crates/mailweft-core/tests/conversion.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T02.02",
       "track": "02_identity",
       "title": "Differentiate source copies and logical message candidates",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [
         "T02.01"
       ],
       "allowed_paths": [
-        "crates/mailweft-core/src/copies.rs"
+        "crates/mailweft-core/src/batch.rs",
+        "crates/mailweft-core/src/copies.rs",
+        "crates/mailweft-core/tests/batch.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
       "acceptance": "Two custodians retain separate copies. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/02_identity/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T02.02: <concise result>",
       "requirements": [
         "R04",
@@ -420,23 +685,42 @@
         "R06",
         "R19"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Distinct custodians retain source copies while exact-byte message candidates can be shared.",
+        "remaining": "Near-duplicate and content-semantic identity resolution remain separate.",
+        "files": [
+          "crates/mailweft-core/src/batch.rs",
+          "crates/mailweft-core/tests/batch.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T02.03",
       "track": "02_identity",
       "title": "Handle missing and colliding Message-ID values",
-      "status": "not_started",
+      "status": "completed",
       "depends_on": [
         "T02.02"
       ],
       "allowed_paths": [
-        "crates/mailweft-core/src/dedup.rs"
+        "crates/mailweft-core/src/dedup.rs",
+        "crates/mailweft-core/src/header_claims.rs",
+        "crates/mailweft-core/tests/thread_candidates.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Acceptance recorded. Do not repeat implementation; protect it with the listed regressions.",
       "acceptance": "No silent data loss or overwrite. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/02_identity/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T02.03: <concise result>",
       "requirements": [
         "R04",
@@ -444,23 +728,42 @@
         "R06",
         "R19"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Missing/colliding Message-ID claims do not overwrite distinct raw messages or force ambiguous parent links.",
+        "remaining": "Full legacy-address and broader threading inference are not included.",
+        "files": [
+          "crates/mailweft-core/src/header_claims.rs",
+          "crates/mailweft-core/tests/thread_candidates.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T02.04",
       "track": "02_identity",
       "title": "Implement explicit To/Cc/Bcc role assertions",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T02.03"
       ],
       "allowed_paths": [
-        "crates/mailweft-core/src/parties.rs"
+        "crates/mailweft-core/src/lib.rs",
+        "crates/mailweft-core/src/parties.rs",
+        "crates/mailweft-core/tests/rust4pm_interop.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.",
       "acceptance": "Roles round-trip without duplicates introduced. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/02_identity/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T02.04: <concise result>",
       "requirements": [
         "R04",
@@ -471,23 +774,42 @@
         "R33",
         "R41"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Observed participant qualifiers and independent-import checks exist.",
+        "remaining": "Complete role-value roundtrip, Bcc disclosure controls and empty/unknown states need stronger qualification.",
+        "files": [
+          "crates/mailweft-core/tests/rust4pm_interop.rs",
+          "crates/mailweft-core/src/lib.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T02.05",
       "track": "02_identity",
       "title": "Implement RFC References and In-Reply-To thread graph",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T02.04"
       ],
       "allowed_paths": [
-        "crates/mailweft-core/src/threads.rs"
+        "crates/mailweft-core/src/batch.rs",
+        "crates/mailweft-core/src/threads.rs",
+        "crates/mailweft-core/tests/thread_candidates.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.",
       "acceptance": "Truth graph fixtures pass. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/02_identity/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T02.05: <concise result>",
       "requirements": [
         "R04",
@@ -495,7 +817,24 @@
         "R06",
         "R19"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Unique observed In-Reply-To targets are labelled candidate edges; missing and ambiguous targets abstain.",
+        "remaining": "Reference-chain reconstruction, cycles, incomplete sources and externally adjudicated accuracy remain.",
+        "files": [
+          "crates/mailweft-core/src/batch.rs",
+          "crates/mailweft-core/tests/thread_candidates.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T02.06",
@@ -573,23 +912,42 @@
       "id": "T03.01",
       "track": "03_ocel",
       "title": "Lock Rust4PM process_mining API and audit supported formats",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T02.08"
       ],
       "allowed_paths": [
+        "crates/mailweft-core/Cargo.toml",
+        "crates/mailweft-core/tests/rust4pm_interop.rs",
         "docs/OCEL_COMPAT.md"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.",
       "acceptance": "Exact version and capabilities documented. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/03_ocel/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T03.01: <concise result>",
       "requirements": [
         "R07",
         "R08"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Rust4PM 0.6.2 is pinned and independently imports the emitted JSON fixtures.",
+        "remaining": "Full supported-format/API compatibility audit remains open.",
+        "files": [
+          "crates/mailweft-core/Cargo.toml",
+          "crates/mailweft-core/tests/rust4pm_interop.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T03.02",
@@ -617,89 +975,161 @@
       "id": "T03.03",
       "track": "03_ocel",
       "title": "Map Stage 1 message/source/participant objects and events",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T03.02"
       ],
       "allowed_paths": [
+        "crates/mailweft-core/src/lib.rs",
         "crates/mailweft-core/src/ocel.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.",
       "acceptance": "One source copy not falsely equal message delivered. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/03_ocel/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T03.03: <concise result>",
       "requirements": [
         "R07",
         "R08"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Stage 1 source-copy, message, address and attachment objects/events are projected.",
+        "remaining": "The wider mapping contract and complete typed-value parity are not yet accepted.",
+        "files": [
+          "crates/mailweft-core/src/lib.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T03.04",
       "track": "03_ocel",
       "title": "Produce full OCEL 2.0 native JSON using Rust4PM",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T03.03"
       ],
       "allowed_paths": [
-        "crates/mailweft-cli/src/export.rs"
+        "crates/mailweft-cli/src/export.rs",
+        "crates/mailweft-core/src/lib.rs",
+        "crates/mailweft-core/tests/rust4pm_interop.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.",
       "acceptance": "Independent import succeeds. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/03_ocel/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T03.04: <concise result>",
       "requirements": [
         "R07",
         "R08"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Portable JSON projection imports through Rust4PM without a mandatory Rust4PM runtime dependency.",
+        "remaining": "Full OCEL typed-value/export parity and the canonical-representation decision require resolution.",
+        "files": [
+          "crates/mailweft-core/src/lib.rs",
+          "crates/mailweft-core/tests/rust4pm_interop.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T03.05",
       "track": "03_ocel",
       "title": "Round-trip variable object attributes + typed values",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T03.04"
       ],
       "allowed_paths": [
+        "crates/mailweft-core/src/batch.rs",
+        "crates/mailweft-core/tests/attachment_metadata.rs",
         "crates/mailweft-core/tests/ocel_roundtrip.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.",
       "acceptance": "No dropped type/change history. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/03_ocel/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T03.05: <concise result>",
       "requirements": [
         "R07",
         "R08"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Time-qualified attachment attribute histories are merged and imported.",
+        "remaining": "Current attributes are strings; heterogeneous primitive values and full roundtrips remain.",
+        "files": [
+          "crates/mailweft-core/src/batch.rs",
+          "crates/mailweft-core/tests/attachment_metadata.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T03.06",
       "track": "03_ocel",
       "title": "Round-trip E2O/O2O qualifiers and multiplicity",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T03.05"
       ],
       "allowed_paths": [
-        "crates/mailweft-core/tests/ocel_relations.rs"
+        "crates/mailweft-core/tests/ocel_relations.rs",
+        "crates/mailweft-core/tests/rust4pm_interop.rs"
       ],
-      "action": "Write or modify the named capability; first create a narrowly scoped synthetic test or document assertion, then implement the minimal change.",
+      "action": "Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.",
       "acceptance": "Equality of relation count and qualifiers. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
       "evidence_path": "conductor/tracks/03_ocel/evidence.md",
-      "tests": "Run targeted cargo test + cargo fmt when rust workspace and toolchain exist; for docs only run scripts/validate_scaffold.py; missing prerequisites => blocked",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T03.06: <concise result>",
       "requirements": [
         "R07",
         "R08"
       ],
-      "lane": "core"
+      "lane": "core",
+      "implementation": {
+        "summary": "Observed and candidate E2O/O2O relationships have independent-import regression tests.",
+        "remaining": "Complete value/qualifier/multiplicity roundtrip equality remains to be tested.",
+        "files": [
+          "crates/mailweft-core/tests/rust4pm_interop.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T03.07",
@@ -1111,19 +1541,21 @@
       "id": "T05b.01",
       "track": "05b_email-structure",
       "title": "Define nested email zone/participant contracts and Rust serde types",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T05.02"
       ],
       "allowed_paths": [
-        "crates/mailweft-semantics/src/zones_contract.rs",
+        "contracts/v1/body-evidence.schema.json",
         "contracts/v1/email-zone.schema.json",
-        "contracts/v1/intext-participant.schema.json"
+        "contracts/v1/intext-participant.schema.json",
+        "crates/mailweft-core/src/zones.rs",
+        "crates/mailweft-semantics/src/zones_contract.rs"
       ],
-      "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
+      "action": "Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.",
       "acceptance": "Synthetic JSON fixtures accepted/rejected by Draft 2020-12 and Rust serde; no raw body strings in evidence outputs.",
       "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
-      "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T05b.01: <concise result>",
       "requirements": [
         "R27",
@@ -1131,23 +1563,42 @@
         "R29",
         "R31"
       ],
-      "lane": "enrichment"
+      "lane": "enrichment",
+      "implementation": {
+        "summary": "Implementation-specific BodyEvidence separates content/origin and exact/derived provenance.",
+        "remaining": "The proposed nested email-zone interchange model is not fully implemented.",
+        "files": [
+          "crates/mailweft-core/src/zones.rs",
+          "contracts/v1/body-evidence.schema.json"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T05b.02",
       "track": "05b_email-structure",
       "title": "Implement deterministic body zone baseline on decoded MIME parts",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T05b.03"
       ],
       "allowed_paths": [
+        "crates/mailweft-core/src/zones.rs",
+        "crates/mailweft-core/tests/zoning_boundaries.rs",
         "crates/mailweft-semantics/src/zones.rs"
       ],
-      "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
+      "action": "Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.",
       "acceptance": "Return source-anchored authored, greeting, signoff, quoted, forwarded, signature, disclaimer, inline-header and unknown zones with full ordered coverage and no silent drop. Labels must include machine-generated/unknown and support a separate coarse multi-label genre summary without claiming an observed business event.",
       "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
-      "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T05b.02: <concise result>",
       "requirements": [
         "R27",
@@ -1155,23 +1606,42 @@
         "R29",
         "R31"
       ],
-      "lane": "enrichment"
+      "lane": "enrichment",
+      "implementation": {
+        "summary": "Non-destructive deterministic quote/forward/signature/disclaimer baseline and diagnostics exist.",
+        "remaining": "Nested attribution, multilingual coverage and independent classifier evaluation remain.",
+        "files": [
+          "crates/mailweft-core/src/zones.rs",
+          "crates/mailweft-core/tests/zoning_boundaries.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T05b.03",
       "track": "05b_email-structure",
       "title": "Preserve span/offset provenance through decoding and normalization",
-      "status": "not_started",
+      "status": "in_progress",
       "depends_on": [
         "T05b.01"
       ],
       "allowed_paths": [
+        "crates/mailweft-core/src/transfer_map.rs",
+        "crates/mailweft-core/tests/transfer_provenance.rs",
         "crates/mailweft-semantics/src/offsets.rs"
       ],
-      "action": "Write a failing deterministic synthetic fixture, implement only the named function, and log exact test evidence; no real email content.",
+      "action": "Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.",
       "acceptance": "Original MIME part bytes and normalized Unicode body segments can be linked with verified part hash; malformed UTF-8 and HTML alternatives tested.",
       "evidence_path": "conductor/tracks/05b_email-structure/evidence.md",
-      "tests": "Run targeted cargo tests/fmt where workspace exists; otherwise mark BLOCKED and run scripts/validate_scaffold.py only for documentation",
+      "tests": "cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check",
       "commit": "T05b.03: <concise result>",
       "requirements": [
         "R27",
@@ -1179,7 +1649,24 @@
         "R29",
         "R31"
       ],
-      "lane": "enrichment"
+      "lane": "enrichment",
+      "implementation": {
+        "summary": "Base64/QP transfer-unit maps are admitted only after parser-byte agreement; zone offsets remain conservative.",
+        "remaining": "Charset transformation maps, HTML mappings and wider encoding fuzz qualification remain open.",
+        "files": [
+          "crates/mailweft-core/src/transfer_map.rs",
+          "crates/mailweft-core/tests/transfer_provenance.rs"
+        ],
+        "commands": [
+          "cargo test --locked --workspace --all-targets --no-fail-fast",
+          "cargo fmt --all -- --check",
+          "python3 scripts/conductor_doctor.py --check"
+        ],
+        "evidence": [
+          "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+        ]
+      }
     },
     {
       "id": "T05b.04",
@@ -3052,5 +3539,6 @@
     }
   ],
   "product": "mailweft",
-  "scope_contract": "conductor/scope-contract.json"
+  "scope_contract": "conductor/scope-contract.json",
+  "reconciled_at": "2026-11-09T09:41:19.579068+00:00"
 }

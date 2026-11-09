@@ -1,16 +1,49 @@
-# Evidence — Message/custodian identity, duplicates and conversation inference
+# Track 02_identity — reconciled evidence
 
-Status: **PARTIAL BASELINE IMPLEMENTED**, not full track acceptance.
+Canonical acceptance declarations: `../../task-manifest.json`. Current CI must pass before merge.
+Earlier checkpoints remain in Git history; initial NOT_STARTED assertions are not current status.
 
-Current Rust `convert_batch` preserves exact-byte source copy identities and prevents multiple observed-copy events from being treated as multiple independent logical messages. The `feat/thread-candidates` branch adds an unverified `reply_target_candidate` object-to-object edge **only** for a uniquely matched `In-Reply-To` to an observed logical message's claimed `Message-ID`. Tests verify missing targets, duplicate custody, conflicting/ambiguous targets, References-only, and deterministic input order.
+## T02.01 — completed
 
-Tests:
-`cargo test --locked -p mailweft-core --test thread_candidates`,
-`cargo test --locked --workspace --all-targets`,
-`cargo test --locked -p mailweft-core --features rust4pm-validation --test rust4pm_interop`,
-`cargo fmt --all -- --check`,
-`cargo clippy --locked --workspace --all-targets -- -D warnings`.
+Domain-separated deterministic IDs have source-copy and event tests; raw identifiers are not emitted.
 
-Add exact final GitHub Actions run links once accepted; do not claim these tests run from their presence alone.
+Artifacts: `crates/mailweft-core/src/lib.rs`, `crates/mailweft-core/tests/conversion.rs`
+Verification: `cargo test --locked --workspace --all-targets --no-fail-fast`; `cargo fmt --all -- --check`; `python3 scripts/conductor_doctor.py --check`
+Evidence: https://github.com/edithatogo/mailweft/actions/runs/42590576579; docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)
+Remaining: Hashes are pseudonyms, not anonymity; keyed/scoped identity is a separate hardening step.
 
-This does **not** complete the full identity/thread task series: absent/forged/duplicated Message-ID, aliases, malformed MIME, external message references, missing source copies, subject heuristics, quoted correspondence, multiple concurrent work items, temporal consistency, actor confirmation and accuracy benchmarks all require further tests or human adjudication. The inferred O2O link is labelled a **candidate**, not a verified reply. No real mail or FOI data was processed.
+## T02.02 — completed
+
+Distinct custodians retain source copies while exact-byte message candidates can be shared.
+
+Artifacts: `crates/mailweft-core/src/batch.rs`, `crates/mailweft-core/tests/batch.rs`
+Verification: `cargo test --locked --workspace --all-targets --no-fail-fast`; `cargo fmt --all -- --check`; `python3 scripts/conductor_doctor.py --check`
+Evidence: https://github.com/edithatogo/mailweft/actions/runs/42590576579; docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)
+Remaining: Near-duplicate and content-semantic identity resolution remain separate.
+
+## T02.03 — completed
+
+Missing/colliding Message-ID claims do not overwrite distinct raw messages or force ambiguous parent links.
+
+Artifacts: `crates/mailweft-core/src/header_claims.rs`, `crates/mailweft-core/tests/thread_candidates.rs`
+Verification: `cargo test --locked --workspace --all-targets --no-fail-fast`; `cargo fmt --all -- --check`; `python3 scripts/conductor_doctor.py --check`
+Evidence: https://github.com/edithatogo/mailweft/actions/runs/42590576579; docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)
+Remaining: Full legacy-address and broader threading inference are not included.
+
+## T02.04 — in_progress
+
+Observed participant qualifiers and independent-import checks exist.
+
+Artifacts: `crates/mailweft-core/tests/rust4pm_interop.rs`, `crates/mailweft-core/src/lib.rs`
+Verification: `cargo test --locked --workspace --all-targets --no-fail-fast`; `cargo fmt --all -- --check`; `python3 scripts/conductor_doctor.py --check`
+Evidence: https://github.com/edithatogo/mailweft/actions/runs/42590576579; docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)
+Remaining: Complete role-value roundtrip, Bcc disclosure controls and empty/unknown states need stronger qualification.
+
+## T02.05 — in_progress
+
+Unique observed In-Reply-To targets are labelled candidate edges; missing and ambiguous targets abstain.
+
+Artifacts: `crates/mailweft-core/src/batch.rs`, `crates/mailweft-core/tests/thread_candidates.rs`
+Verification: `cargo test --locked --workspace --all-targets --no-fail-fast`; `cargo fmt --all -- --check`; `python3 scripts/conductor_doctor.py --check`
+Evidence: https://github.com/edithatogo/mailweft/actions/runs/42590576579; docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)
+Remaining: Reference-chain reconstruction, cycles, incomplete sources and externally adjudicated accuracy remain.

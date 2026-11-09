@@ -1,13 +1,19 @@
 {
+  "track_id": "08_release",
   "id": "08_release",
+  "type": "feature",
   "title": "Interoperability, packaging and downstream consumer boundaries",
-  "status": "not_started",
+  "description": "Interoperability, packaging and downstream consumer boundaries",
+  "status": "new",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
   "requirements": [
     "R12",
     "R16",
     "R25",
     "R32",
-    "R47"
+    "R47",
+    "R48"
   ],
   "tasks": [
     "T08.01",
@@ -19,10 +25,5 @@
     "T08.07",
     "T08.08"
   ],
-  "depends_on": [
-    "00_foundation",
-    "03_ocel"
-  ],
-  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence.",
-  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
 }

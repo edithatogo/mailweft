@@ -1,7 +1,12 @@
 {
+  "track_id": "00_foundation",
   "id": "00_foundation",
+  "type": "chore",
   "title": "Foundation, legal/source gates and Rust workspace",
-  "status": "not_started",
+  "description": "Foundation, legal/source gates and Rust workspace",
+  "status": "in_progress",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
   "requirements": [
     "R10",
     "R12",
@@ -17,7 +22,5 @@
     "T00.06",
     "T00.07"
   ],
-  "depends_on": [],
-  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence.",
-  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
 }

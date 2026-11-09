@@ -1,7 +1,12 @@
 {
+  "track_id": "02_identity",
   "id": "02_identity",
+  "type": "feature",
   "title": "Message/custodian identity, duplicates and conversation inference",
-  "status": "not_started",
+  "description": "Message/custodian identity, duplicates and conversation inference",
+  "status": "in_progress",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
   "requirements": [
     "R04",
     "R05",
@@ -21,9 +26,5 @@
     "T02.07",
     "T02.08"
   ],
-  "depends_on": [
-    "01_ingestion"
-  ],
-  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence.",
-  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
 }

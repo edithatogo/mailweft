@@ -1,0 +1,23 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://example.invalid/email-ocel/contracts/v1/transfer-map.schema.json",
+  "title":"Verified transfer-unit map",
+  "type":"object", "additionalProperties":false,
+  "required":["status","reason","decoded_byte_length","units","source_only_ranges"],
+  "properties":{
+    "status":{"enum":["identity","verified_transfer","unavailable"]},
+    "reason":{"type":["string","null"]},
+    "decoded_byte_length":{"type":"integer","minimum":0,"maximum":2097152},
+    "units":{"type":"array","maxItems":32768,"items":{
+      "type":"object","additionalProperties":false,"required":["decoded_start","decoded_end","raw_start","raw_end"],
+      "properties":{"decoded_start":{"type":"integer","minimum":0},"decoded_end":{"type":"integer","minimum":1},"raw_start":{"type":"integer","minimum":0},"raw_end":{"type":"integer","minimum":1}}
+    }},
+    "source_only_ranges":{"type":"array","maxItems":32768,"items":{
+      "type":"object","additionalProperties":false,"required":["start","end"],
+      "properties":{"start":{"type":"integer","minimum":0},"end":{"type":"integer","minimum":1}}
+    }}
+  },
+  "allOf":[
+    {"if":{"properties":{"status":{"const":"unavailable"}}},"then":{"properties":{"reason":{"type":"string","minLength":1},"units":{"maxItems":0},"source_only_ranges":{"maxItems":0}}},"else":{"properties":{"reason":{"type":"null"}}}}
+  ]
+}

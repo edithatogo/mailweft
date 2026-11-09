@@ -1,3 +1,6 @@
-# Evidence — Versioned NLP claims, entity resolution and evidence sidecar
+# Track 06_semantics — reconciled evidence
 
-No tasks executed. For each accepted task record date, commit, files, commands with exit codes, test output summary, hashes and residual limits. Do not include raw email bytes or names.
+Canonical acceptance declarations: `../../task-manifest.json`. Current CI must pass before merge.
+Earlier checkpoints remain in Git history; initial NOT_STARTED assertions are not current status.
+
+No implementation acceptance is declared for this track. Specifications and planned tasks are not runtime evidence.
