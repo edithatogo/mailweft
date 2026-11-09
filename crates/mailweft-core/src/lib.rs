@@ -1,6 +1,7 @@
 //! Mailweft: an offline, corpus-independent EML-to-OCEL 2.0 converter.
 //! Stage 1 records archive observation, not proof of sending, delivery or business action.
 mod batch;
+mod header_claims;
 pub use batch::{SourceInput, convert_batch};
 
 use chrono::{DateTime, Utc};
@@ -91,7 +92,7 @@ fn digest(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
 }
 
-fn identity(namespace: &str, value: &str) -> String {
+pub(crate) fn identity(namespace: &str, value: &str) -> String {
     digest(format!("mailweft/v1/{namespace}\0{value}").as_bytes())
 }
 
@@ -201,6 +202,17 @@ pub fn convert_eml(
     ] {
         push_address_links(&mut relationships, &mut objects, role, addresses);
     }
+    let mut event_attributes = vec![Attribute {
+        name: "source_sha256".into(),
+        value: source_sha256.clone(),
+    }];
+    header_claims::add_claims(
+        &parsed,
+        &mut event_attributes,
+        &mut relationships,
+        &mut objects,
+    );
+    event_attributes.sort_by(|a, b| (&a.name, &a.value).cmp(&(&b.name, &b.value)));
     relationships.sort_by(|a, b| (&a.qualifier, &a.object_id).cmp(&(&b.qualifier, &b.object_id)));
     let event_id = format!(
         "event_{}",
@@ -216,7 +228,7 @@ pub fn convert_eml(
         message_candidate_id,
         source_copy_id,
         log: Ocel {
-            object_types: ["email_address", "email_message", "source_copy"]
+            object_types: ["claimed_message_identifier", "email_address", "email_message", "source_copy"]
                 .iter()
                 .map(|name| OcelType {
                     name: (*name).into(),
@@ -225,20 +237,14 @@ pub fn convert_eml(
                 .collect(),
             event_types: vec![OcelType {
                 name: "source_copy_observed".into(),
-                attributes: vec![AttributeType {
-                    name: "source_sha256".into(),
-                    value_type: "string".into(),
-                }],
+                attributes: header_claims::attribute_types(),
             }],
             objects: objects.into_values().collect(),
             events: vec![Event {
                 id: event_id,
                 event_type: "source_copy_observed".into(),
                 time: observed_at,
-                attributes: vec![Attribute {
-                    name: "source_sha256".into(),
-                    value: source_sha256,
-                }],
+                attributes: event_attributes,
                 relationships,
             }],
         },
