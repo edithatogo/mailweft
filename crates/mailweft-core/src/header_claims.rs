@@ -14,6 +14,7 @@ fn status(attributes: &mut Vec<Attribute>, name: &str, value: &str) {
 
 /// Preserve a claimed message identifier only if its parsed form is plausible.
 /// This does not prove that the referenced email exists or was sent.
+/// The identifier is case-preserving, and its SHA-256 pseudonym is not anonymity.
 fn canonical_id(value: &str) -> Option<&str> {
     let id = value.trim().trim_start_matches('<').trim_end_matches('>');
     if id.is_empty()
