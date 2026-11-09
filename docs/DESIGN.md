@@ -18,12 +18,12 @@ flowchart LR
   Q --> R
 ```
 
-## Crate boundaries (proposed, not implemented)
-- `email-ocel-core`: source envelope, message identities, typed data contracts, deterministic IDs, privacy controls.
+## Crate boundaries (implemented and proposed)
+- `mailweft-core` (implemented): bounded RFC EML parser-backed OCEL 2.0 projection, deterministic IDs, safe MIME metadata and preliminary opt-in body zoning. Full source envelope, identity privacy controls and semantic reconciliation remain planned.
 - `email-ocel-ingest`: safe EML/maildir input and incremental manifests; optional EDRM manifest adapter.
 - `email-ocel-threads`: RFC references-based threading + explicit heuristic hypotheses; confidence independent of communication timestamps.
 - `email-ocel-ocel`: map typed events/objects/relationships into Rust4PM's canonical full OCEL representation; export/import and loss ledger.
-- `email-ocel-cli`: local offline commands `inspect`, `ingest`, `export-ocel`, `validate`, `benchmark`.
+- `mailweft-cli` (implemented): offline single EML, explicit multi-EML batch and content-free `inspect`. Other commands remain proposed.
 - `email-ocel-semantics` (feature optional): content segmentation, extractor traits, claim/evidence sidecar, human review.
 - `email-ocel-evidence` (feature optional): temporal provenance graph adapter and retrieval/GraphRAG. No graph dependency for core.
 
@@ -31,7 +31,7 @@ Avoid publishing many tiny crates before interface pressure justifies them: begi
 
 ## Stage 1 object/event ontology
 - `SourceCopy` = observed file/archival occurrence (same logical email may appear in many custodians). `Message` = logical email candidate. `PersonIdentity` = address/name assertion, not necessarily unique person. `Conversation` = thread hypothesis. `Attachment` = observed MIME part. `Document` = optional content-addressed document identity. `Mailbox`/`Folder` = observed provenance, not authorisation.
-- One event `message_archived_observed` per source copy, timestamp `observed_at` (the archived-source observation); additionally, when a parseable header Date exists, a distinct `message_header_date_asserted` event is placed at **header_date** for reconstructing the claimed communication timeline. The latter is an assertion derived from source headers, not independent proof of sending or delivery. Query consumers must select an explicit event-view policy and may not silently mix ingestion and header times. Do not synthesise a delivery event. Optional evidence-backed `message_received_observed` only when source fields explicitly evidence reception.
+- Implemented Stage 1 emits `source_copy_observed` at caller-supplied `observed_at`. A single valid RFC Date is retained as `claimed_date_utc` **attribute** with a `date_claim_status`, not as a second observed event. A separate asserted-header timeline projection was previously contemplated but is **not implemented** and must require a new versioned decision and strict view separation before introduction. Never synthesise a delivery event.
 - An archived copy links to `Message`, `SourceCopy`, `PersonIdentity` and `Attachment` objects with qualifiers `sender_asserted`, `to_asserted`, `cc_asserted`, `bcc_asserted`, `contains_mime_part`, `archived_copy`. A thread link is `in_reply_to_header` when actual header is available, otherwise `thread_candidate_subject`/`thread_candidate_quote` with confidence in sidecar.
 - Preserve direction and multiplicity of relationships. Missing sender/recipient/message ID may be unresolved, but must not manufacture a named person or erase the record.
 

@@ -3,7 +3,11 @@
 mod attachments;
 mod batch;
 mod header_claims;
+mod zones;
 pub use batch::{SourceInput, convert_batch};
+pub use zones::{
+    BodyEvidence, OffsetQuality, SourceZone, TextPartEvidence, ZoneKind, inspect_body_zones,
+};
 
 use chrono::{DateTime, Utc};
 use mail_parser::{AddressList, MessageParser};
@@ -96,7 +100,7 @@ pub struct Conversion {
     pub log: Ocel,
 }
 
-fn digest(bytes: &[u8]) -> String {
+pub(crate) fn digest(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
 }
 
@@ -242,7 +246,7 @@ pub fn convert_eml(
     );
 
     Ok(Conversion {
-        schema_version: "1.2.0",
+        schema_version: "1.3.0",
         source_sha256: source_sha256.clone(),
         message_candidate_id,
         source_copy_id,
@@ -251,12 +255,27 @@ pub fn convert_eml(
                 "claimed_message_identifier",
                 "email_address",
                 "email_message",
+                "mime_attachment",
                 "source_copy",
             ]
             .iter()
             .map(|name| OcelType {
                 name: (*name).into(),
-                attributes: Vec::new(),
+                attributes: if *name == "mime_attachment" {
+                    [
+                        "declared_media_type",
+                        "filename_sha256",
+                        "decoded_byte_length",
+                    ]
+                    .into_iter()
+                    .map(|field| AttributeType {
+                        name: field.into(),
+                        value_type: "string".into(),
+                    })
+                    .collect()
+                } else {
+                    Vec::new()
+                },
             })
             .collect(),
             event_types: vec![OcelType {
