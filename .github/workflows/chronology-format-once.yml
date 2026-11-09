@@ -15,12 +15,13 @@ jobs:
         with:
           persist-credentials: true
       - run: rustup toolchain install stable --profile minimal --component rustfmt
+      - run: cargo +stable generate-lockfile
       - run: cargo +stable fmt --all
       - name: Commit formatting only
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add crates/
+          git add crates/ Cargo.lock
           if ! git diff --cached --quiet; then
             git commit -m 'style: format claimed header evidence conversion'
             git push origin HEAD:feat/claimed-header-chronology
