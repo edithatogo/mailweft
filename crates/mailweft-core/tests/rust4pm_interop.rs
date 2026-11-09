@@ -69,3 +69,20 @@ fn rust4pm_import_preserves_claimed_header_attributes_and_reference_qualifiers()
         conversion.log.events[0].attributes.len()
     );
 }
+
+#[test]
+fn rust4pm_imports_time_qualified_attachment_object_attributes() {
+    let raw = b"From: a@example.invalid\r\nMIME-Version: 1.0\r\nContent-Type: multipart/mixed; boundary=\"x\"\r\n\r\n--x\r\nContent-Type: text/plain\r\n\r\nHello\r\n--x\r\nContent-Type: text/plain; name=\"report.txt\"\r\nContent-Disposition: attachment; filename=\"report.txt\"\r\nContent-Transfer-Encoding: base64\r\n\r\nSEVMTE8=\r\n--x--\r\n";
+    let at = Utc.with_ymd_and_hms(2026, 11, 9, 7, 0, 0).unwrap();
+    let conversion = convert_eml(raw, "copy", at).unwrap();
+    let mut file = tempfile::Builder::new().suffix(".json").tempfile().unwrap();
+    serde_json::to_writer(&mut file, &conversion.log).unwrap();
+    file.flush().unwrap();
+    let imported = OCEL::import_from_path(file.path()).unwrap();
+    assert_eq!(imported.events.len(), 1);
+    assert_eq!(imported.objects.len(), conversion.log.objects.len());
+    let source_attachment = conversion.log.objects.iter().find(|o| o.object_type == "mime_attachment").unwrap();
+    let loaded_attachment = imported.objects.iter().find(|o| o.id == source_attachment.id).unwrap();
+    assert_eq!(loaded_attachment.attributes.len(), source_attachment.attributes.len());
+    assert_eq!(imported.events[0].relationships.len(), conversion.log.events[0].relationships.len());
+}
