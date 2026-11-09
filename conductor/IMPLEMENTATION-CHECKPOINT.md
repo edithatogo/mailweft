@@ -67,3 +67,11 @@ Branch `feat/source-spans-zoning` adds `mailweft-core::inspect_body_zones` and `
 Also repairs a type-catalogue defect: emitted `mime_attachment` objects must have a declared OCEL `objectTypes` entry and typed attribute definitions. Version changes: Rust crates `0.4.0`, `Conversion.schema_version=1.3.0`. See `docs/MIGRATION-0.4.md` and `docs/SOURCE-PROVENANCE-AND-ZONING.md`.
 
 This is a **partial precursor** to T05b.01–03, not completion of the planned nested structure, source map or multi-class evaluation. Source-envelope, rights/coverage, precise encoded-span mapping, signatures in forwarded blocks, NLP, GraphRAG and FOI consumer work remain outstanding. Run evidence must be recorded for the exact merged Git commit.
+
+## Sixth implementation checkpoint: conservative cross-message reply candidates
+
+Branch `feat/thread-candidates` adds a deterministic, optional O2O `reply_target_candidate` link in `convert_batch` when an In-Reply-To header identifier uniquely matches the Message-ID claim of another observed logical message. This is a claimed header correlation, **not** a verified conversation, transmission or completed action. Missing/ambiguous targets, multiple requested parents, self-links and References-only evidence abstain. Duplicate source copies do not multiply the edge; input order is irrelevant.
+
+Rust crates advance to `0.5.0`; single-source `Conversion.schema_version` stays at `1.3.0` since its output is unchanged. Tests in `thread_candidates.rs` cover unique/missing/ambiguous/duplicate/references-only and ordering; a feature-gated Rust4PM import test checks O2O qualifier preservation. See `docs/THREAD-CANDIDATES.md` and `docs/MIGRATION-0.5.md`.
+
+This is only a small, high-precision part of the planned threading track. It does not establish thread completeness, work-item case correlation, authorship, intended recipient, sent/delivered time, context from quotes, NLP or GraphRAG. No real corpus was ingested. Document exact final CI references before merging; no broad Conductor task completion is implied.
