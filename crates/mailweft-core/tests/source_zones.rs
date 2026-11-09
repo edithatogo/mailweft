@@ -104,3 +104,8 @@ fn parser_declares_all_constructed_attachment_objects() {
         }
     }
 }
+
+#[test]
+fn unstructured_bytes_are_not_mislabelled_as_email_evidence() {
+    assert!(inspect_body_zones(b"not an RFC 5322 email").is_err());
+}
