@@ -24,10 +24,12 @@ jobs:
           rustc --version
       - name: Test
         run: cargo test --locked --workspace --all-targets --no-fail-fast
-      - name: Explicit source-integrity and batch acceptance
+      - name: Explicit source-integrity, corpus and mapping acceptance
         run: |
           cargo test --locked -p mailweft-core --test source_integrity
           cargo test --locked -p mailweft-core --test batch
+          cargo test --locked -p mailweft-cli --test corpus_reconciliation
+          cargo test --locked -p mailweft-core --test transfer_provenance
       - name: Rust4PM independent OCEL import
         run: cargo test --locked -p mailweft-core --features rust4pm-validation --test rust4pm_interop
       - name: Actual Rust output contract validation
