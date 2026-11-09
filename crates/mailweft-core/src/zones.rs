@@ -117,6 +117,14 @@ pub fn inspect_body_zones(raw: &[u8]) -> Result<BodyEvidence, Error> {
     let parsed = MessageParser::new()
         .parse(raw)
         .ok_or(Error::InvalidSource)?;
+    if parsed.from().is_none()
+        && parsed.to().is_none()
+        && parsed.sender().is_none()
+        && parsed.subject().is_none()
+        && parsed.message_id().is_none()
+    {
+        return Err(Error::InvalidSource);
+    }
     let mut parts = Vec::new();
     let skipped_html_parts = parsed.html_body().len();
     for part in parsed.text_body() {
