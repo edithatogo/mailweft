@@ -1,5 +1,6 @@
 //! Mailweft: an offline, corpus-independent EML-to-OCEL 2.0 converter.
 //! Stage 1 records archive observation, not proof of sending, delivery or business action.
+mod attachments;
 mod batch;
 mod header_claims;
 pub use batch::{SourceInput, convert_batch};
@@ -44,6 +45,13 @@ pub struct Attribute {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+pub struct ObjectAttribute {
+    pub name: String,
+    pub time: DateTime<Utc>,
+    pub value: String,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Relationship {
     #[serde(rename = "objectId")]
     pub object_id: String,
@@ -55,7 +63,7 @@ pub struct Object {
     pub id: String,
     #[serde(rename = "type")]
     pub object_type: String,
-    pub attributes: Vec<Attribute>,
+    pub attributes: Vec<ObjectAttribute>,
     pub relationships: Vec<Relationship>,
 }
 
@@ -212,6 +220,17 @@ pub fn convert_eml(
         &mut relationships,
         &mut objects,
     );
+    let attachment_count = attachments::add_attachment_metadata(
+        &parsed,
+        &message_candidate_id,
+        observed_at,
+        &mut relationships,
+        &mut objects,
+    );
+    event_attributes.push(Attribute {
+        name: "attachment_count".into(),
+        value: attachment_count.to_string(),
+    });
     event_attributes.sort_by(|a, b| (&a.name, &a.value).cmp(&(&b.name, &b.value)));
     relationships.sort_by(|a, b| (&a.qualifier, &a.object_id).cmp(&(&b.qualifier, &b.object_id)));
     let event_id = format!(
@@ -242,7 +261,13 @@ pub fn convert_eml(
             .collect(),
             event_types: vec![OcelType {
                 name: "source_copy_observed".into(),
-                attributes: header_claims::attribute_types(),
+                attributes: {
+                    let mut types = header_claims::attribute_types();
+                    types.push(AttributeType {
+                        name: "attachment_count".into(), value_type: "string".into()
+                    });
+                    types
+                },
             }],
             objects: objects.into_values().collect(),
             events: vec![Event {
