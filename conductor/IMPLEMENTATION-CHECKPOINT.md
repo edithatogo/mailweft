@@ -43,3 +43,11 @@ Branch `feat/multi-eml-batch` adds `SourceInput` and `convert_batch`, merging so
 Hosted Rust converter checks **passed** for commit `3e88747e2f0ea4b4766d71cc0847a3a3ed612d53`, including unit/integration tests, explicit batch acceptance, Rust4PM 0.6.2 import of the combined OCEL, rustfmt and clippy -D warnings (run 42528662115). Planning tests passed at that stage. The later temporary CI helper removal and documentation changes must be verified independently; they do not modify converter source.
 
 This does not complete the Conductor source-manifest, header chronology, MIME attachment, source validation, full OCEL attribute/history or dataset benchmark tracks. The Conductor track task registry remains conservative; no blanket track completion is claimed. See `docs/BATCH-IMPLEMENTATION.md`.
+
+## Third implementation checkpoint: claimed message chronology and references
+
+Branch `feat/claimed-header-chronology` adds explicit Date, Message-ID, In-Reply-To and References *claims*. Observation event time is still caller-supplied and immutable. A uniquely parsed Date is exposed as `claimed_date_utc`, separate from `source_copy_observed.time`; missing, malformed or duplicate headers are encoded through typed statuses. Plausible parsed Message-ID and reply/reference values become hashed `claimed_message_identifier` objects linked by qualified E2O relationships; they **do not** create synthetic observed message events or conflate byte-distinct source copies.
+
+The library and CLI advance to `0.2.0`, and the `Conversion` API schema version advances to `1.1.0`. See `docs/MIGRATION-0.2.md` and `docs/CLAIMED-HEADER-CHRONOLOGY.md` for the additive changes, evidence-fidelity boundaries and pseudonym re-identification limitations. Tests cover RFC timezone conversion, malformed and duplicate dates, missing fields, opaque references, identical claimed IDs in distinct raw messages, and independent Rust4PM import of the added metadata.
+
+This checkpoint intentionally does **not** mark the complete threading/chronology tracks done. No source span ledger, verified delivery time, attachment metadata, message-level matching or cross-source independent corroboration is implemented. All run statuses must refer to an exact commit; planning/CI checks do not prove evidentiary truth or production readiness.
