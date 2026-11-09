@@ -177,7 +177,7 @@ pub fn inspect_body_zones(raw: &[u8]) -> Result<BodyEvidence, Error> {
             pos = end_pos;
         }
         parts.push(TextPartEvidence {
-            part_id: u32::from(part.id()),
+            part_id: part.id(),
             raw_start: start,
             raw_end: end,
             raw_sha256: digest(&raw[start..end]),
