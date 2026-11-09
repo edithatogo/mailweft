@@ -3,7 +3,7 @@
 //! Derived annotations never alter the authoritative OCEL observation. Values
 //! retain hashes and offsets, not plaintext or untrusted message instructions.
 use crate::{Error, digest};
-use mail_parser::MessageParser;
+use mail_parser::{MessageParser, PartKind};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
@@ -106,8 +106,13 @@ pub fn inspect_body_zones(raw: &[u8]) -> Result<BodyEvidence, Error> {
     }
     let parsed = MessageParser::new().parse(raw).ok_or(Error::InvalidSource)?;
     let mut parts = Vec::new();
-    let mut skipped_html_parts = parsed.html_body().len();
+    let skipped_html_parts = parsed.html_body().len();
     for part in parsed.text_body() {
+        // The parser may expose an HTML-only fallback in its text-body list.
+        // Do not claim that converted HTML corresponds to original plain text.
+        if !matches!(part.kind(), PartKind::Text) {
+            continue;
+        }
         let start = part.offset_body() as usize;
         let end = part.offset_end() as usize;
         if start > end || end > raw.len() {
@@ -121,8 +126,7 @@ pub fn inspect_body_zones(raw: &[u8]) -> Result<BodyEvidence, Error> {
         if text.len() > 2 * 1024 * 1024 {
             continue;
         }
-        let exact = !problems.is_empty() == false
-            && part.raw_body() == text.as_bytes();
+        let exact = problems.is_empty() && part.raw_body() == text.as_bytes();
         let quality = if exact { OffsetQuality::Exact } else { OffsetQuality::Derived };
         let mut zones = Vec::new();
         let mut pos = 0usize;
@@ -158,11 +162,6 @@ pub fn inspect_body_zones(raw: &[u8]) -> Result<BodyEvidence, Error> {
             decoding_problems: !problems.is_empty(),
             zones,
         });
-    }
-    // Plain-only messages legitimately have zero HTML alternatives.
-    if skipped_html_parts > 0 && parts.is_empty() {
-        // Preserves count without misclassifying HTML markup as authored text.
-        skipped_html_parts = skipped_html_parts.max(1);
     }
     Ok(BodyEvidence {
         schema_version: "1.0.0",
