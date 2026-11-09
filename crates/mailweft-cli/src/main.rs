@@ -1,135 +1,87 @@
-//! Thin, offline command-line adapter over the Mailweft Rust core.
+//! Offline CLI. Source capture and archival preservation remain external responsibilities.
 use chrono::{DateTime, Utc};
+use mailweft_core::source::{
+    MAX_ENVELOPE_BYTES, MAX_SOURCE_BYTES, convert_with_envelope, parse_envelope_json,
+    read_bounded_file,
+};
 use mailweft_core::{SourceInput, convert_batch, convert_eml, inspect_body_zones};
-use std::{env, fs, process::ExitCode};
+use std::{env, io::{self, Write}, path::Path, process::ExitCode};
 
-fn parse_instant(value: &str) -> Option<DateTime<Utc>> {
+fn parse_instant(value: &str) -> Result<DateTime<Utc>, &'static str> {
     DateTime::parse_from_rfc3339(value)
-        .ok()
         .map(|dt| dt.with_timezone(&Utc))
+        .map_err(|_| "observed-at must be an RFC3339 instant")
 }
 
-fn print_ocel(log: &mailweft_core::Ocel) -> ExitCode {
-    match serde_json::to_string_pretty(log) {
-        Ok(json) => {
-            println!("{json}");
-            ExitCode::SUCCESS
-        }
-        Err(_) => {
-            eprintln!("error: cannot serialize OCEL");
-            ExitCode::FAILURE
-        }
-    }
+fn read_file(path: &str, limit: usize) -> Result<Vec<u8>, &'static str> {
+    read_bounded_file(Path::new(path), limit).map_err(|e| e.code())
 }
 
-fn batch(args: &[String]) -> ExitCode {
-    if args.len() < 4 || args.len() > 1027 {
-        eprintln!("Usage: mailweft batch <observed-at:RFC3339> <file.eml> [file2.eml ...]");
-        return ExitCode::FAILURE;
-    }
-    let Some(at) = parse_instant(&args[2]) else {
-        eprintln!("error: observed-at must be an RFC3339 instant");
-        return ExitCode::FAILURE;
-    };
-    // The batch CLI deliberately bounds inputs and total bytes; a streaming
-    // adapter is a separate implementation track for larger corpora.
-    let mut total: u64 = 0;
-    let mut contents = Vec::new();
-    for path in &args[3..] {
-        let Ok(meta) = fs::metadata(path) else {
-            eprintln!("error: cannot read source metadata");
-            return ExitCode::FAILURE;
-        };
-        total = total.saturating_add(meta.len());
-        if total > 256 * 1024 * 1024 || meta.len() > 16 * 1024 * 1024 {
-            eprintln!("error: batch exceeds its input resource limit");
-            return ExitCode::FAILURE;
-        }
-        match fs::read(path) {
-            Ok(bytes) => contents.push(bytes),
-            Err(_) => {
-                eprintln!("error: cannot read source file");
-                return ExitCode::FAILURE;
+fn run(args: &[String]) -> Result<String, &'static str> {
+    match args.get(1).map(String::as_str) {
+        Some("convert-evidence") => {
+            if args.len() != 4 {
+                return Err("Usage: mailweft convert-evidence <raw.eml> <source-envelope.json>");
             }
+            let metadata = read_file(&args[3], MAX_ENVELOPE_BYTES)?;
+            let envelope = parse_envelope_json(&metadata).map_err(|e| e.code())?;
+            let raw = read_file(&args[2], MAX_SOURCE_BYTES)?;
+            let result = convert_with_envelope(&raw, &envelope).map_err(|e| e.code())?;
+            serde_json::to_string_pretty(&result).map_err(|_| "OUTPUT_SERIALIZATION_FAILED")
         }
-    }
-    let inputs: Vec<_> = contents
-        .iter()
-        .zip(args[3..].iter())
-        .map(|(bytes, source_id)| SourceInput {
-            raw: bytes.as_slice(),
-            source_id: source_id.as_str(),
-            observed_at: at,
-        })
-        .collect();
-    match convert_batch(&inputs) {
-        Ok(log) => print_ocel(&log),
-        Err(err) => {
-            eprintln!("error: {err}");
-            ExitCode::FAILURE
+        Some("inspect") => {
+            if args.len() != 3 {
+                return Err("Usage: mailweft inspect <raw.eml>");
+            }
+            let raw = read_file(&args[2], MAX_SOURCE_BYTES)?;
+            let evidence = inspect_body_zones(&raw).map_err(|_| "SOURCE_INSPECTION_FAILED")?;
+            serde_json::to_string_pretty(&evidence).map_err(|_| "OUTPUT_SERIALIZATION_FAILED")
         }
-    }
-}
-
-fn inspect(args: &[String]) -> ExitCode {
-    if args.len() != 3 {
-        eprintln!("Usage: mailweft inspect <raw.eml>");
-        return ExitCode::FAILURE;
-    }
-    let raw = match fs::read(&args[2]) {
-        Ok(bytes) => bytes,
-        Err(_) => {
-            eprintln!("error: cannot read source file");
-            return ExitCode::FAILURE;
+        Some("batch") => {
+            if args.len() < 4 || args.len() > 1027 {
+                return Err("Usage: mailweft batch <observed-at:RFC3339> <file.eml> [file2.eml ...]");
+            }
+            let at = parse_instant(&args[2])?;
+            let mut remaining = 256 * 1024 * 1024usize;
+            let mut contents = Vec::new();
+            for path in &args[3..] {
+                let bytes = read_file(path, MAX_SOURCE_BYTES.min(remaining))?;
+                remaining -= bytes.len();
+                contents.push(bytes);
+            }
+            let inputs: Vec<_> = contents.iter().zip(&args[3..]).map(|(bytes, source_id)| {
+                SourceInput { raw: bytes, source_id, observed_at: at }
+            }).collect();
+            let log = convert_batch(&inputs).map_err(|_| "SOURCE_CONVERSION_FAILED")?;
+            serde_json::to_string_pretty(&log).map_err(|_| "OUTPUT_SERIALIZATION_FAILED")
         }
-    };
-    let evidence = match inspect_body_zones(&raw) {
-        Ok(value) => value,
-        Err(err) => {
-            eprintln!("error: {err}");
-            return ExitCode::FAILURE;
-        }
-    };
-    match serde_json::to_string_pretty(&evidence) {
-        Ok(text) => {
-            println!("{text}");
-            ExitCode::SUCCESS
-        }
-        Err(_) => {
-            eprintln!("error: cannot serialize source evidence");
-            ExitCode::FAILURE
+        _ => {
+            if args.len() < 3 || args.len() > 4 {
+                return Err("Usage: mailweft <raw.eml> <observed-at:RFC3339> [source-id]");
+            }
+            let at = parse_instant(&args[2])?;
+            let raw = read_file(&args[1], MAX_SOURCE_BYTES)?;
+            let source_id = args.get(3).unwrap_or(&args[1]);
+            let conversion = convert_eml(&raw, source_id, at)
+                .map_err(|_| "SOURCE_CONVERSION_FAILED")?;
+            serde_json::to_string_pretty(&conversion.log).map_err(|_| "OUTPUT_SERIALIZATION_FAILED")
         }
     }
 }
 
 fn main() -> ExitCode {
-    let args: Vec<String> = env::args().collect();
-    if args.get(1).is_some_and(|arg| arg == "batch") {
-        return batch(&args);
-    }
-    if args.get(1).is_some_and(|arg| arg == "inspect") {
-        return inspect(&args);
-    }
-    if args.len() < 3 || args.len() > 4 {
-        eprintln!("Usage: mailweft <raw.eml> <observed-at:RFC3339> [source-id]");
-        return ExitCode::FAILURE;
-    }
-    let Some(observed_at) = parse_instant(&args[2]) else {
-        eprintln!("error: observed-at must be an RFC3339 instant");
-        return ExitCode::FAILURE;
-    };
-    let raw = match fs::read(&args[1]) {
-        Ok(bytes) => bytes,
-        Err(_) => {
-            eprintln!("error: cannot read source file");
-            return ExitCode::FAILURE;
+    let args = env::args().collect::<Vec<_>>();
+    match run(&args) {
+        Ok(json) => {
+            let mut output = io::stdout().lock();
+            if output.write_all(json.as_bytes()).and_then(|_| output.write_all(b"\n")).is_err() {
+                eprintln!("error: OUTPUT_WRITE_FAILED");
+                return ExitCode::FAILURE;
+            }
+            ExitCode::SUCCESS
         }
-    };
-    let source_id = args.get(3).map(String::as_str).unwrap_or(args[1].as_str());
-    match convert_eml(&raw, source_id, observed_at) {
-        Ok(result) => print_ocel(&result.log),
-        Err(err) => {
-            eprintln!("error: {err}");
+        Err(code) => {
+            eprintln!("error: {code}");
             ExitCode::FAILURE
         }
     }

@@ -3,6 +3,7 @@
 mod attachments;
 mod batch;
 mod header_claims;
+pub mod source;
 mod zones;
 pub use batch::{SourceInput, convert_batch};
 pub use zones::{
