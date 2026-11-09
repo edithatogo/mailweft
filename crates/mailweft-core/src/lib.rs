@@ -264,7 +264,8 @@ pub fn convert_eml(
                 attributes: {
                     let mut types = header_claims::attribute_types();
                     types.push(AttributeType {
-                        name: "attachment_count".into(), value_type: "string".into()
+                        name: "attachment_count".into(),
+                        value_type: "string".into(),
                     });
                     types
                 },

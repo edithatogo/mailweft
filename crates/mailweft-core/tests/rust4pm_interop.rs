@@ -81,8 +81,23 @@ fn rust4pm_imports_time_qualified_attachment_object_attributes() {
     let imported = OCEL::import_from_path(file.path()).unwrap();
     assert_eq!(imported.events.len(), 1);
     assert_eq!(imported.objects.len(), conversion.log.objects.len());
-    let source_attachment = conversion.log.objects.iter().find(|o| o.object_type == "mime_attachment").unwrap();
-    let loaded_attachment = imported.objects.iter().find(|o| o.id == source_attachment.id).unwrap();
-    assert_eq!(loaded_attachment.attributes.len(), source_attachment.attributes.len());
-    assert_eq!(imported.events[0].relationships.len(), conversion.log.events[0].relationships.len());
+    let source_attachment = conversion
+        .log
+        .objects
+        .iter()
+        .find(|o| o.object_type == "mime_attachment")
+        .unwrap();
+    let loaded_attachment = imported
+        .objects
+        .iter()
+        .find(|o| o.id == source_attachment.id)
+        .unwrap();
+    assert_eq!(
+        loaded_attachment.attributes.len(),
+        source_attachment.attributes.len()
+    );
+    assert_eq!(
+        imported.events[0].relationships.len(),
+        conversion.log.events[0].relationships.len()
+    );
 }

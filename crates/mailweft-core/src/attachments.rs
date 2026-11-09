@@ -29,7 +29,10 @@ pub(crate) fn add_attachment_metadata(
         let part_id = part.id();
         let attachment_id = format!(
             "attachment_{}",
-            identity("mime-attachment-part", &format!("{message_candidate_id}\\0{part_id}"))
+            identity(
+                "mime-attachment-part",
+                &format!("{message_candidate_id}\\0{part_id}")
+            )
         );
         let mut attrs = Vec::new();
         if let Some(content_type) = part.content_type() {
@@ -43,15 +46,21 @@ pub(crate) fn add_attachment_metadata(
             add_attribute(&mut attrs, "filename_sha256", digest, observed_at);
         }
         add_attribute(
-            &mut attrs, "decoded_byte_length", part.decoded_len().to_string(), observed_at
+            &mut attrs,
+            "decoded_byte_length",
+            part.decoded_len().to_string(),
+            observed_at,
         );
         attrs.sort_by(|a, b| (&a.name, &a.time, &a.value).cmp(&(&b.name, &b.time, &b.value)));
-        objects.insert(attachment_id.clone(), Object {
-            id: attachment_id.clone(),
-            object_type: "mime_attachment".into(),
-            attributes: attrs,
-            relationships: Vec::new(),
-        });
+        objects.insert(
+            attachment_id.clone(),
+            Object {
+                id: attachment_id.clone(),
+                object_type: "mime_attachment".into(),
+                attributes: attrs,
+                relationships: Vec::new(),
+            },
+        );
         if let Some(email) = objects.get_mut(message_candidate_id) {
             email.relationships.push(Relationship {
                 object_id: attachment_id.clone(),
