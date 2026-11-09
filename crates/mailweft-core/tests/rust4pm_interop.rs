@@ -60,6 +60,12 @@ fn rust4pm_import_preserves_claimed_header_attributes_and_reference_qualifiers()
     let imported = OCEL::import_from_path(file.path()).unwrap();
     assert_eq!(imported.events.len(), 1);
     assert_eq!(imported.objects.len(), conversion.log.objects.len());
-    assert_eq!(imported.events[0].relationships.len(), conversion.log.events[0].relationships.len());
-    assert_eq!(imported.events[0].attributes.len(), conversion.log.events[0].attributes.len());
+    assert_eq!(
+        imported.events[0].relationships.len(),
+        conversion.log.events[0].relationships.len()
+    );
+    assert_eq!(
+        imported.events[0].attributes.len(),
+        conversion.log.events[0].attributes.len()
+    );
 }
