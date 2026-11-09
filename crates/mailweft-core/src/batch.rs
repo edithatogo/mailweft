@@ -83,6 +83,7 @@ pub fn convert_batch(inputs: &[SourceInput<'_>]) -> Result<Ocel, Error> {
     // Header identifiers are claims. Link only an observed, uniquely matching
     // logical message, and call the O2O edge a *candidate*, not a verified reply.
     // A copied mailbox observation does not multiply thread evidence.
+    // A candidate O2O edge cannot establish authorship or successful delivery.
     let mut announced_ids: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
     let mut requested_parents: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
     for event in events.values() {
