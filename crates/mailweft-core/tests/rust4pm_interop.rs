@@ -109,21 +109,41 @@ fn rust4pm_preserves_candidate_reply_object_links() {
     let child = b"From: b@example.invalid\r\nMessage-ID: <child@example.invalid>\r\nIn-Reply-To: <root@example.invalid>\r\n\r\nReply";
     let observed = Utc.with_ymd_and_hms(2026, 11, 9, 7, 0, 0).unwrap();
     let sources = [
-        SourceInput {raw: root,source_id:"root",observed_at:observed},
-        SourceInput {raw: child,source_id:"child",observed_at:observed}
+        SourceInput {
+            raw: root,
+            source_id: "root",
+            observed_at: observed,
+        },
+        SourceInput {
+            raw: child,
+            source_id: "child",
+            observed_at: observed,
+        },
     ];
     let log = convert_batch(&sources).unwrap();
-    let expected = log.objects.iter().filter(|o|
-        o.relationships.iter().any(|r| r.qualifier == "reply_target_candidate")
-    ).count();
+    let expected = log
+        .objects
+        .iter()
+        .filter(|o| {
+            o.relationships
+                .iter()
+                .any(|r| r.qualifier == "reply_target_candidate")
+        })
+        .count();
     assert_eq!(expected, 1);
     let mut file = tempfile::Builder::new().suffix(".json").tempfile().unwrap();
     serde_json::to_writer(&mut file, &log).unwrap();
     file.flush().unwrap();
     let imported = OCEL::import_from_path(file.path()).unwrap();
     assert_eq!(imported.objects.len(), log.objects.len());
-    let actual = imported.objects.iter().filter(|o|
-        o.relationships.iter().any(|r| r.qualifier == "reply_target_candidate")
-    ).count();
+    let actual = imported
+        .objects
+        .iter()
+        .filter(|o| {
+            o.relationships
+                .iter()
+                .any(|r| r.qualifier == "reply_target_candidate")
+        })
+        .count();
     assert_eq!(actual, expected);
 }
