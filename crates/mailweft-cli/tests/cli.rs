@@ -58,7 +58,11 @@ fn inspect_returns_source_mapped_zones_without_body_text() {
         .arg(&file)
         .output()
         .unwrap();
-    assert!(output.status.success(), "{}", String::from_utf8_lossy(&output.stderr));
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
     let value: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
     assert_eq!(value["parts"].as_array().unwrap().len(), 1);
     assert!(value["parts"][0]["zones"].as_array().unwrap().len() >= 3);
