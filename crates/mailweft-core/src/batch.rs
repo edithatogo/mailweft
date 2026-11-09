@@ -41,11 +41,26 @@ pub fn convert_batch(inputs: &[SourceInput<'_>]) -> Result<Ocel, Error> {
                 }
                 Entry::Occupied(mut o) => {
                     let previous = o.get_mut();
-                    if previous.object_type != object.object_type
-                        || previous.attributes != object.attributes
-                    {
+                    if previous.object_type != object.object_type {
                         return Err(Error::IdentityCollision);
                     }
+                    // Merge time-varying OCEL object attribute history from
+                    // repeated, independently observed source copies.
+                    for attr in object.attributes {
+                        if previous.attributes.iter().any(|existing| {
+                            existing.name == attr.name
+                                && existing.time == attr.time
+                                && existing.value != attr.value
+                        }) {
+                            return Err(Error::IdentityCollision);
+                        }
+                        if !previous.attributes.contains(&attr) {
+                            previous.attributes.push(attr);
+                        }
+                    }
+                    previous.attributes.sort_by(|a, b| {
+                        (&a.name, &a.time, &a.value).cmp(&(&b.name, &b.time, &b.value))
+                    });
                     previous.relationships.extend(object.relationships);
                     sort_relations(&mut previous.relationships);
                 }
