@@ -4,8 +4,10 @@ mod attachments;
 mod batch;
 mod header_claims;
 mod zones;
-pub use zones::{BodyEvidence, OffsetQuality, SourceZone, TextPartEvidence, ZoneKind, inspect_body_zones};
 pub use batch::{SourceInput, convert_batch};
+pub use zones::{
+    BodyEvidence, OffsetQuality, SourceZone, TextPartEvidence, ZoneKind, inspect_body_zones,
+};
 
 use chrono::{DateTime, Utc};
 use mail_parser::{AddressList, MessageParser};
@@ -260,13 +262,17 @@ pub fn convert_eml(
             .map(|name| OcelType {
                 name: (*name).into(),
                 attributes: if *name == "mime_attachment" {
-                    ["declared_media_type", "filename_sha256", "decoded_byte_length"]
-                        .into_iter()
-                        .map(|field| AttributeType {
-                            name: field.into(),
-                            value_type: "string".into(),
-                        })
-                        .collect()
+                    [
+                        "declared_media_type",
+                        "filename_sha256",
+                        "decoded_byte_length",
+                    ]
+                    .into_iter()
+                    .map(|field| AttributeType {
+                        name: field.into(),
+                        value_type: "string".into(),
+                    })
+                    .collect()
                 } else {
                     Vec::new()
                 },

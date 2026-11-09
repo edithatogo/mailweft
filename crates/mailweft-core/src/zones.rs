@@ -69,7 +69,9 @@ fn classify(line: &str, first_authored: bool, after_signoff: bool) -> ZoneKind {
     if trimmed.starts_with('>') {
         return ZoneKind::Quotation;
     }
-    if lower.contains("forwarded message") && (lower.starts_with("begin ") || lower.starts_with('-')) {
+    if lower.contains("forwarded message")
+        && (lower.starts_with("begin ") || lower.starts_with('-'))
+    {
         return ZoneKind::ForwardedMarker;
     }
     if trimmed == "-- " || trimmed == "--" {
@@ -78,14 +80,22 @@ fn classify(line: &str, first_authored: bool, after_signoff: bool) -> ZoneKind {
     if after_signoff {
         return ZoneKind::Signature;
     }
-    if first_authored &&
-        (lower.starts_with("hi ") || lower.starts_with("hello ") || lower.starts_with("dear ")) &&
-        (trimmed.ends_with(',') || trimmed.ends_with(':'))
+    if first_authored
+        && (lower.starts_with("hi ") || lower.starts_with("hello ") || lower.starts_with("dear "))
+        && (trimmed.ends_with(',') || trimmed.ends_with(':'))
     {
         return ZoneKind::Salutation;
     }
-    if matches!(lower.as_str(), "regards," | "kind regards," | "best regards," |
-        "sincerely," | "many thanks," | "thanks," | "yours sincerely,") {
+    if matches!(
+        lower.as_str(),
+        "regards,"
+            | "kind regards,"
+            | "best regards,"
+            | "sincerely,"
+            | "many thanks,"
+            | "thanks,"
+            | "yours sincerely,"
+    ) {
         return ZoneKind::Signoff;
     }
     if lower.starts_with("this email and any attachments")
@@ -104,7 +114,9 @@ pub fn inspect_body_zones(raw: &[u8]) -> Result<BodyEvidence, Error> {
     if raw.is_empty() || raw.len() > 16 * 1024 * 1024 {
         return Err(Error::InvalidSource);
     }
-    let parsed = MessageParser::new().parse(raw).ok_or(Error::InvalidSource)?;
+    let parsed = MessageParser::new()
+        .parse(raw)
+        .ok_or(Error::InvalidSource)?;
     let mut parts = Vec::new();
     let skipped_html_parts = parsed.html_body().len();
     for part in parsed.text_body() {
@@ -127,7 +139,11 @@ pub fn inspect_body_zones(raw: &[u8]) -> Result<BodyEvidence, Error> {
             continue;
         }
         let exact = problems.is_empty() && part.raw_body() == text.as_bytes();
-        let quality = if exact { OffsetQuality::Exact } else { OffsetQuality::Derived };
+        let quality = if exact {
+            OffsetQuality::Exact
+        } else {
+            OffsetQuality::Derived
+        };
         let mut zones = Vec::new();
         let mut pos = 0usize;
         let mut first_authored = true;

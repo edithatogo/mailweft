@@ -1,5 +1,5 @@
-use mailweft_core::{ZoneKind, OffsetQuality, inspect_body_zones, convert_eml};
 use chrono::{TimeZone, Utc};
+use mailweft_core::{OffsetQuality, ZoneKind, convert_eml, inspect_body_zones};
 
 const RAW: &[u8] = b"From: alice@example.invalid\r\nTo: bob@example.invalid\r\nSubject: Review\r\n\r\nHi Bob,\r\nPlease review the paper.\r\n> Earlier message\r\nKind regards,\r\nAlice\r\n";
 
@@ -14,20 +14,36 @@ fn classify_complete_plaintext_body_without_dropping_lines() {
     assert!(zones.iter().any(|z| z.kind == ZoneKind::Quotation));
     assert!(zones.iter().any(|z| z.kind == ZoneKind::Signoff));
     assert!(zones.iter().any(|z| z.kind == ZoneKind::Signature));
-    assert!(zones.iter().all(|z| z.offset_quality == OffsetQuality::Exact));
+    assert!(
+        zones
+            .iter()
+            .all(|z| z.offset_quality == OffsetQuality::Exact)
+    );
     assert_eq!(zones.first().unwrap().decoded_start, 0);
-    assert_eq!(zones.last().unwrap().decoded_end, evidence.parts[0].decoded_byte_length);
-    assert!(zones.windows(2).all(|w| w[0].decoded_end == w[1].decoded_start));
+    assert_eq!(
+        zones.last().unwrap().decoded_end,
+        evidence.parts[0].decoded_byte_length
+    );
+    assert!(
+        zones
+            .windows(2)
+            .all(|w| w[0].decoded_end == w[1].decoded_start)
+    );
     let raw_body = &RAW[evidence.parts[0].raw_start..evidence.parts[0].raw_end];
     for z in zones {
         let start = z.raw_start.expect("exact");
         let end = z.raw_end.expect("exact");
-        assert_eq!(&RAW[start..end],
-                   &raw_body[z.decoded_start..z.decoded_end]);
+        assert_eq!(&RAW[start..end], &raw_body[z.decoded_start..z.decoded_end]);
         assert_eq!(z.sha256.len(), 64);
     }
     let public = serde_json::to_string(&evidence).unwrap();
-    for secret in ["alice@example.invalid", "Please review", "Earlier message", "Hi Bob", "Kind regards"] {
+    for secret in [
+        "alice@example.invalid",
+        "Please review",
+        "Earlier message",
+        "Hi Bob",
+        "Kind regards",
+    ] {
         assert!(!public.contains(secret));
     }
 }
@@ -37,8 +53,14 @@ fn transfer_decoding_never_fabricates_exact_source_offsets() {
     let raw = b"From: a@example.invalid\r\nMIME-Version: 1.0\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Transfer-Encoding: base64\r\n\r\nSGkgQm9iLAo+IFF1b3RlZAo=";
     let e = inspect_body_zones(raw).unwrap();
     assert_eq!(e.parts.len(), 1);
-    assert!(e.parts[0].zones.iter().all(|z|
-        z.offset_quality == OffsetQuality::Derived && z.raw_start.is_none() && z.raw_end.is_none()));
+    assert!(
+        e.parts[0]
+            .zones
+            .iter()
+            .all(|z| z.offset_quality == OffsetQuality::Derived
+                && z.raw_start.is_none()
+                && z.raw_end.is_none())
+    );
 }
 
 #[test]
@@ -71,7 +93,11 @@ fn parser_declares_all_constructed_attachment_objects() {
     let at = Utc.with_ymd_and_hms(2026, 11, 9, 7, 0, 0).unwrap();
     let c = convert_eml(raw, "copy", at).unwrap();
     for obj in &c.log.objects {
-        let ty = c.log.object_types.iter().find(|t| t.name == obj.object_type)
+        let ty = c
+            .log
+            .object_types
+            .iter()
+            .find(|t| t.name == obj.object_type)
             .unwrap_or_else(|| panic!("undeclared object type: {}", obj.object_type));
         for attr in &obj.attributes {
             assert!(ty.attributes.iter().any(|t| t.name == attr.name));
