@@ -7,11 +7,6 @@ fn at() -> chrono::DateTime<Utc> { Utc.with_ymd_and_hms(2026, 11, 9, 7, 0, 0).un
 fn source<'a>(raw: &'a [u8], id: &'a str) -> SourceInput<'a> {
     SourceInput {raw, source_id: id, observed_at: at()}
 }
-fn message_links<'a>(log: &'a mailweft_core::Ocel, subject_prefix: &str) -> Vec<&'a mailweft_core::Object> {
-    log.objects.iter().filter(|o| o.object_type == "email_message"
-        && o.relationships.iter().any(|r| r.qualifier == subject_prefix)).collect()
-}
-
 #[test]
 fn unique_observed_parent_has_only_a_candidate_reply_edge() {
     let root_id = mailweft_core::convert_eml(ROOT, "root", at()).unwrap().message_candidate_id;
