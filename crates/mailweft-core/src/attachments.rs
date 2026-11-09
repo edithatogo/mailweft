@@ -17,6 +17,7 @@ fn add_attribute(attrs: &mut Vec<ObjectAttribute>, name: &str, value: String, at
 
 /// Returns the number of MIME parts classified as attachments by the parser.
 /// These are observed *parts of supplied source bytes*, not proven delivered documents.
+/// Declared MIME types are not content verification, and filenames stay hashed.
 pub(crate) fn add_attachment_metadata(
     message: &Message<'_>,
     message_candidate_id: &str,
