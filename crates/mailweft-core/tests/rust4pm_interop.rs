@@ -48,3 +48,24 @@ fn rust4pm_imports_two_copy_events_with_merged_message_relationships() {
     assert_eq!(loaded.events.len(), 2);
     assert_eq!(loaded.objects.len(), log.objects.len());
 }
+
+#[test]
+fn rust4pm_import_preserves_claimed_header_attributes_and_reference_qualifiers() {
+    let raw = b"From: a@example.invalid\r\nDate: Sun, 08 Nov 2026 20:30:00 -0500\r\nMessage-ID: <child@example.invalid>\r\nIn-Reply-To: <parent@example.invalid>\r\nReferences: <root@example.invalid> <parent@example.invalid>\r\n\r\nBody";
+    let observed = Utc.with_ymd_and_hms(2026, 11, 9, 7, 0, 0).unwrap();
+    let conversion = convert_eml(raw, "held/1", observed).unwrap();
+    let mut file = tempfile::Builder::new().suffix(".json").tempfile().unwrap();
+    serde_json::to_writer(&mut file, &conversion.log).unwrap();
+    file.flush().unwrap();
+    let imported = OCEL::import_from_path(file.path()).unwrap();
+    assert_eq!(imported.events.len(), 1);
+    assert_eq!(imported.objects.len(), conversion.log.objects.len());
+    assert_eq!(
+        imported.events[0].relationships.len(),
+        conversion.log.events[0].relationships.len()
+    );
+    assert_eq!(
+        imported.events[0].attributes.len(),
+        conversion.log.events[0].attributes.len()
+    );
+}
