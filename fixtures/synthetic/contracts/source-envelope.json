@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "fixture/copy-17",
+  "source_sha256": "2ba2c8f860bfc5f2b6d4c13d4cfb0d8eb234239e432880195d9e4579ef87951e",
+  "byte_length": 81,
+  "observed_at": "2026-11-09T07:00:00Z",
+  "fidelity": "raw_rfc5322",
+  "coverage_claim": "unknown",
+  "producer": {"name": "fictional-fixture", "version": "1.0"},
+  "rights_ref": "synthetic-original-work",
+  "scope_ref": "synthetic-test-only",
+  "custodian_ref": null,
+  "locator_ref": null,
+  "transformation_refs": []
+}

@@ -1,18 +1,17 @@
-//! Optional source-anchored, non-destructive plaintext zoning.
-//!
-//! Derived annotations never alter the authoritative OCEL observation. Values
-//! retain hashes and offsets, not plaintext or untrusted message instructions.
-use crate::{Error, digest};
+//! Non-destructive plaintext zoning; labels and origin scopes are rule hypotheses.
+//! Source hashes and offsets are retained, never plaintext or inferred task ownership.
+use crate::{Error, MAX_EML_BYTES, digest};
 use mail_parser::{MessageParser, PartKind};
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeSet;
+
+const MAX_TEXT_BYTES: usize = 2 * 1024 * 1024;
+const MAX_ZONES: usize = 65_536;
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum OffsetQuality {
-    /// Each decoded span matches the same bytes in the original EML source.
     Exact,
-    /// Transfer/charset decoding changed bytes: a raw part is known but
-    /// there is no verified span-level correspondence.
     Derived,
 }
 
@@ -23,15 +22,46 @@ pub enum ZoneKind {
     Salutation,
     Quotation,
     ForwardedMarker,
+    ForwardedContent,
+    InlineHeader,
     Signoff,
     Signature,
     Disclaimer,
     Unknown,
 }
 
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum OriginScope {
+    NewAuthorContent,
+    QuotedPriorContent,
+    ForwardedThirdParty,
+    GeneratedOrUnknown,
+}
+
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum SkipReason {
+    HtmlUnsupported,
+    UnsupportedBodyKind,
+    UnverifiablePartRange,
+    DecodingUnavailable,
+    DecodedSizeLimit,
+    ZoneCountLimit,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+pub struct SkippedPart {
+    pub part_id: u32,
+    pub reason: SkipReason,
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SourceZone {
     pub kind: ZoneKind,
+    pub origin_scope: OriginScope,
+    pub quote_depth: usize,
+    pub forward_depth: usize,
     pub decoded_start: usize,
     pub decoded_end: usize,
     pub raw_start: Option<usize>,
@@ -58,139 +88,157 @@ pub struct BodyEvidence {
     pub source_sha256: String,
     pub parts: Vec<TextPartEvidence>,
     pub skipped_html_parts: usize,
+    pub skipped_parts: Vec<SkippedPart>,
 }
 
-fn classify(line: &str, first_authored: bool, after_signoff: bool) -> ZoneKind {
-    let trimmed = line.trim();
-    let lower = trimmed.to_ascii_lowercase();
-    if trimmed.is_empty() {
-        return ZoneKind::Unknown;
-    }
-    if trimmed.starts_with('>') {
-        return ZoneKind::Quotation;
-    }
-    if lower.contains("forwarded message")
-        && (lower.starts_with("begin ") || lower.starts_with('-'))
-    {
-        return ZoneKind::ForwardedMarker;
-    }
-    if trimmed == "-- " || trimmed == "--" {
-        return ZoneKind::Signoff;
-    }
-    if after_signoff {
-        return ZoneKind::Signature;
-    }
-    if first_authored
-        && (lower.starts_with("hi ") || lower.starts_with("hello ") || lower.starts_with("dear "))
-        && (trimmed.ends_with(',') || trimmed.ends_with(':'))
-    {
-        return ZoneKind::Salutation;
-    }
-    if matches!(
-        lower.as_str(),
-        "regards,"
-            | "kind regards,"
-            | "best regards,"
-            | "sincerely,"
-            | "many thanks,"
-            | "thanks,"
-            | "yours sincerely,"
-    ) {
-        return ZoneKind::Signoff;
-    }
-    if lower.starts_with("this email and any attachments")
-        || lower.starts_with("this message is confidential")
-    {
-        return ZoneKind::Disclaimer;
-    }
-    ZoneKind::Authored
+#[derive(Default)]
+struct ZoneState {
+    seen_authored: bool,
+    after_signoff: bool,
+    forward_depth: usize,
 }
 
-/// Build a private, body-free sidecar from raw RFC5322 input. No HTML conversion
-/// or remote content retrieval is attempted; HTML parts are explicitly skipped.
-/// Unsupported character/transfer decoding yields derived offsets, never exact
-/// offsets fabricated from Unicode-text lengths.
+impl ZoneState {
+    fn classify(&mut self, line: &str) -> (ZoneKind, OriginScope, usize, usize) {
+        let trimmed = line.trim();
+        let mut remainder = trimmed;
+        let mut quote_depth = 0;
+        while let Some(rest) = remainder.strip_prefix('>') {
+            quote_depth += 1;
+            remainder = rest.trim_start();
+        }
+        if quote_depth > 0 {
+            // A following unprefixed inline answer must not inherit signature state.
+            self.after_signoff = false;
+            return (ZoneKind::Quotation, OriginScope::QuotedPriorContent, quote_depth, self.forward_depth);
+        }
+        let lower = trimmed.to_ascii_lowercase();
+        if lower.contains("forwarded message")
+            && (lower.starts_with("begin ") || lower.starts_with('-'))
+        {
+            self.forward_depth += 1;
+            self.after_signoff = false;
+            return (ZoneKind::ForwardedMarker, OriginScope::ForwardedThirdParty, 0, self.forward_depth);
+        }
+        if self.forward_depth > 0 {
+            let inline_header = ["from:", "sent:", "date:", "to:", "cc:", "bcc:", "subject:", "reply-to:"]
+                .iter().any(|prefix| lower.starts_with(prefix));
+            let kind = if inline_header { ZoneKind::InlineHeader }
+                else if trimmed.is_empty() { ZoneKind::Unknown }
+                else { ZoneKind::ForwardedContent };
+            // Without a trustworthy end delimiter, abstain from promoting any
+            // trailing passage back to current-author content.
+            return (kind, OriginScope::ForwardedThirdParty, 0, self.forward_depth);
+        }
+        if trimmed.is_empty() {
+            return (ZoneKind::Unknown, OriginScope::GeneratedOrUnknown, 0, 0);
+        }
+        // Footer detection precedes signature carry-over.
+        if lower.starts_with("this email and any attachments")
+            || lower.starts_with("this message is confidential")
+        {
+            return (ZoneKind::Disclaimer, OriginScope::GeneratedOrUnknown, 0, 0);
+        }
+        let kind = if trimmed == "--" || matches!(lower.as_str(),
+            "regards," | "kind regards," | "best regards," | "sincerely," |
+            "many thanks," | "thanks," | "yours sincerely,") {
+            self.after_signoff = true;
+            ZoneKind::Signoff
+        } else if self.after_signoff {
+            ZoneKind::Signature
+        } else if !self.seen_authored
+            && (lower.starts_with("hi ") || lower.starts_with("hello ") || lower.starts_with("dear "))
+            && (trimmed.ends_with(',') || trimmed.ends_with(':')) {
+            ZoneKind::Salutation
+        } else {
+            ZoneKind::Authored
+        };
+        self.seen_authored = true;
+        (kind, OriginScope::NewAuthorContent, 0, 0)
+    }
+}
+
+/// Produce rule-based source annotations, not factual authorship or event assertions.
+/// Every accepted text part is fully covered; every skipped candidate part is reported.
 pub fn inspect_body_zones(raw: &[u8]) -> Result<BodyEvidence, Error> {
-    if raw.is_empty() || raw.len() > 16 * 1024 * 1024 {
+    if raw.is_empty() || raw.len() > MAX_EML_BYTES {
         return Err(Error::InvalidSource);
     }
-    let parsed = MessageParser::new()
-        .parse(raw)
-        .ok_or(Error::InvalidSource)?;
-    if parsed.from().is_none()
-        && parsed.to().is_none()
-        && parsed.sender().is_none()
-        && parsed.subject().is_none()
-        && parsed.message_id().is_none()
-    {
+    let parsed = MessageParser::new().parse(raw).ok_or(Error::InvalidSource)?;
+    if parsed.from().is_none() && parsed.to().is_none() && parsed.sender().is_none()
+        && parsed.subject().is_none() && parsed.message_id().is_none() {
         return Err(Error::InvalidSource);
     }
     let mut parts = Vec::new();
-    let skipped_html_parts = parsed.html_body().len();
+    let mut skipped_parts = Vec::new();
+    let mut seen = BTreeSet::new();
+    for part in parsed.html_body().filter(|p| matches!(p.kind(), PartKind::Html)) {
+        if seen.insert(part.id()) {
+            skipped_parts.push(SkippedPart { part_id: part.id(), reason: SkipReason::HtmlUnsupported });
+        }
+    }
+    let skipped_html_parts = skipped_parts.len();
+    let mut remaining_zones = MAX_ZONES;
     for part in parsed.text_body() {
-        // The parser may expose an HTML-only fallback in its text-body list.
-        // Do not claim that converted HTML corresponds to original plain text.
+        if !seen.insert(part.id()) { continue; }
+        let skip = |reason| SkippedPart { part_id: part.id(), reason };
         if !matches!(part.kind(), PartKind::Text) {
+            skipped_parts.push(skip(SkipReason::UnsupportedBodyKind));
             continue;
         }
         let start = part.offset_body() as usize;
         let end = part.offset_end() as usize;
-        if start > end || end > raw.len() {
+        if raw.get(start..end) != Some(part.raw_body()) {
+            skipped_parts.push(skip(SkipReason::UnverifiablePartRange));
+            continue;
+        }
+        // Measure transfer size before materializing decoded text. Charset
+        // expansion is checked again afterwards, within the bounded source.
+        if part.decoded_len() > MAX_TEXT_BYTES {
+            skipped_parts.push(skip(SkipReason::DecodedSizeLimit));
             continue;
         }
         let Some((text, problems)) = part.text_checked() else {
+            skipped_parts.push(skip(SkipReason::DecodingUnavailable));
             continue;
         };
-        // Avoid retaining large untrusted expanded texts in memory beyond
-        // a bounded part. Source messages themselves are already bounded.
-        if text.len() > 2 * 1024 * 1024 {
+        if text.len() > MAX_TEXT_BYTES {
+            skipped_parts.push(skip(SkipReason::DecodedSizeLimit));
             continue;
         }
-        let exact = problems.is_empty() && part.raw_body() == text.as_bytes();
-        let quality = if exact {
-            OffsetQuality::Exact
-        } else {
-            OffsetQuality::Derived
-        };
-        let mut zones = Vec::new();
-        let mut pos = 0usize;
-        let mut first_authored = true;
-        let mut after_signoff = false;
+        let line_count = text.split_inclusive('\n').count();
+        if line_count > remaining_zones {
+            skipped_parts.push(skip(SkipReason::ZoneCountLimit));
+            continue;
+        }
+        remaining_zones -= line_count;
+        let exact = problems.is_empty() && raw.get(start..end) == Some(text.as_bytes());
+        let quality = if exact { OffsetQuality::Exact } else { OffsetQuality::Derived };
+        let mut zones = Vec::with_capacity(line_count);
+        let mut pos = 0;
+        let mut state = ZoneState::default();
         for line in text.split_inclusive('\n') {
             let end_pos = pos + line.len();
-            let kind = classify(line, first_authored, after_signoff);
-            if !line.trim().is_empty() && kind != ZoneKind::Unknown {
-                first_authored = false;
-            }
-            if kind == ZoneKind::Signoff {
-                after_signoff = true;
-            }
+            let (kind, origin_scope, quote_depth, forward_depth) = state.classify(line);
             zones.push(SourceZone {
-                kind,
-                decoded_start: pos,
-                decoded_end: end_pos,
+                kind, origin_scope, quote_depth, forward_depth,
+                decoded_start: pos, decoded_end: end_pos,
                 raw_start: exact.then_some(start + pos),
                 raw_end: exact.then_some(start + end_pos),
-                offset_quality: quality,
-                sha256: digest(line.as_bytes()),
+                offset_quality: quality, sha256: digest(line.as_bytes()),
             });
             pos = end_pos;
         }
         parts.push(TextPartEvidence {
-            part_id: part.id(),
-            raw_start: start,
-            raw_end: end,
+            part_id: part.id(), raw_start: start, raw_end: end,
             raw_sha256: digest(&raw[start..end]),
-            decoded_sha256: digest(text.as_bytes()),
-            decoded_byte_length: text.len(),
-            decoding_problems: !problems.is_empty(),
-            zones,
+            decoded_sha256: digest(text.as_bytes()), decoded_byte_length: text.len(),
+            decoding_problems: !problems.is_empty(), zones,
         });
     }
+    skipped_parts.sort_by_key(|p| p.part_id);
     Ok(BodyEvidence {
-        schema_version: "1.0.0",
-        source_sha256: digest(raw),
-        parts,
-        skipped_html_parts,
+        schema_version: "1.1.0", source_sha256: digest(raw),
+        parts, skipped_html_parts, skipped_parts,
     })
 }
