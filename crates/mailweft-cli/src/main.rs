@@ -1,6 +1,6 @@
 //! Thin, offline command-line adapter over the Mailweft Rust core.
 use chrono::{DateTime, Utc};
-use mailweft_core::{SourceInput, convert_batch, convert_eml};
+use mailweft_core::{SourceInput, convert_batch, convert_eml, inspect_body_zones};
 use std::{env, fs, process::ExitCode};
 
 fn parse_instant(value: &str) -> Option<DateTime<Utc>> {
@@ -71,10 +71,44 @@ fn batch(args: &[String]) -> ExitCode {
     }
 }
 
+fn inspect(args: &[String]) -> ExitCode {
+    if args.len() != 3 {
+        eprintln!("Usage: mailweft inspect <raw.eml>");
+        return ExitCode::FAILURE;
+    }
+    let raw = match fs::read(&args[2]) {
+        Ok(bytes) => bytes,
+        Err(_) => {
+            eprintln!("error: cannot read source file");
+            return ExitCode::FAILURE;
+        }
+    };
+    let evidence = match inspect_body_zones(&raw) {
+        Ok(value) => value,
+        Err(err) => {
+            eprintln!("error: {err}");
+            return ExitCode::FAILURE;
+        }
+    };
+    match serde_json::to_string_pretty(&evidence) {
+        Ok(text) => {
+            println!("{text}");
+            ExitCode::SUCCESS
+        }
+        Err(_) => {
+            eprintln!("error: cannot serialize source evidence");
+            ExitCode::FAILURE
+        }
+    }
+}
+
 fn main() -> ExitCode {
     let args: Vec<String> = env::args().collect();
     if args.get(1).is_some_and(|arg| arg == "batch") {
         return batch(&args);
+    }
+    if args.get(1).is_some_and(|arg| arg == "inspect") {
+        return inspect(&args);
     }
     if args.len() < 3 || args.len() > 4 {
         eprintln!("Usage: mailweft <raw.eml> <observed-at:RFC3339> [source-id]");
