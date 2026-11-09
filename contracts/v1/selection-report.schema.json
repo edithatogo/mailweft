@@ -1,0 +1,33 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://example.invalid/email-ocel/contracts/v1/selection-report.schema.json",
+  "title":"Mailweft selection reconciliation 1.0.0",
+  "type":"object","additionalProperties":false,"required":["manifest","manifest_sha256","log"],
+  "$defs":{
+    "hash":{"type":"string","pattern":"^[a-f0-9]{64}$"},
+    "receipt":{"type":"object","additionalProperties":false},
+    "entry":{
+      "type":"object","additionalProperties":false,"required":["entry_sha256","status","diagnostic","receipt"],
+      "properties":{
+        "entry_sha256":{"$ref":"#/$defs/hash"},"status":{"enum":["accepted","rejected"]},
+        "diagnostic":{"type":["string","null"]},"receipt":{"anyOf":[{"$ref":"#/$defs/receipt"},{"type":"null"}]}
+      },
+      "allOf":[{"if":{"properties":{"status":{"const":"accepted"}}},"then":{"properties":{"receipt":{"type":"object"},"diagnostic":{"type":"null"}}},"else":{"properties":{"receipt":{"type":"null"},"diagnostic":{"type":"string","minLength":1}}}}]
+    }
+  },
+  "properties":{
+    "manifest_sha256":{"$ref":"#/$defs/hash"},
+    "manifest":{
+      "type":"object","additionalProperties":false,
+      "required":["schema_version","supplied","accepted","rejected","unique_observations","projection_status","coverage_assurance","ocel_sha256","entries"],
+      "properties":{
+        "schema_version":{"const":"1.0.0"},"supplied":{"type":"integer","minimum":1,"maximum":1024},
+        "accepted":{"type":"integer","minimum":0},"rejected":{"type":"integer","minimum":0},"unique_observations":{"type":"integer","minimum":0},
+        "projection_status":{"enum":["withheld","partial","complete_selection"]},"coverage_assurance":{"const":"supplied_selection_only"},
+        "ocel_sha256":{"anyOf":[{"$ref":"#/$defs/hash"},{"type":"null"}]},
+        "entries":{"type":"array","minItems":1,"maxItems":1024,"items":{"$ref":"#/$defs/entry"}}
+      }
+    },
+    "log":{"anyOf":[{"type":"null"},{"type":"object","additionalProperties":false,"required":["objectTypes","eventTypes","objects","events"],"properties":{"objectTypes":{"type":"array"},"eventTypes":{"type":"array"},"objects":{"type":"array"},"events":{"type":"array"}}}]}
+  }
+}

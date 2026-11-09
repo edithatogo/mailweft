@@ -1,15 +1,11 @@
-# Agent workflow
+# Mailweft development workflow
 
-1. Select the earliest unblocked unchecked track and first unchecked Txx.yy step.
-2. Read that track's `spec.md`, `plan.md`, shared contracts and minimal directly relevant source code.
-3. Make the smallest change necessary to satisfy the single task's acceptance. Use existing libraries before custom algorithms. No unrelated refactors.
-4. Run exactly the listed tests/commands and capture exit code; if dependencies, network, rights or tooling are missing, mark BLOCKED in the private/logged evidence and stop. Do not fabricate pass results.
-5. Update track evidence and checklist only on successful verification; commit the task separately with `Txx.yy` in commit message.
-6. After every phase, rerun specified integration tests. Review architecture if data loss, confidence confusion, unsafe content processing or licence incompatibility is discovered.
-7. All external corpora remain outside source control. Never download or process a dataset merely because a task references it; check the dataset rights gate.
-8. Before a release, run full synthetic acceptance suite, verify OCEL round trips, docs, supply chain checks and zero-sensitive-artifact audit.
+1. Read the project index, AGENTS.md, scope contract and the selected track index/spec/plan. Use `python3 scripts/conductor_doctor.py --status`; select an eligible task from the canonical manifest. Task dependencies are exact IDs, never whole-track approval gates.
+2. Work on an isolated feature branch. Record significant interface/scope rulings in the execution ledger; preserve raw-source/copy/claim distinctions, FOI ownership and optional-lane isolation.
+3. Write a focused failing test, execute it and inspect the failure. Implement the smallest coherent change, then run the targeted tests. Fictional fixtures only; missing tool/data access is BLOCKED, not PASSED.
+4. Run locked Rust tests, independent Rust4PM import tests, actual-output schema validation, formatting, all-feature Clippy, planning tests and the Conductor doctor. Failed checks prevent acceptance.
+5. Update only the tasks whose acceptance was actually met. For partial work use `in_progress`, with precise implemented and remaining statements. Store file/test/CI evidence in the task manifest. Preserve requirement IDs; amend interface paths to actual code rather than duplicating modules solely to match obsolete proposed names.
+6. Run `python3 scripts/conductor_doctor.py --sync`, inspect changes, then `--check`. This updates plan checkboxes, metadata, indexes, evidence summaries and next-task hints. Synchronization never changes task status.
+7. Review the full diff and residual risks. Push the feature branch, require exact-head CI, merge only with authorization, and verify post-merge CI. No force push or branch protection bypass.
 
-## Task-ID scheduling and release lanes
-`task-manifest.json` is the authoritative prerequisite graph; track headings are organizational, not transitive all-task gates. All implementation tasks remain not_started. Core tasks may depend only on core tasks; corpus, enrichment, research and integration are independently selected lanes. `scripts/validate_scaffold.py` checks graph integrity, requirements, cards and lane closure. `scripts/test_validate_scaffold.py` tests that the checker rejects broken plans.
-
-One scoped design/review decision covers a feature; do not add per-message human approval rituals. Unknown source rights block real-data access only, not fictional-fixture development. Domain/authority decisions and production permissions retain their separate owners.
+Conductor's upstream plugin is read-only and pinned. The project is already configured: generic setup must not overwrite these files. Host registration is separate and unverified here. Human approval is reserved for real-data rights/access, external effects outside the requested work, destructive operations and ontology/legal promotion—not repeated permission to perform already approved implementation tasks.
