@@ -4,7 +4,7 @@
 
 Mailweft is a standalone, corpus-neutral library and CLI: raw RFC 5322/MIME email -> typed, evidence-linked OCEL 2.0 communication logs. Optional structural NLP, semantic enrichment and GraphRAG build on that output without replacing the converter or rewriting its observations.
 
-**Status:** an experimental offline Rust EML-to-OCEL 2.0 implementation now builds, with single-file and bounded multi-EML batch conversion, synthetic tests and independent Rust4PM import acceptance. Its published roadmap remains much broader. No real dataset benchmark, semantic NLP, GraphRAG, live FOI migration or product release has been validated.
+**Status:** an experimental offline Rust EML-to-OCEL 2.0 implementation now builds, with single-file and bounded multi-EML batch conversion, claimed Date/Message-ID/In-Reply-To/References extraction, synthetic tests and independent Rust4PM import acceptance. Its published roadmap remains much broader. No real dataset benchmark, semantic NLP, GraphRAG, live FOI migration or product release has been validated.
 
 ## Core contract
 - Local EML input (maildir planned); no processed-data prerequisite. Preserve source hashes, actual participant roles, claimed versus observed times, duplicate/copy identity and completeness.
@@ -22,7 +22,7 @@ cargo test --locked --workspace --all-targets
 cargo test --locked -p mailweft-core --features rust4pm-validation --test rust4pm_interop
 ```
 
-The required timestamp is a caller-supplied acquisition observation, not proof of sending or delivery. Public output uses hashed participant identifiers and explicit qualifier relationships. Batch is limited to 1,024 explicit EML paths and 256 MiB input; large-corpus streaming, full source receipts and many fields remain planned. [Implementation limitations](docs/BATCH-IMPLEMENTATION.md).
+The required timestamp is a caller-supplied acquisition observation, not proof of sending or delivery. Public output uses hashed participant identifiers and explicit qualifier relationships. Batch is limited to 1,024 explicit EML paths and 256 MiB input; large-corpus streaming, full source receipts and many fields remain planned. [Implementation limitations](docs/BATCH-IMPLEMENTATION.md) and [claimed-header chronology](docs/CLAIMED-HEADER-CHRONOLOGY.md).
 
 ## First consumer and ownership
 `foi-process` will depend on Mailweft. Its existing unvalidated output is **not** a reference or correctness oracle. Independently adjudicated source evidence and synthetic fixtures govern migration.
