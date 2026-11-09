@@ -6,7 +6,10 @@ use mail_parser::Message;
 use std::collections::BTreeMap;
 
 fn status(attributes: &mut Vec<Attribute>, name: &str, value: &str) {
-    attributes.push(Attribute { name: name.to_owned(), value: value.to_owned() });
+    attributes.push(Attribute {
+        name: name.to_owned(),
+        value: value.to_owned(),
+    });
 }
 
 /// Preserve a claimed message identifier only if its parsed form is plausible.
@@ -16,8 +19,9 @@ fn canonical_id(value: &str) -> Option<&str> {
     if id.is_empty()
         || id.len() > 998
         || !id.contains('@')
-        || id.bytes().any(|b| b.is_ascii_whitespace() || b == b'<' || b == b'>'
-            || b == 0 || !b.is_ascii())
+        || id
+            .bytes()
+            .any(|b| b.is_ascii_whitespace() || b == b'<' || b == b'>' || b == 0 || !b.is_ascii())
     {
         None
     } else {
@@ -38,14 +42,21 @@ fn add_id_object(
         attributes: Vec::new(),
         relationships: Vec::new(),
     });
-    let link = Relationship { object_id, qualifier: qualifier.to_owned() };
+    let link = Relationship {
+        object_id,
+        qualifier: qualifier.to_owned(),
+    };
     if !relationships.contains(&link) {
         relationships.push(link);
     }
 }
 
 fn count_headers(message: &Message<'_>, name: &str) -> usize {
-    message.headers().iter().filter(|field| field.raw_name().eq_ignore_ascii_case(name)).count()
+    message
+        .headers()
+        .iter()
+        .filter(|field| field.raw_name().eq_ignore_ascii_case(name))
+        .count()
 }
 
 fn claim_id_list(
@@ -92,7 +103,9 @@ pub(crate) fn add_claims(
     match count_headers(message, "date") {
         0 => status(attrs, "date_claim_status", "absent"),
         1 => {
-            let claimed = message.date().filter(|date| date.is_valid())
+            let claimed = message
+                .date()
+                .filter(|date| date.is_valid())
                 .and_then(|date| Utc.timestamp_opt(date.to_timestamp(), 0).single());
             if let Some(claimed) = claimed {
                 status(attrs, "date_claim_status", "parsed");
@@ -118,19 +131,38 @@ pub(crate) fn add_claims(
     }
 
     claim_id_list(
-        message.in_reply_to(), "in_reply_to", "claimed_in_reply_to",
-        count_headers(message, "in-reply-to"), attrs, relations, objects
+        message.in_reply_to(),
+        "in_reply_to",
+        "claimed_in_reply_to",
+        count_headers(message, "in-reply-to"),
+        attrs,
+        relations,
+        objects,
     );
     claim_id_list(
-        message.references(), "references", "claimed_reference",
-        count_headers(message, "references"), attrs, relations, objects
+        message.references(),
+        "references",
+        "claimed_reference",
+        count_headers(message, "references"),
+        attrs,
+        relations,
+        objects,
     );
 }
 
 pub(crate) fn attribute_types() -> Vec<AttributeType> {
-    ["source_sha256", "date_claim_status", "claimed_date_utc",
-      "message_id_claim_status", "in_reply_to_claim_status", "references_claim_status"]
-        .into_iter()
-        .map(|name| AttributeType { name: name.into(), value_type: "string".into() })
-        .collect()
+    [
+        "source_sha256",
+        "date_claim_status",
+        "claimed_date_utc",
+        "message_id_claim_status",
+        "in_reply_to_claim_status",
+        "references_claim_status",
+    ]
+    .into_iter()
+    .map(|name| AttributeType {
+        name: name.into(),
+        value_type: "string".into(),
+    })
+    .collect()
 }

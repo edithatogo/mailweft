@@ -228,13 +228,18 @@ pub fn convert_eml(
         message_candidate_id,
         source_copy_id,
         log: Ocel {
-            object_types: ["claimed_message_identifier", "email_address", "email_message", "source_copy"]
-                .iter()
-                .map(|name| OcelType {
-                    name: (*name).into(),
-                    attributes: Vec::new(),
-                })
-                .collect(),
+            object_types: [
+                "claimed_message_identifier",
+                "email_address",
+                "email_message",
+                "source_copy",
+            ]
+            .iter()
+            .map(|name| OcelType {
+                name: (*name).into(),
+                attributes: Vec::new(),
+            })
+            .collect(),
             event_types: vec![OcelType {
                 name: "source_copy_observed".into(),
                 attributes: header_claims::attribute_types(),
