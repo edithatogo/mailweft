@@ -25,40 +25,24 @@ jobs:
           s = p.read_text()
           s = s.replace("    if before in text:\n", "    if after in text:\n        return\n    if before in text:\n", 1)
           s = s.replace("['cargo', 'metadata', '--locked', '--all-features', '--format-version', '1']", "['cargo', 'metadata', '--all-features', '--format-version', '1']")
-          s = s.replace('''        let transfer_map = crate::transfer_map::verified_map(
-                      part.raw_body(), decoded.as_ref(), text.as_bytes(), start,
-                      part.content_transfer_encoding().unwrap_or(""),
-                      !problems.is_empty() || !transfer_problems.is_empty() || ambiguous_encoding,
-                      remaining_map_units,
-                  );''', '''        let transfer_map = crate::transfer_map::verified_map(
-                      crate::transfer_map::TransferInput {
-                          raw: part.raw_body(), decoded: decoded.as_ref(), text: text.as_bytes(), base: start,
-                          encoding: part.content_transfer_encoding().unwrap_or(""),
-                          problems: !problems.is_empty() || !transfer_problems.is_empty() || ambiguous_encoding,
-                      }, remaining_map_units,
-                  );''')
-          # The multiline source fragment has independent indentation inside a Python string.
-          old = '''            part.raw_body(), decoded.as_ref(), text.as_bytes(), start,
-                      part.content_transfer_encoding().unwrap_or(""),
-                      !problems.is_empty() || !transfer_problems.is_empty() || ambiguous_encoding,
-                      remaining_map_units,'''
-          # Exact replacement below is whitespace-independent and asserted.
           marker = 'part.raw_body(), decoded.as_ref(), text.as_bytes(), start,'
-          if marker in s:
-              begin = s.index(marker)
-              end = s.index('remaining_map_units,', begin) + len('remaining_map_units,')
-              s = s[:begin] + '''crate::transfer_map::TransferInput {
-                      raw: part.raw_body(), decoded: decoded.as_ref(), text: text.as_bytes(), base: start,
-                      encoding: part.content_transfer_encoding().unwrap_or(""),
-                      problems: !problems.is_empty() || !transfer_problems.is_empty() || ambiguous_encoding,
-                  }, remaining_map_units,''' + s[end:]
+          assert marker in s
+          begin = s.index(marker)
+          end = s.index('remaining_map_units,', begin) + len('remaining_map_units,')
+          s = s[:begin] + '''crate::transfer_map::TransferInput {
+                  raw: part.raw_body(), decoded: decoded.as_ref(), text: text.as_bytes(), base: start,
+                  encoding: part.content_transfer_encoding().unwrap_or(""),
+                  problems: !problems.is_empty() || !transfer_problems.is_empty() || ambiguous_encoding,
+              }, remaining_map_units,''' + s[end:]
           p.write_text(s)
           p = Path('crates/mailweft-core/src/transfer_map.rs')
           s = p.read_text()
           old = "pub fn verified_map(raw: &[u8], decoded: &[u8], text: &[u8], base: usize, encoding: &str, problems: bool, budget: usize) -> TransferMap {"
           new = "pub struct TransferInput<'a> { pub raw: &'a [u8], pub decoded: &'a [u8], pub text: &'a [u8], pub base: usize, pub encoding: &'a str, pub problems: bool }\n\npub fn verified_map(input: TransferInput<'_>, budget: usize) -> TransferMap {\n    let TransferInput { raw, decoded, text, base, encoding, problems } = input;"
           assert old in s
-          p.write_text(s.replace(old, new).replace('tokens.len() % 4 != 0', '!tokens.len().is_multiple_of(4)'))
+          s = s.replace(old, new).replace('tokens.len() % 4 != 0', '!tokens.len().is_multiple_of(4)')
+          s = s.replace('tokens.chunks_exact(4)', 'tokens.as_chunks::<4>().0.iter()')
+          p.write_text(s)
           PY
           rustup toolchain install 1.99.1 --profile minimal --component rustfmt --component clippy
           python3 scripts/qualify_current_slice.py
