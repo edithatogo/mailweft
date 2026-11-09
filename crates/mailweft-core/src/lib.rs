@@ -246,7 +246,7 @@ pub fn convert_eml(
     );
 
     Ok(Conversion {
-        schema_version: "1.2.0",
+        schema_version: "1.3.0",
         source_sha256: source_sha256.clone(),
         message_candidate_id,
         source_copy_id,
