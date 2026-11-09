@@ -1,6 +1,6 @@
 # Conductor track registry — Mailweft
 
-The task manifest owns exact prerequisites. All application implementation remains not_started. Optional research/integration cannot block core release.
+The task manifest owns exact prerequisites. Several *bounded vertical slices* of the Rust core are implemented and independently tested; **the full tracks and their unchecked tasks remain open** until each acceptance contract is met. Optional research/integration cannot block core release.
 
 - [ ] **00_foundation: Foundation, legal/source gates and Rust workspace** — [spec](tracks/00_foundation/spec.md), [plan](tracks/00_foundation/plan.md), 7 tasks.
 - [ ] **01_ingestion: Raw EML and maildir input, manifests and parse boundaries** — [spec](tracks/01_ingestion/spec.md), [plan](tracks/01_ingestion/plan.md), 8 tasks.

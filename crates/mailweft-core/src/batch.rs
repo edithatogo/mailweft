@@ -1,7 +1,7 @@
 //! Deterministic multi-message OCEL assembly. Do not turn copy counts into message counts.
 use crate::{Error, Event, Object, Ocel, Relationship, convert_eml};
 use chrono::{DateTime, Utc};
-use std::collections::{BTreeMap, btree_map::Entry};
+use std::collections::{BTreeMap, BTreeSet, btree_map::Entry};
 
 #[derive(Clone, Debug)]
 pub struct SourceInput<'a> {
@@ -77,6 +77,66 @@ pub fn convert_batch(inputs: &[SourceInput<'_>]) -> Result<Ocel, Error> {
                     }
                 }
             }
+        }
+    }
+
+    // Header identifiers are claims. Link only an observed, uniquely matching
+    // logical message, and call the O2O edge a *candidate*, not a verified reply.
+    // A copied mailbox observation does not multiply thread evidence.
+    // A candidate O2O edge cannot establish authorship or successful delivery.
+    let mut announced_ids: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+    let mut requested_parents: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+    for event in events.values() {
+        let message = event
+            .relationships
+            .iter()
+            .find(|r| r.qualifier == "message")
+            .map(|r| r.object_id.clone());
+        if let Some(message) = message {
+            for relationship in &event.relationships {
+                match relationship.qualifier.as_str() {
+                    "claimed_message_id" => {
+                        announced_ids
+                            .entry(relationship.object_id.clone())
+                            .or_default()
+                            .insert(message.clone());
+                    }
+                    "claimed_in_reply_to" => {
+                        requested_parents
+                            .entry(message.clone())
+                            .or_default()
+                            .insert(relationship.object_id.clone());
+                    }
+                    _ => {}
+                }
+            }
+        }
+    }
+    for (child_id, references) in requested_parents {
+        if references.len() != 1 {
+            continue;
+        }
+        let Some(reference) = references.iter().next() else {
+            continue;
+        };
+        let Some(parents) = announced_ids.get(reference) else {
+            continue;
+        };
+        if parents.len() != 1 {
+            continue;
+        }
+        let Some(parent_id) = parents.iter().next() else {
+            continue;
+        };
+        if &child_id == parent_id {
+            continue;
+        }
+        if let Some(child) = objects.get_mut(&child_id) {
+            child.relationships.push(Relationship {
+                object_id: parent_id.clone(),
+                qualifier: "reply_target_candidate".into(),
+            });
+            sort_relations(&mut child.relationships);
         }
     }
 
