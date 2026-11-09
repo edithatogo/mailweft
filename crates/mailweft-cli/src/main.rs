@@ -1,4 +1,5 @@
 //! Offline CLI. Source capture and archival preservation remain external responsibilities.
+mod reconcile;
 use chrono::{DateTime, Utc};
 use mailweft_core::source::{
     MAX_ENVELOPE_BYTES, MAX_SOURCE_BYTES, convert_with_envelope, parse_envelope_json,
@@ -84,8 +85,13 @@ fn run(args: &[String]) -> Result<String, &'static str> {
 
 fn main() -> ExitCode {
     let args = env::args().collect::<Vec<_>>();
-    match run(&args) {
-        Ok(json) => {
+    let result = if args.get(1).is_some_and(|arg| arg == "reconcile") {
+        reconcile::run(&args)
+    } else {
+        run(&args).map(|json| (json, false))
+    };
+    match result {
+        Ok((json, partial)) => {
             let mut output = io::stdout().lock();
             if output
                 .write_all(json.as_bytes())
@@ -95,7 +101,7 @@ fn main() -> ExitCode {
                 eprintln!("error: OUTPUT_WRITE_FAILED");
                 return ExitCode::FAILURE;
             }
-            ExitCode::SUCCESS
+            ExitCode::from(if partial { 2 } else { 0 })
         }
         Err(code) => {
             eprintln!("error: {code}");

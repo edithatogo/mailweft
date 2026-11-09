@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0.0",
+  "scope": "resolved_direct_dependencies_including_dev_and_optional",
+  "dependencies": [
+    {
+      "name": "chrono",
+      "version": "0.4.45",
+      "spdx_declared": "MIT OR Apache-2.0",
+      "licence_files": [
+        {
+          "name": "LICENSE.txt",
+          "sha256": "946c9835d8034d24404f8cfec5f4654cee5dad17e944afc3d06d742cf2882831"
+        }
+      ]
+    },
+    {
+      "name": "mail-parser",
+      "version": "1.0.1",
+      "spdx_declared": "Apache-2.0 OR MIT",
+      "licence_files": []
+    },
+    {
+      "name": "process_mining",
+      "version": "0.6.2",
+      "spdx_declared": "MIT OR Apache-2.0",
+      "licence_files": []
+    },
+    {
+      "name": "serde",
+      "version": "1.0.229",
+      "spdx_declared": "MIT OR Apache-2.0",
+      "licence_files": [
+        {
+          "name": "LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "name": "LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "serde_json",
+      "version": "1.0.154",
+      "spdx_declared": "MIT OR Apache-2.0",
+      "licence_files": [
+        {
+          "name": "LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "name": "LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "name": "sha2",
+      "version": "0.10.9",
+      "spdx_declared": "MIT OR Apache-2.0",
+      "licence_files": [
+        {
+          "name": "LICENSE-APACHE",
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "name": "LICENSE-MIT",
+          "sha256": "b4eb00df6e2a4d22518fcaa6a2b4646f249b3a3c9814509b22bd2091f1392ff1"
+        }
+      ]
+    },
+    {
+      "name": "tempfile",
+      "version": "3.27.0",
+      "spdx_declared": "MIT OR Apache-2.0",
+      "licence_files": [
+        {
+          "name": "LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "name": "LICENSE-MIT",
+          "sha256": "8b427f5bc501764575e52ba4f9d95673cf8f6d80a86d0d06599852e1a9a20a36"
+        }
+      ]
+    },
+    {
+      "name": "thiserror",
+      "version": "2.0.21",
+      "spdx_declared": "MIT OR Apache-2.0",
+      "licence_files": [
+        {
+          "name": "LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "name": "LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    }
+  ]
+}

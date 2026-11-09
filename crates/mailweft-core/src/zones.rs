@@ -80,6 +80,7 @@ pub struct TextPartEvidence {
     pub decoded_byte_length: usize,
     pub decoding_problems: bool,
     pub zones: Vec<SourceZone>,
+    pub transfer_map: crate::transfer_map::TransferMap,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
@@ -231,6 +232,7 @@ pub fn inspect_body_zones(raw: &[u8]) -> Result<BodyEvidence, Error> {
     }
     let skipped_html_parts = skipped_parts.len();
     let mut remaining_zones = MAX_ZONES;
+    let mut remaining_map_units = 32_768usize;
     for part in parsed.text_body() {
         if !seen.insert(part.id()) {
             continue;
@@ -295,6 +297,32 @@ pub fn inspect_body_zones(raw: &[u8]) -> Result<BodyEvidence, Error> {
             });
             pos = end_pos;
         }
+        let (decoded, transfer_problems) = part.decoded_checked();
+        let ambiguous_encoding = part
+            .headers()
+            .iter()
+            .filter(|header| {
+                header
+                    .raw_name()
+                    .eq_ignore_ascii_case("content-transfer-encoding")
+            })
+            .count()
+            > 1;
+        let transfer_map = crate::transfer_map::verified_map(
+            crate::transfer_map::TransferInput {
+                raw: part.raw_body(),
+                decoded: decoded.as_ref(),
+                text: text.as_bytes(),
+                base: start,
+                encoding: part.content_transfer_encoding().unwrap_or(""),
+                problems: !problems.is_empty()
+                    || !transfer_problems.is_empty()
+                    || ambiguous_encoding,
+            },
+            remaining_map_units,
+        );
+        remaining_map_units = remaining_map_units
+            .saturating_sub(transfer_map.units.len() + transfer_map.source_only_ranges.len());
         parts.push(TextPartEvidence {
             part_id: part.id(),
             raw_start: start,
@@ -304,11 +332,12 @@ pub fn inspect_body_zones(raw: &[u8]) -> Result<BodyEvidence, Error> {
             decoded_byte_length: text.len(),
             decoding_problems: !problems.is_empty(),
             zones,
+            transfer_map,
         });
     }
     skipped_parts.sort_by_key(|p| p.part_id);
     Ok(BodyEvidence {
-        schema_version: "1.1.0",
+        schema_version: "1.2.0",
         source_sha256: digest(raw),
         parts,
         skipped_html_parts,

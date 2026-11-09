@@ -16,6 +16,8 @@ os.chdir(ROOT)
 def replace(path, before, after):
     p = ROOT / path
     text = p.read_text()
+    if after in text:
+        return
     if before in text:
         if text.count(before) != 1: raise RuntimeError(f'ambiguous migration: {path}')
         p.write_text(text.replace(before, after, 1))
@@ -37,10 +39,11 @@ def prepare_code():
             header.raw_name().eq_ignore_ascii_case("content-transfer-encoding")
         }).count() > 1;
         let transfer_map = crate::transfer_map::verified_map(
-            part.raw_body(), decoded.as_ref(), text.as_bytes(), start,
-            part.content_transfer_encoding().unwrap_or(""),
-            !problems.is_empty() || !transfer_problems.is_empty() || ambiguous_encoding,
-            remaining_map_units,
+            crate::transfer_map::TransferInput {
+        raw: part.raw_body(), decoded: decoded.as_ref(), text: text.as_bytes(), base: start,
+        encoding: part.content_transfer_encoding().unwrap_or(""),
+        problems: !problems.is_empty() || !transfer_problems.is_empty() || ambiguous_encoding,
+    }, remaining_map_units,
         );
         remaining_map_units = remaining_map_units.saturating_sub(
             transfer_map.units.len() + transfer_map.source_only_ranges.len()
@@ -78,7 +81,7 @@ def prepare_code():
 
 
 def dependency_inventory():
-    obj = json.loads(subprocess.check_output(['cargo', 'metadata', '--locked', '--all-features', '--format-version', '1'], text=True))
+    obj = json.loads(subprocess.check_output(['cargo', 'metadata', '--all-features', '--format-version', '1'], text=True))
     members = set(obj['workspace_members'])
     names = {d['name'] for p in obj['packages'] if p['id'] in members for d in p['dependencies'] if d.get('source')}
     rows = []

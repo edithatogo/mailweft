@@ -1,3 +1,6 @@
-# Evidence
+# Track 11_frontier-validation — reconciled evidence
 
-Planning/contracts created 2026-11-08. No Rust implementation, runtime validation, corpus benchmark or integration has been executed. Record each task receipt below when actually run.
+Canonical acceptance declarations: `../../task-manifest.json`. Current CI must pass before merge.
+Earlier checkpoints remain in Git history; initial NOT_STARTED assertions are not current status.
+
+No implementation acceptance is declared for this track. Specifications and planned tasks are not runtime evidence.

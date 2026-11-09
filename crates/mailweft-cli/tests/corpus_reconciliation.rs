@@ -1,8 +1,13 @@
 use serde_json::{Value, json};
-use std::{path::Path, process::{Command, Output}};
+use std::{
+    path::Path,
+    process::{Command, Output},
+};
 
-const RAW: &[u8] = b"From: alice@example.invalid\r\nTo: bob@example.invalid\r\nSubject: Fixture\r\n\r\nHello\r\n";
-const ENVELOPE: &[u8] = include_bytes!("../../../fixtures/synthetic/contracts/source-envelope.json");
+const RAW: &[u8] =
+    b"From: alice@example.invalid\r\nTo: bob@example.invalid\r\nSubject: Fixture\r\n\r\nHello\r\n";
+const ENVELOPE: &[u8] =
+    include_bytes!("../../../fixtures/synthetic/contracts/source-envelope.json");
 
 fn fixture(root: &Path) -> Value {
     std::fs::write(root.join("source.eml"), RAW).unwrap();
@@ -22,7 +27,9 @@ fn run(root: &Path, request: &Value, partial: bool) -> Output {
     std::fs::write(&path, serde_json::to_vec(request).unwrap()).unwrap();
     let mut cmd = Command::new(env!("CARGO_BIN_EXE_mailweft"));
     cmd.arg("reconcile").arg(path);
-    if partial { cmd.arg("--allow-partial"); }
+    if partial {
+        cmd.arg("--allow-partial");
+    }
     cmd.output().unwrap()
 }
 
@@ -46,12 +53,26 @@ fn every_selected_item_has_an_outcome_and_partial_projection_is_explicit() {
     assert_eq!(doc["log"]["events"].as_array().unwrap().len(), 1);
     assert_eq!(doc["manifest_sha256"].as_str().unwrap().len(), 64);
     let output = String::from_utf8_lossy(&partial.stdout);
-    for private in ["private-one", "missing.eml", "source.eml", "alice@example.invalid", "Hello"] {
+    for private in [
+        "private-one",
+        "missing.eml",
+        "source.eml",
+        "alice@example.invalid",
+        "Hello",
+    ] {
         assert!(!output.contains(private));
     }
     let outcomes = doc["manifest"]["entries"].as_array().unwrap();
-    assert!(outcomes.iter().any(|e| e["diagnostic"] == "SOURCE_HASH_MISMATCH"));
-    assert!(outcomes.iter().any(|e| e["diagnostic"] == "SOURCE_READ_FAILED"));
+    assert!(
+        outcomes
+            .iter()
+            .any(|e| e["diagnostic"] == "SOURCE_HASH_MISMATCH")
+    );
+    assert!(
+        outcomes
+            .iter()
+            .any(|e| e["diagnostic"] == "SOURCE_READ_FAILED")
+    );
 }
 
 #[test]
@@ -74,13 +95,20 @@ fn repeated_observation_is_accepted_but_not_counted_as_two_events() {
     two["entry_id"] = json!("other-selection-slot");
     request["entries"] = json!([one, two]);
     let output = run(dir.path(), &request, false);
-    assert!(output.status.success(), "{}", String::from_utf8_lossy(&output.stderr));
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
     let doc: Value = serde_json::from_slice(&output.stdout).unwrap();
     assert_eq!(doc["manifest"]["accepted"], 2);
     assert_eq!(doc["manifest"]["unique_observations"], 1);
     assert_eq!(doc["manifest"]["projection_status"], "complete_selection");
     assert_eq!(doc["log"]["events"].as_array().unwrap().len(), 1);
-    assert_eq!(doc["manifest"]["coverage_assurance"], "supplied_selection_only");
+    assert_eq!(
+        doc["manifest"]["coverage_assurance"],
+        "supplied_selection_only"
+    );
 }
 
 #[test]

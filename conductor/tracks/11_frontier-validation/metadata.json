@@ -1,7 +1,12 @@
 {
+  "track_id": "11_frontier-validation",
   "id": "11_frontier-validation",
+  "type": "feature",
   "title": "Controlled benchmarks and frontier experiments",
-  "status": "not_started",
+  "description": "Controlled benchmarks and frontier experiments",
+  "status": "new",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
   "requirements": [
     "R23",
     "R31",
@@ -11,7 +16,8 @@
     "R43",
     "R44",
     "R45",
-    "R46"
+    "R46",
+    "R49"
   ],
   "tasks": [
     "T11.01",
@@ -23,10 +29,5 @@
     "T11.07",
     "T11.08"
   ],
-  "depends_on": [
-    "09_patterns",
-    "10_evidence-incremental"
-  ],
-  "notes": "Planning only; task manifest owns executable dependencies. Optional track never gates core release.",
-  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
 }

@@ -2,8 +2,10 @@
 //! Stage 1 records archive observation, not proof of sending, delivery or business action.
 mod attachments;
 mod batch;
+pub mod corpus;
 mod header_claims;
 pub mod source;
+pub mod transfer_map;
 mod zones;
 pub use batch::{SourceInput, convert_batch};
 pub use zones::{

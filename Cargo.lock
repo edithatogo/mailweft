@@ -569,17 +569,18 @@ dependencies = [
 
 [[package]]
 name = "mailweft-cli"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "chrono",
  "mailweft-core",
+ "serde",
  "serde_json",
  "tempfile",
 ]
 
 [[package]]
 name = "mailweft-core"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "chrono",
  "mail-parser",

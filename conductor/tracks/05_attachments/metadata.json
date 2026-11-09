@@ -1,7 +1,12 @@
 {
+  "track_id": "05_attachments",
   "id": "05_attachments",
+  "type": "feature",
   "title": "Opt-in text and attachment content extraction",
-  "status": "not_started",
+  "description": "Opt-in text and attachment content extraction",
+  "status": "new",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
   "requirements": [
     "R16",
     "R20"
@@ -15,9 +20,5 @@
     "T05.06",
     "T05.07"
   ],
-  "depends_on": [
-    "01_ingestion"
-  ],
-  "notes": "This is a granular noninteractive Conductor track. Do not mark tasks done without test evidence.",
-  "dependency_policy": "Informative track links only. Exact task dependencies in task-manifest.json are authoritative; never require all tasks in a referenced track."
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
 }

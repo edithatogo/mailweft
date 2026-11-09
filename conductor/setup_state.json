@@ -3,8 +3,16 @@
   "context_prepared": true,
   "plugin_path": ".agents/plugins/conductor",
   "plugin_commit": "7a5c560a4fdf5297be58594cc37527eb12790272",
-  "host_extension_installed": false,
-  "rust_workspace_implemented": false,
-  "next_task": "T00.01",
-  "scope_contract": "conductor/scope-contract.json"
+  "plugin_version": "0.4.1",
+  "host_extension_status": "not_verified_in_user_host",
+  "rust_workspace_implemented": true,
+  "rust_package_version": "0.7.0",
+  "task_counts": {
+    "completed": 14,
+    "in_progress": 12,
+    "not_started": 90
+  },
+  "next_task": "T00.06",
+  "scope_contract": "conductor/scope-contract.json",
+  "state_owner": "generated_from_task_manifest_not_upstream_setup_state"
 }

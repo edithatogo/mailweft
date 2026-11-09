@@ -1,6 +1,6 @@
 //! Reconciliation of an explicitly supplied selection, not proof of complete correspondence.
-use crate::{Ocel, SourceInput, convert_batch, digest, identity};
 use crate::source::{SourceEnvelope, SourceError, SourceReceipt, convert_with_envelope};
+use crate::{Ocel, SourceInput, convert_batch, digest, identity};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
@@ -33,7 +33,7 @@ pub struct SelectionManifest {
     pub unique_observations: usize,
     pub projection_status: String,
     pub coverage_assurance: String,
-    pub oc​​el_sha256: Option<String>,
+    pub ocel_sha256: Option<String>,
     pub entries: Vec<SelectionOutcome>,
 }
 
@@ -78,10 +78,14 @@ pub fn reconcile_selection(
     let mut total = 0usize;
     for item in &items {
         if let Ok((bytes, _)) = &item.source {
-            total = total.checked_add(bytes.len()).ok_or(SelectionError::SizeLimit)?;
+            total = total
+                .checked_add(bytes.len())
+                .ok_or(SelectionError::SizeLimit)?;
         }
     }
-    if total > MAX_SELECTION_BYTES { return Err(SelectionError::SizeLimit); }
+    if total > MAX_SELECTION_BYTES {
+        return Err(SelectionError::SizeLimit);
+    }
     let supplied = items.len();
     let mut accepted_data = Vec::new();
     let mut entries = Vec::with_capacity(supplied);
@@ -95,8 +99,10 @@ pub fn reconcile_selection(
                 Ok(result) => {
                     observation_ids.insert(result.receipt.observation_event_id.clone());
                     entries.push(SelectionOutcome {
-                        entry_sha256: entry_sha256.clone(), status: "accepted".into(),
-                        diagnostic: None, receipt: Some(result.receipt),
+                        entry_sha256: entry_sha256.clone(),
+                        status: "accepted".into(),
+                        diagnostic: None,
+                        receipt: Some(result.receipt),
                     });
                     accepted_data.push((bytes, envelope));
                     None
@@ -105,7 +111,10 @@ pub fn reconcile_selection(
         };
         if let Some(error) = failure {
             entries.push(SelectionOutcome {
-                entry_sha256, status: "rejected".into(), diagnostic: Some(error.code().into()), receipt: None,
+                entry_sha256,
+                status: "rejected".into(),
+                diagnostic: Some(error.code().into()),
+                receipt: None,
             });
         }
     }
@@ -114,20 +123,46 @@ pub fn reconcile_selection(
     let rejected = supplied - accepted;
     let project = accepted > 0 && (rejected == 0 || allow_partial);
     let log = if project {
-        let inputs: Vec<_> = accepted_data.iter().map(|(raw, envelope)| SourceInput {
-            raw, source_id: &envelope.source_id, observed_at: envelope.observed_at,
-        }).collect();
+        let inputs: Vec<_> = accepted_data
+            .iter()
+            .map(|(raw, envelope)| SourceInput {
+                raw,
+                source_id: &envelope.source_id,
+                observed_at: envelope.observed_at,
+            })
+            .collect();
         Some(convert_batch(&inputs).map_err(|_| SelectionError::ProjectionConflict)?)
-    } else { None };
-    let ocel_hash = log.as_ref().map(|value| serde_json::to_vec(value).map(|bytes| digest(&bytes)))
-        .transpose().map_err(|_| SelectionError::Serialization)?;
-    let manifest = SelectionManifest {
-        schema_version: "1.0.0".into(), supplied, accepted, rejected,
-        unique_observations: observation_ids.len(),
-        projection_status: if !project { "withheld" } else if rejected == 0 { "complete_selection" } else { "partial" }.into(),
-        coverage_assurance: "supplied_selection_only".into(),
-        oc​​el_sha256: ocel_hash, entries,
+    } else {
+        None
     };
-    let manifest_sha256 = digest(&serde_json::to_vec(&manifest).map_err(|_| SelectionError::Serialization)?);
-    Ok(ReconciledSelection { manifest, manifest_sha256, log })
+    let ocel_hash = log
+        .as_ref()
+        .map(|value| serde_json::to_vec(value).map(|bytes| digest(&bytes)))
+        .transpose()
+        .map_err(|_| SelectionError::Serialization)?;
+    let manifest = SelectionManifest {
+        schema_version: "1.0.0".into(),
+        supplied,
+        accepted,
+        rejected,
+        unique_observations: observation_ids.len(),
+        projection_status: if !project {
+            "withheld"
+        } else if rejected == 0 {
+            "complete_selection"
+        } else {
+            "partial"
+        }
+        .into(),
+        coverage_assurance: "supplied_selection_only".into(),
+        ocel_sha256: ocel_hash,
+        entries,
+    };
+    let manifest_sha256 =
+        digest(&serde_json::to_vec(&manifest).map_err(|_| SelectionError::Serialization)?);
+    Ok(ReconciledSelection {
+        manifest,
+        manifest_sha256,
+        log,
+    })
 }

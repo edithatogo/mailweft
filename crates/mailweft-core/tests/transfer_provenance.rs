@@ -46,10 +46,18 @@ fn quoted_printable_preserves_escapes_and_source_only_soft_breaks() {
 fn charset_transcoding_and_malformed_encoding_abstain_from_transfer_precision() {
     let (_, latin) = inspect("quoted-printable", "iso-8859-1", "=E9");
     assert_eq!(latin["parts"][0]["transfer_map"]["status"], "unavailable");
-    assert_eq!(latin["parts"][0]["transfer_map"]["reason"], "charset_transformation");
+    assert_eq!(
+        latin["parts"][0]["transfer_map"]["reason"],
+        "charset_transformation"
+    );
     let (_, bad) = inspect("base64", "utf-8", "!SGk=");
     assert_eq!(bad["parts"][0]["transfer_map"]["status"], "unavailable");
-    assert!(bad["parts"][0]["transfer_map"]["units"].as_array().unwrap().is_empty());
+    assert!(
+        bad["parts"][0]["transfer_map"]["units"]
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
 }
 
 #[test]
@@ -59,5 +67,9 @@ fn unicode_plaintext_identity_map_remains_byte_based() {
     assert_eq!(part["transfer_map"]["status"], "identity");
     assert_eq!(part["decoded_byte_length"], 10);
     let unit = &part["transfer_map"]["units"][0];
-    assert_eq!(&raw[unit["raw_start"].as_u64().unwrap() as usize..unit["raw_end"].as_u64().unwrap() as usize], "Hello é\r\n".as_bytes());
+    assert_eq!(
+        &raw[unit["raw_start"].as_u64().unwrap() as usize
+            ..unit["raw_end"].as_u64().unwrap() as usize],
+        "Hello é\r\n".as_bytes()
+    );
 }
