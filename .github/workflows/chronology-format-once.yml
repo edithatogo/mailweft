@@ -25,3 +25,5 @@ jobs:
             git commit -m 'style: format claimed header evidence conversion'
             git push origin HEAD:feat/claimed-header-chronology
           fi
+
+# Final formatting after independent Rust4PM attribute round-trip test.
