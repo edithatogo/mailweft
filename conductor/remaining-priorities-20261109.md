@@ -1,18 +1,25 @@
 # Execution ledger — source receipts and segmentation hardening
 
-Base: f6999713b1c42f1fc7d56d8a16bac4df649f8bf7. Scope: continue T01.01/T01.07 foundations and T05b structural work. Do not claim the entire tracks done.
+Base: f6999713b1c42f1fc7d56d8a16bac4df649f8bf7. Feature branch: feat/source-envelope-integrity.
 
 ## Rulings
-- The existing contract calls for a SourceEnvelope but no schema or Rust implementation exists. Add a versioned strict contract and a separate convert-evidence API/CLI. Preserve existing OCEL output/identifiers; receipts verify byte hash/length, not caller authority or source completeness.
-- Only raw_rfc5322 is admitted to conversion. Lower-fidelity rendered HTML/platform exports are representable metadata but rejected by this conversion boundary. No raw-source reconstruction from FYI pages.
-- Local Rust execution is unavailable in this session; exact-commit GitHub Actions is the test environment. Work is isolated on a feature branch, not main.
-- The CLI currently allocates whole files before validation. Use a counted limit+1 reader for all input modes, and count actual batch bytes rather than only pre-read metadata.
-- Forwarded histories must not become current-author acts. Add explicit origin scope and quote depth; preserve all spans and report skipped parts. No generated confidence, actor identity, HTML rendering, or GraphRAG.
+- Add a source contract where the product spec required one but no concrete schema existed. `convert-evidence` is additive; preserve original OCEL fields/identities.
+- Byte integrity is verifiable; source timestamps, rights/scope, producer identity, source fidelity and coverage remain caller assertions. Never promote them to independent attestation.
+- Lower-fidelity FYI pages/exports are representable metadata, not valid input to this raw-email converter. Capture/archive ownership remains external.
+- CLI file reads were previously unbounded before parsing. Use counted limits for every mode and actual batch bytes; document remaining filesystem-race limitations.
+- Scope work uses existing core/CLI modules rather than creating an extra tiny crate. The implementation-specific body-evidence schema does not replace the broader proposed email-zone schema.
+- The session has no local Rust/network checkout; hosted Actions is the executed test environment. No separate reviewer agent is available; conduct and disclose a whole-diff self-review.
 
-## Ordered tasks
-1. Define CLI and zone regression tests; observe their failures against the existing implementation.
-2. Add strict source envelope, byte-integrity verification, deterministic content-free receipts and bounded I/O. Test against corruption, malformed metadata and lower-fidelity claims.
-3. Strengthen forward/quote/disclaimer zoning and explicit coverage diagnostics. Retain exact/derived source-offset distinctions.
-4. Add contract schemas, migration notes, granular track evidence and exact test receipts. Validate default Rust, Rust4PM, format, Clippy and planning on the final commit.
+## Task ledger
+1. Source receipt CLI tests: RED at 427418b (42587746942), GREEN at 190f050 (42588267305); that latter run was still red for zoning.
+2. Source envelope/readers: implemented in source.rs; API boundary tests, private-reference exclusion and actual-output schema validation added. Core projection remains unchanged.
+3. Zoning: four failures observed before implementation. Add explicit forwarding/quote origin and skipped-part diagnostics; precise encoded-byte maps remain open.
+4. Version/contracts: Rust 0.6.0; SourceEnvelope/Receipt 1.0.0; BodyEvidence 1.1.0; Conversion stays 1.3.0. No new runtime dependencies.
+5. Qualification: one-time branch-scoped helper formatted Rust, tested default workspace and updated workspace lock entries. It is removed before merge. Full final read-only CI remains the acceptance gate.
 
-Status: tests specified; implementation not yet performed. Core product remains a Rust email-to-OCEL converter. Enron is an example/verification corpus only; FOI consumer/ontology work remains outside this change.
+## Next granular tasks (not completed here)
+- Source manifests: define supplied/accepted/rejected counts and diagnostic records, reconcile a synthetic mixed-quality batch, and verify no failed source becomes an event.
+- Transfer mapping: test UTF-8 byte offsets, base64 quartet/whitespace/padding spans and quoted-printable soft-line-break spans separately; report mapping uncertainty rather than fabricate character offsets.
+- Filesystem ingestion: qualify a maintained capability-safe reader for descriptor-relative no-follow traversal before claiming protection against hostile path races.
+- Zoning: independently annotate bounded forward endings, inline answers after quotations, and multi-line disclaimers; preserve false-positive/false-negative reports.
+- Only afterwards add FOI consumer adapters and optional source-constrained graph retrieval. No legacy FOI output is a golden reference.
