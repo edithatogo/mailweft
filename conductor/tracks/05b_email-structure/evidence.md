@@ -1,9 +1,11 @@
-# Track 05b — evidence and implementation boundary
+# Track 05b — partial structural baseline and explicit exclusions
 
-Status: **PARTIAL BASELINE IMPLEMENTED**. Do not mark T05b.01–08 complete: the planned nested `mailweft-semantics` contract, person-linking, multi-class benchmarks and the full source byte/character map are **not** implemented.
+Status: **PARTIAL IMPLEMENTATION**, not complete T05b.01–08 acceptance.
 
-A narrower, tested source-provenanced Stage 1.5 baseline lives in `mailweft-core::inspect_body_zones` and the `mailweft inspect` CLI. It produces source-part and decoded-text hashes, exact raw offsets only when bytes match, `derived` offset status otherwise, deterministic candidate zone labels, and no body text. HTML-only fallback is not reclassified as source plaintext. Synthetic regressions verify all-line coverage, source-offset roundtrip on raw UTF-8, derived offsets for base64, no plaintext leakage, absence of side effects on the authoritative OCEL, and rejection of unstructured source.
+Rust 0.4 added content-free source hashes/offsets and line zones; 0.6 adds explicit origin scope, nested quote depth, forwarded-block context, inline header labels, disclaimer precedence and a skipped-part ledger. Existing exact/derived offset semantics and immutable Stage 1 OCEL remain unchanged.
 
-A separate OCEL regression checks the `mime_attachment` type and attribute declarations; earlier v0.3 output could omit the catalogue entry even when Rust4PM import succeeded. The change is versioned 0.4.0 (Rust crates), `Conversion.schema_version=1.3.0`.
+RED for the new regression boundaries: commit 190f050dab3be69a1bea0a6baed351588bf2154b, run 42588267305/job 129063252374. Four executed tests reproduced forwarded passages labelled `authored`, disclaimers labelled `signature`, missing quote depth and silent oversized-part exclusion. No performance claim is based on these synthetic regressions.
 
-Targeted tests: `cargo test --locked -p mailweft-core --test source_zones`; full Rust and independent Rust4PM acceptance: `cargo test --locked --workspace --all-targets` and `cargo test --locked -p mailweft-core --features rust4pm-validation --test rust4pm_interop`. Include exact final GitHub Actions links and checks after running. No real email corpus was ingested. This baseline does not claim Quagga/Zebra parity, calibrated NLP, verified authorship, HTML mapping, or full text span provenance for encoded MIME.
+Verification commands: `cargo test --locked -p mailweft-core --test zoning_boundaries`; `cargo test --locked -p mailweft-core --test source_zones`; full workspace and Rust4PM tests; `python3 scripts/validate_runtime_contracts.py` against the built CLI; fmt and all-feature Clippy. Final run evidence belongs to the exact PR/head.
+
+The body-evidence 1.1 schema describes this implemented sidecar, not the older proposed nested email-zone contract. Open: raw-byte/decoded-character maps for transfer encodings, HTML zoning, author attribution, person/role linking, multi-label speech acts, calibrated multilingual evaluation and independent corpora. Forwarded origin remains conservative to end-of-part, potentially losing recall rather than inventing new authored acts. No payload or private correspondence is tracked.

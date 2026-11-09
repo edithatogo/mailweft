@@ -2,42 +2,47 @@
 
 **An email-to-OCEL converter written in Rust.**
 
-Mailweft is a standalone, corpus-neutral library and CLI: raw RFC 5322/MIME email -> typed, evidence-linked OCEL 2.0 communication logs. Optional structural NLP, semantic enrichment and GraphRAG build on that output without replacing the converter or rewriting its observations.
+Mailweft is a standalone, corpus-neutral library and CLI: supplied raw RFC 5322/MIME email becomes typed OCEL 2.0 communication logs. Optional source inspection and later NLP/GraphRAG do not replace the converter or rewrite its observations.
 
-**Status:** an experimental offline Rust EML-to-OCEL 2.0 implementation now builds, with single-file and bounded multi-EML batch conversion, claimed Date/Message-ID/In-Reply-To/References, safe MIME attachment metadata, an optional content-free source-span/zoning inspector, conservative multi-message reply candidates, synthetic tests and independent Rust4PM import acceptance. Its published roadmap remains much broader. No real dataset benchmark, semantic NLP, GraphRAG, live FOI migration or product release has been validated.
+**Status: experimental Rust 0.6.0.** Implemented: single-file and bounded batch conversion; participant qualifiers; claimed Date/Message-ID/reply references; MIME attachment metadata; conservative reply candidates; source-envelope byte verification and receipts; non-destructive plaintext zones with source offsets and explicit origin/skip diagnostics. No real-corpus benchmark, semantic NLP, GraphRAG, live FOI migration or product release is certified.
 
-## Core contract
-- Local EML input (maildir planned); no processed-data prerequisite. Preserve source hashes, actual participant roles, claimed versus observed times, duplicate/copy identity and completeness.
-- Native OCEL 2.0 JSON with typed attributes, event/object relationship qualifiers and object histories; report every lossy or unsupported mapping.
-- Offline Rust-only production core; no required Python, LLM, graph database, cloud, UI, FOI project or Enron corpus.
-- Enron is a **canonical verification and example dataset**, not the subject or schema of Mailweft. Dataset-specific recipes stay outside the core; no real email data is committed.
-- Original source stays immutable. Optional interpretations retain evidence, attribution, uncertainty, correction history and review state.
-
-## Try the offline Rust converter
+## Try it
 
 ```sh
-cargo run --locked -p mailweft-cli -- source.eml 2026-11-09T01:02:03Z > single.ocel.json
-cargo run --locked -p mailweft-cli -- batch 2026-11-09T01:02:03Z a.eml b.eml > batch.ocel.json
+# Existing modes continue to produce bare OCEL 2.0 JSON.
+cargo run --locked -p mailweft-cli -- source.eml 2026-11-09T07:00:00Z > source.ocel.json
+cargo run --locked -p mailweft-cli -- batch 2026-11-09T07:00:00Z a.eml b.eml > batch.ocel.json
+
+# Separate source inspection and integrity-bound conversion.
 cargo run --locked -p mailweft-cli -- inspect source.eml > body-evidence.json
+cargo run --locked -p mailweft-cli -- convert-evidence source.eml source-envelope.json > evidence-bundle.json
+
 cargo test --locked --workspace --all-targets
 cargo test --locked -p mailweft-core --features rust4pm-validation --test rust4pm_interop
 ```
 
-The required timestamp is a caller-supplied acquisition observation, not proof of sending or delivery. Public output uses hashed participant identifiers and explicit qualifier relationships. Batch is limited to 1,024 explicit EML paths and 256 MiB input; large-corpus streaming, full source receipts and many fields remain planned. [Implementation limitations](docs/BATCH-IMPLEMENTATION.md), [claimed-header chronology](docs/CLAIMED-HEADER-CHRONOLOGY.md) and [attachment metadata](docs/ATTACHMENT-METADATA.md) and [non-destructive source zoning](docs/SOURCE-PROVENANCE-AND-ZONING.md) and [candidate reply threading](docs/THREAD-CANDIDATES.md).
+`convert-evidence` requires a caller-supplied envelope matching the actual bytes. It returns `{conversion, receipt}`; the OCEL is `conversion.log`. Receipt assurance is **byte integrity**, not sender authenticity, trusted time, access authorization or proven source completeness. See [source-envelope contract](docs/SOURCE-ENVELOPE.md) and [0.6 migration](docs/MIGRATION-0.6.md).
 
-## First consumer and ownership
-`foi-process` will depend on Mailweft. Its existing unvalidated output is **not** a reference or correctness oracle. Independently adjudicated source evidence and synthetic fixtures govern migration.
+## Core boundaries
 
-`fyi-cli` retains acquisition/capture; the `fyi-archive` boundary retains archival manifests/provenance/distribution (or a verified successor). `foi-process` maps generic results into a pinned FOI-O profile and sends evidence-linked ontology improvement candidates to `foi-o`. No automatic ontology changes or legal conclusions are inferred. See [FOI boundaries and handover ambiguity](docs/FOI-BOUNDARIES.md).
+- Local EML input; no processed dataset prerequisite or automatic network acquisition. Enron is a canonical **verification/example corpus**, never required input or the library's domain.
+- Offline Rust runtime: no required Python, language model, graph database, Microsoft tenant, UI or FOI module. Python scripts are development-only contract checks.
+- Distinguish observed source copies, claimed header times, address roles and unverified reply candidates. To/Cc does not assign tasks; a Date or Message-ID does not prove delivery.
+- Input reads are counted and bounded: 16 MiB per EML, 64 KiB per metadata envelope; batch 1,024 files/256 MiB actual input. Visible final-component symlinks and non-regular files are rejected. Hostile directory races/root confinement remain unqualified.
+- Content remains external and immutable. OCEL/receipts/zone sidecars exclude bodies and private source locators, but hashes and metadata are **pseudonymous, not anonymous**. Keep access controls.
+- Plaintext zones preserve every accepted line; transformed offsets remain `derived`, and omitted parts have diagnostics. Labels/origin are rule hypotheses, not verified authorship or business acts.
 
-## Start here
-- [Product scope](docs/PRODUCT-SCOPE.md), [contract](docs/CONTRACT.md), [requirements](docs/REQUIREMENTS.md), [design](docs/DESIGN.md)
-- [Conductor index](conductor/index.md), [tracks](conductor/tracks.md), [task manifest](conductor/task-manifest.json), [execution order](docs/EXECUTION-ORDER.md)
-- [GraphRAG design](docs/GRAPHRAG.md), [FOI and error-injection protocol](docs/FOI-SCOPE-AND-ROBUSTNESS.md)
-- [Dataset verification](docs/DATASETS.md), [validation](docs/VALIDATION.md), [planning status](docs/BUILD_STATUS.md)
+See [batch limits](docs/BATCH-IMPLEMENTATION.md), [header claims](docs/CLAIMED-HEADER-CHRONOLOGY.md), [attachment metadata](docs/ATTACHMENT-METADATA.md), [source zoning](docs/SOURCE-PROVENANCE-AND-ZONING.md) and [thread candidates](docs/THREAD-CANDIDATES.md). Earlier dated specifications describe their implementation versions; the 0.6 migration governs new receipts/zoning.
 
-## Conductor
-Gemini Conductor is a real Git submodule at `.agents/plugins/conductor`, pinned to commit `7a5c560a4fdf5297be58594cc37527eb12790272` (`conductor-v0.4.1`). Project context and task plans are already populated; do not run setup that overwrites them.
+## First consumer
+
+`foi-process` will depend on Mailweft. Its existing unvalidated output is **not** an oracle, teacher or analytical equality target. Independent source annotations and synthetic fixtures govern acceptance.
+
+`fyi-cli` captures; the `fyi-archive` boundary or its explicitly verified successor preserves sources/manifests. `foi-process` applies versioned FOI mappings and contributes reviewed evidence to `foi-o`. Mailweft performs no legal interpretation or automatic ontology promotion. See [FOI boundaries](docs/FOI-BOUNDARIES.md).
+
+## Conductor and execution
+
+Gemini Conductor is a real pinned Git submodule at `.agents/plugins/conductor`, commit `7a5c560a4fdf5297be58594cc37527eb12790272`. Do not overwrite project context by rerunning setup. Host-specific extension registration is separate.
 
 ```sh
 git clone --recurse-submodules https://github.com/edithatogo/mailweft.git
@@ -46,10 +51,8 @@ python3 scripts/validate_scaffold.py
 python3 -m unittest discover -s scripts -p 'test_*.py'
 ```
 
-Python is only an initial planning-validation helper, not the proposed application runtime. Registering a host-specific Conductor extension is a separate optional action; the submodule does not prove it is installed in the user's agent host. See [naming and submodule details](docs/NAME-MIGRATION.md).
+Start with [AGENTS.md](AGENTS.md), [product contract](docs/CONTRACT.md), [requirements](docs/REQUIREMENTS.md), [design](docs/DESIGN.md), [track registry](conductor/tracks.md), [task manifest](conductor/task-manifest.json), and [execution order](docs/EXECUTION-ORDER.md). The [current execution ledger](conductor/remaining-priorities-20261109.md) records partial task coverage and remaining source/segmentation work. Working slices do not mark whole tracks complete. Optional research, GraphRAG and downstream integration cannot block a core release.
 
-## Agent execution
-Read `AGENTS.md` and the single eligible task card; implement only that task, write the specified failing tests first, record real exit codes, and leave unavailable execution blocked. The core lane is independently releasable; dataset rights, human annotation, research, graphs and downstream consumers are not core release prerequisites.
+## Licence and qualification
 
-## Licence and references
-Original work: Apache-2.0. Upstream dependencies and datasets retain separate licences and rights. `mail-parser` 1.0.1 is the qualified initial parser and Rust4PM `process_mining` 0.6.2 is pinned for an optional import-validation feature. `mail-threading` remains a future candidate. No upstream unlicensed implementation or email corpus is bundled. Existing version-1 schema identifiers retain the earlier email-ocel namespace as stable aliases.
+Original work: Apache-2.0. `mail-parser` 1.0.1 is pinned; Rust4PM `process_mining` 0.6.2 is an optional independent validation provider. Cargo.lock pins dependency resolution. No new production dependency was added for receipts/zoning. No real email corpus or unlicensed implementation is bundled. Existing schema IDs remain stable; new envelope/receipt/body schemas are additive. See [dataset rights](docs/DATASETS.md), [validation](docs/VALIDATION.md) and [GraphRAG design](docs/GRAPHRAG.md).
