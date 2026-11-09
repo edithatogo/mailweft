@@ -40,13 +40,12 @@ class ConductorProtocolTests(unittest.TestCase):
     def test_doctor_rejects_completed_task_with_unaccepted_dependency(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            # Only generated-context inputs are required; no checkout is mutated.
-            shutil.copytree(ROOT / 'conductor', root / 'conductor')
-            shutil.copytree(ROOT / 'crates', root / 'crates')
-            for name in ('docs', 'scripts'):
+            # Only project context is copied; no checkout is mutated.
+            for name in ('conductor', 'crates', 'docs', 'scripts', 'contracts', '.github'):
                 shutil.copytree(ROOT / name, root / name)
             for name in ('GEMINI.md', 'rust-toolchain.toml', 'AGENTS.md', '.gitignore', 'Cargo.toml', 'Cargo.lock'):
                 shutil.copy2(ROOT / name, root / name)
+            self.assertEqual(doctor.check(root, verify_git=False), [])
             manifest = doctor.load(root)
             task = next(t for t in manifest['tasks'] if t['id'] == 'T00.07')
             task['depends_on'].append('T00.02')

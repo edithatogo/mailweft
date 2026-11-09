@@ -70,7 +70,8 @@ def rendered(root):
                      f"  - Requirements: {', '.join(task['requirements'])}.",
                      '  - Allowed paths: ' + ', '.join(f'`{p}`' for p in task['allowed_paths']) + '.',
                      f"  - Action: {task['action']}", f"  - Acceptance: {task['acceptance']}",
-                     f"  - Verification: `{task['tests']}`.", f"  - Evidence: `{task['evidence_path']}`."]
+                     f"  - Verification: `{task['tests']}`.",
+                     f"  - Evidence: `{task['evidence_path']}`."]
             if task.get('task_card'):
                 plan.append(f"  - Task card: `{task['task_card']}`.")
             impl = task.get('implementation')
@@ -87,7 +88,8 @@ def rendered(root):
         outputs[f'{folder}/plan.md'] = '\n'.join(plan)
         outputs[f'{folder}/evidence.md'] = '\n'.join(evidence)
         marker = 'x' if status == 'completed' else '~' if status == 'in_progress' else ' '
-        registry += ['---', '', f'- [{marker}] **Track: {title}**', f'*Link: [./tracks/{track}/](./tracks/{track}/)*', '']
+        # The pinned implement.toml locates a ## heading in each --- section.
+        registry += ['---', '', f'## [{marker}] Track: {title}', f'*Link: [./tracks/{track}/](./tracks/{track}/)*', '']
     outputs['conductor/tracks.md'] = '\n'.join(registry)
     outputs['conductor/setup_state.json'] = encode({
         'product': 'mailweft', 'context_prepared': True, 'plugin_path': PLUGIN, 'plugin_commit': PIN,
@@ -148,7 +150,12 @@ def check(root=ROOT, verify_git=True):
         path = root / name
         if not path.is_file() or path.read_text(encoding='utf-8') != text:
             errors.append(f'Conductor drift: {name}; run --sync after reviewing manifest changes')
+    lookup = {task['id']: task for task in tasks}
     for task in tasks:
+        if task['status'] == 'completed':
+            for dep in task['depends_on']:
+                if lookup.get(dep, {}).get('status') != 'completed':
+                    errors.append(f"Completed task {task['id']} has unaccepted prerequisite {dep}")
         if task['status'] != 'not_started':
             impl = task.get('implementation', {})
             if not all(impl.get(k) for k in ('summary', 'remaining', 'files', 'commands', 'evidence')):
@@ -156,6 +163,21 @@ def check(root=ROOT, verify_git=True):
             for name in impl.get('files', []):
                 if Path(name).is_absolute() or '..' in Path(name).parts or not (root / name).is_file():
                     errors.append(f"Missing/unsafe evidence artifact: {task['id']}/{name}")
+    # Verify the consumer's grammar, not just equality with our own renderer.
+    registry_path = root / 'conductor/tracks.md'
+    registry = registry_path.read_text(encoding='utf-8') if registry_path.is_file() else ''
+    found_tracks = []
+    for section in registry.split('---'):
+        if '*Link:' not in section:
+            continue
+        headings = re.findall(r'^## \[([ ~x])\] Track: (.+)$', section, flags=re.MULTILINE)
+        links = re.findall(r'\[\./tracks/([^/]+)/\]\(\./tracks/\1/\)', section)
+        if len(headings) != 1 or len(links) != 1:
+            errors.append('Conductor registry does not match pinned implement command heading/link grammar')
+        found_tracks.extend(links)
+    expected_tracks = {task['track'] for task in tasks}
+    if set(found_tracks) != expected_tracks or len(found_tracks) != len(expected_tracks):
+        errors.append('Conductor registry has missing, extra or duplicate track sections')
     for name in ('GEMINI.md', 'rust-toolchain.toml', 'docs/CONDUCTOR-SETUP.md',
                  'conductor/product.md', 'conductor/product-guidelines.md', 'conductor/tech-stack.md', 'conductor/workflow.md'):
         if not (root / name).is_file(): errors.append(f'Missing context artifact: {name}')
