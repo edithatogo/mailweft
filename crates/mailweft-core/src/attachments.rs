@@ -36,11 +36,11 @@ pub(crate) fn add_attachment_metadata(
             )
         );
         let mut attrs = Vec::new();
-        if let Some(content_type) = part.content_type() {
-            if let Some(subtype) = content_type.subtype() {
-                let declared = format!("{}/{}", content_type.ctype(), subtype).to_ascii_lowercase();
-                add_attribute(&mut attrs, "declared_media_type", declared, observed_at);
-            }
+        if let Some(content_type) = part.content_type()
+            && let Some(subtype) = content_type.subtype()
+        {
+            let declared = format!("{}/{}", content_type.ctype(), subtype).to_ascii_lowercase();
+            add_attribute(&mut attrs, "declared_media_type", declared, observed_at);
         }
         if let Some(filename) = part.attachment_name().filter(|name| !name.is_empty()) {
             let digest = identity("mime-filename", filename);
