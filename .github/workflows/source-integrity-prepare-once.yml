@@ -1,0 +1,52 @@
+name: One-time source-integrity format and version qualification
+on:
+  push:
+    branches: [feat/source-envelope-integrity]
+    paths: ['.github/workflows/source-integrity-prepare-once.yml']
+permissions:
+  contents: write
+jobs:
+  prepare:
+    if: github.repository == 'edithatogo/mailweft' && github.ref == 'refs/heads/feat/source-envelope-integrity'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: true
+      - run: rustup toolchain install stable --profile minimal --component rustfmt
+      - name: Apply explicit additive version and public type exports
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          for name in ('mailweft-core', 'mailweft-cli'):
+              path = Path('crates') / name / 'Cargo.toml'
+              text = path.read_text()
+              assert 'version = "0.5.0"' in text or 'version = "0.6.0"' in text
+              path.write_text(text.replace('version = "0.5.0"', 'version = "0.6.0"', 1))
+          path = Path('crates/mailweft-core/src/lib.rs')
+          text = path.read_text()
+          old = '    BodyEvidence, OffsetQuality, SourceZone, TextPartEvidence, ZoneKind, inspect_body_zones,'
+          if old in text:
+              text = text.replace(old, '    BodyEvidence, OffsetQuality, OriginScope, SkipReason, SkippedPart, SourceZone, TextPartEvidence, ZoneKind, inspect_body_zones,')
+          else:
+              assert 'OriginScope' in text
+          path.write_text(text)
+          PY
+      - run: cargo +stable fmt --all
+      - name: Update workspace-only lock entries and test
+        run: cargo +stable test --workspace --all-targets --no-fail-fast
+      - name: Push only qualified crate formatting and lockfile changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          test "$(git ls-remote origin refs/heads/feat/source-envelope-integrity | awk '{print $1}')" = "$GITHUB_SHA"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add crates/ Cargo.lock
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore: qualify source evidence APIs, format Rust and lock workspace 0.6'
+            git push origin HEAD:feat/source-envelope-integrity
+          fi
