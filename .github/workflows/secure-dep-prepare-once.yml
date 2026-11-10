@@ -35,3 +35,5 @@ jobs:
 # Requalification after native-value type and Conductor-version fixes.
 
 # Recheck after typed attachment test expectation update.
+
+# Requalification for supported integer type mismatch regression.
