@@ -8,7 +8,7 @@ use std::collections::BTreeMap;
 fn status(attributes: &mut Vec<Attribute>, name: &str, value: &str) {
     attributes.push(Attribute {
         name: name.to_owned(),
-        value: value.to_owned(),
+        value: serde_json::Value::String(value.to_owned()),
     });
 }
 
