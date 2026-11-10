@@ -11,7 +11,11 @@ fn add_attribute(attrs: &mut Vec<ObjectAttribute>, name: &str, value: String, at
     attrs.push(ObjectAttribute {
         name: name.to_owned(),
         time: at,
-        value,
+        value: if name == "decoded_byte_length" {
+            serde_json::Value::from(value.parse::<u64>().expect("parser length is numeric"))
+        } else {
+            serde_json::Value::String(value)
+        },
     });
 }
 
@@ -52,7 +56,7 @@ pub(crate) fn add_attachment_metadata(
             part.decoded_len().to_string(),
             observed_at,
         );
-        attrs.sort_by(|a, b| (&a.name, &a.time, &a.value).cmp(&(&b.name, &b.time, &b.value)));
+        attrs.sort_by(|a, b| (&a.name, &a.time).cmp(&(&b.name, &b.time)));
         objects.insert(
             attachment_id.clone(),
             Object {
