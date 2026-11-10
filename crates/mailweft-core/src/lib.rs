@@ -3,6 +3,7 @@
 mod attachments;
 mod batch;
 pub mod corpus;
+pub mod ocel_capabilities;
 mod header_claims;
 pub mod ocel_validate;
 pub mod source;
