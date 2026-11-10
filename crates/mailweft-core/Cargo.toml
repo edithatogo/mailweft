@@ -20,6 +20,8 @@ rust4pm-validation = ["dep:process_mining"]
 
 [dependencies.process_mining]
 version = "=0.6.2"
+git = "https://github.com/edithatogo/rust4pm.git"
+rev = "7d8d72a139196deb170de7d6442b7c3df6512315"
 default-features = false
 optional = true
 
