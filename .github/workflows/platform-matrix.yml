@@ -1,0 +1,33 @@
+name: Cross-platform core qualification
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'rust-toolchain.toml'
+      - 'crates/**'
+      - '.github/workflows/platform-matrix.yml'
+permissions:
+  contents: read
+jobs:
+  portability:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-15, windows-2025]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+      - name: Pin supported Rust compiler
+        shell: bash
+        run: |
+          rustup toolchain install 1.99.1 --profile minimal
+          rustc --version
+      - name: Test core and CLI on this OS
+        run: cargo test --locked --workspace --all-targets
+      - name: Independent Rust4PM import qualification
+        run: cargo test --locked -p mailweft-core --features rust4pm-validation --test rust4pm_interop
