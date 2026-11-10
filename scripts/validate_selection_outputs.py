@@ -3,6 +3,7 @@
 import copy
 import hashlib
 import json
+from validate_ocel_integrity import validate_ocel
 from pathlib import Path
 import subprocess
 import tempfile
@@ -23,6 +24,7 @@ def verify(doc):
         assert doc['log'] is None and manifest['ocel_sha256'] is None
     else:
         assert doc['log'] is not None
+        validate_ocel(doc['log'])
         assert len(doc['log']['events']) == manifest['unique_observations']
         assert manifest['ocel_sha256'] == hashlib.sha256(json.dumps(doc['log'], ensure_ascii=False, separators=(',', ':')).encode()).hexdigest()
         assert (manifest['projection_status'] == 'complete_selection') == (manifest['rejected'] == 0)
