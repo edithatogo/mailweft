@@ -11,8 +11,18 @@ fn capability_ledger_is_stable_and_does_not_change_source_ocel() {
     assert!(report.validation_passed);
     assert!(report.validation_codes.is_empty());
     assert_eq!(report.event_count, 1);
-    assert!(report.loss_entries.iter().any(|e| e.code == "STRING_ATTRIBUTE_PROFILE"));
-    assert!(report.loss_entries.iter().any(|e| e.code == "FORMAT_ROUNDTRIP_UNQUALIFIED"));
+    assert!(
+        report
+            .loss_entries
+            .iter()
+            .any(|e| e.code == "STRING_ATTRIBUTE_PROFILE")
+    );
+    assert!(
+        report
+            .loss_entries
+            .iter()
+            .any(|e| e.code == "FORMAT_ROUNDTRIP_UNQUALIFIED")
+    );
     assert_eq!(serde_json::to_vec(&log).unwrap(), before);
     assert_eq!(capability_report(&log), report);
 }
@@ -25,5 +35,9 @@ fn invalid_ocel_is_not_presented_as_conformant() {
     log.events[0].relationships[0].object_id = "absent".into();
     let report = capability_report(&log);
     assert!(!report.validation_passed);
-    assert!(report.validation_codes.contains(&"RELATIONSHIP_TARGET_MISSING"));
+    assert!(
+        report
+            .validation_codes
+            .contains(&"RELATIONSHIP_TARGET_MISSING")
+    );
 }

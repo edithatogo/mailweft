@@ -25,7 +25,9 @@ pub struct OcelCapabilityReport {
 }
 
 pub fn capability_report(log: &Ocel) -> OcelCapabilityReport {
-    let errors = crate::ocel_validate::validate_ocel(log).err().unwrap_or_default();
+    let errors = crate::ocel_validate::validate_ocel(log)
+        .err()
+        .unwrap_or_default();
     let mut validation_codes: Vec<_> = errors.into_iter().map(|e| e.code).collect();
     validation_codes.sort_unstable();
     validation_codes.dedup();
