@@ -163,7 +163,7 @@ pub(crate) fn attribute_types() -> Vec<AttributeType> {
     .into_iter()
     .map(|name| AttributeType {
         name: name.into(),
-        value_type: "string".into(),
+        value_type: if name == "claimed_date_utc" { "time" } else { "string" }.into(),
     })
     .collect()
 }
