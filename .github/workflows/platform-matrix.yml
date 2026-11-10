@@ -1,6 +1,14 @@
 name: Cross-platform core qualification
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'rust-toolchain.toml'
+      - 'crates/**'
+      - '.github/workflows/platform-matrix.yml'
   pull_request:
     paths:
       - 'Cargo.toml'
