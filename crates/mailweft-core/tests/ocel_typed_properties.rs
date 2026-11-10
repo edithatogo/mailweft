@@ -39,7 +39,8 @@ fn typed_fixture() -> Ocel {
             "attributes": [{"name": "cost", "value": 2.5}, {"name": "verified", "value": true}],
             "relationships": [{"objectId": "o1", "qualifier": "case"}]
         }]
-    })).unwrap()
+    }))
+    .unwrap()
 }
 
 #[test]
@@ -49,8 +50,16 @@ fn all_five_native_ocel_attribute_types_survive_json_roundtrip() {
     let json = serde_json::to_vec(&log).unwrap();
     let decoded: Ocel = serde_json::from_slice(&json).unwrap();
     assert_eq!(decoded, log);
-    assert!(serde_json::to_string(&log).unwrap().contains("\"value\":true"));
-    assert!(serde_json::to_string(&log).unwrap().contains("\"value\":23"));
+    assert!(
+        serde_json::to_string(&log)
+            .unwrap()
+            .contains("\"value\":true")
+    );
+    assert!(
+        serde_json::to_string(&log)
+            .unwrap()
+            .contains("\"value\":23")
+    );
 }
 
 #[test]
@@ -58,14 +67,25 @@ fn type_mismatches_fail_closed() {
     let mut log = typed_fixture();
     log.events[0].attributes[0].value = json!("not a float");
     let violations = validate_ocel(&log).unwrap_err();
-    assert!(violations.iter().any(|v| v.code == "EVENT_ATTRIBUTE_TYPE_MISMATCH"));
+    assert!(
+        violations
+            .iter()
+            .any(|v| v.code == "EVENT_ATTRIBUTE_TYPE_MISMATCH")
+    );
 
     let mut log = typed_fixture();
     let obj = &mut log.objects[0];
-    obj.attributes.iter_mut().find(|a| a.name == "as_of").unwrap().value =
-        json!("not a timestamp");
-    assert!(validate_ocel(&log).unwrap_err().iter()
-        .any(|v| v.code == "OBJECT_ATTRIBUTE_TYPE_MISMATCH"));
+    obj.attributes
+        .iter_mut()
+        .find(|a| a.name == "as_of")
+        .unwrap()
+        .value = json!("not a timestamp");
+    assert!(
+        validate_ocel(&log)
+            .unwrap_err()
+            .iter()
+            .any(|v| v.code == "OBJECT_ATTRIBUTE_TYPE_MISMATCH")
+    );
 }
 
 proptest! {

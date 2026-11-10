@@ -37,14 +37,21 @@ pub fn validate_ocel(log: &Ocel) -> Result<(), Vec<OcelViolation>> {
             }
             let mut names = BTreeMap::new();
             for attribute in &item.attributes {
-                if attribute.name.is_empty() || names.insert(attribute.name.clone(), attribute.value_type.clone()).is_some() {
+                if attribute.name.is_empty()
+                    || names
+                        .insert(attribute.name.clone(), attribute.value_type.clone())
+                        .is_some()
+                {
                     fail(
                         &mut errors,
                         "ATTRIBUTE_DEFINITION_DUPLICATE",
                         format!("{label}/{}/{}", item.name, attribute.name),
                     );
                 }
-                if !matches!(attribute.value_type.as_str(), "string" | "time" | "integer" | "float" | "boolean") {
+                if !matches!(
+                    attribute.value_type.as_str(),
+                    "string" | "time" | "integer" | "float" | "boolean"
+                ) {
                     fail(
                         &mut errors,
                         "ATTRIBUTE_TYPE_UNSUPPORTED",
@@ -80,8 +87,13 @@ pub fn validate_ocel(log: &Ocel) -> Result<(), Vec<OcelViolation>> {
                 );
             }
             if let Some(value_type) = allowed.and_then(|a| a.get(&attr.name))
-                && !valid_value(&attr.value, value_type) {
-                fail(&mut errors, "OBJECT_ATTRIBUTE_TYPE_MISMATCH", format!("{}/{}", object.id, attr.name));
+                && !valid_value(&attr.value, value_type)
+            {
+                fail(
+                    &mut errors,
+                    "OBJECT_ATTRIBUTE_TYPE_MISMATCH",
+                    format!("{}/{}", object.id, attr.name),
+                );
             }
             let key = (attr.name.clone(), attr.time);
             if let Some(previous) = seen.insert(key, &attr.value) {
@@ -121,8 +133,13 @@ pub fn validate_ocel(log: &Ocel) -> Result<(), Vec<OcelViolation>> {
                 );
             }
             if let Some(value_type) = allowed.and_then(|a| a.get(&attr.name))
-                && !valid_value(&attr.value, value_type) {
-                fail(&mut errors, "EVENT_ATTRIBUTE_TYPE_MISMATCH", format!("{}/{}", event.id, attr.name));
+                && !valid_value(&attr.value, value_type)
+            {
+                fail(
+                    &mut errors,
+                    "EVENT_ATTRIBUTE_TYPE_MISMATCH",
+                    format!("{}/{}", event.id, attr.name),
+                );
             }
             if !seen.insert(attr.name.as_str()) {
                 fail(
@@ -176,7 +193,9 @@ fn check_links(
 fn valid_value(value: &Value, typ: &str) -> bool {
     match typ {
         "string" => value.is_string(),
-        "time" => value.as_str().is_some_and(|s| DateTime::parse_from_rfc3339(s).is_ok()),
+        "time" => value
+            .as_str()
+            .is_some_and(|s| DateTime::parse_from_rfc3339(s).is_ok()),
         "integer" => value.as_i64().is_some() || value.as_u64().is_some(),
         "float" => value.as_f64().is_some() && value.is_number(),
         "boolean" => value.is_boolean(),

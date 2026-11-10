@@ -1,6 +1,6 @@
 # Conductor — Mailweft
 
-**An email-to-OCEL converter written in Rust.** Experimental Rust implementation: 0.7.0.
+**An email-to-OCEL converter written in Rust.** Experimental Rust implementation: 0.8.0.
 
 - [Product Definition](./product.md)
 - [Product Guidelines](./product-guidelines.md)

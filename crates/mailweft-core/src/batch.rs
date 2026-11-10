@@ -58,9 +58,9 @@ pub fn convert_batch(inputs: &[SourceInput<'_>]) -> Result<Ocel, Error> {
                             previous.attributes.push(attr);
                         }
                     }
-                    previous.attributes.sort_by(|a, b| {
-                        (&a.name, &a.time).cmp(&(&b.name, &b.time))
-                    });
+                    previous
+                        .attributes
+                        .sort_by(|a, b| (&a.name, &a.time).cmp(&(&b.name, &b.time)));
                     previous.relationships.extend(object.relationships);
                     sort_relations(&mut previous.relationships);
                 }

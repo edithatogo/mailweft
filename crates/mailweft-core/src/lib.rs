@@ -276,7 +276,12 @@ pub fn convert_eml(
                     .into_iter()
                     .map(|field| AttributeType {
                         name: field.into(),
-                        value_type: if field == "decoded_byte_length" { "integer" } else { "string" }.into(),
+                        value_type: if field == "decoded_byte_length" {
+                            "integer"
+                        } else {
+                            "string"
+                        }
+                        .into(),
                     })
                     .collect()
                 } else {

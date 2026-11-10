@@ -6,7 +6,7 @@
   "plugin_version": "0.4.1",
   "host_extension_status": "not_verified_in_user_host",
   "rust_workspace_implemented": true,
-  "rust_package_version": "0.7.0",
+  "rust_package_version": "0.8.0",
   "task_counts": {
     "completed": 14,
     "in_progress": 12,
