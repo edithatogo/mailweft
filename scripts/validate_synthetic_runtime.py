@@ -11,6 +11,7 @@ import sys
 import tempfile
 
 from synthetic_mime import write
+from synthetic_metrics import impact
 
 
 def run(binary: Path, *args: str) -> dict:
@@ -44,10 +45,14 @@ def main() -> None:
         assert len(reply_edges(original)) == 1
         missing = run(binary, "batch", at, path("root"), changed("reply_target_missing"))
         assert len(reply_edges(missing)) == 0, "missing parent must not fabricate a reply edge"
+        missing_impact = impact(original, missing, -1)
+        assert missing_impact["expected_direction_met"] and missing_impact["event_count_delta"] == 0
         ambiguous = run(binary, "batch", at, path("root"), path("reply"), changed("message_id_collision"))
         assert len(reply_edges(ambiguous)) == 0, "ambiguous claimed root must abstain"
+        assert impact(original, ambiguous, -1)["expected_direction_met"]
         quoted = run(binary, "batch", at, path("root"), changed("quoted_request"))
         assert reply_edges(quoted), "quote-depth perturbation must not remove independent header link"
+        assert impact(original, quoted, 0)["expected_direction_met"]
         for doc in (original, missing, ambiguous, quoted):
             assert all(event["type"] == "source_copy_observed" for event in doc["events"])
             assert all(event["time"] == at for event in doc["events"])
