@@ -1,5 +1,6 @@
 //! Validate structural OCEL 2.0 integrity without silently repairing the log.
 //! This is an additional invariant gate, not full normative schema certification.
+//! It does not change the authoritative OCEL event or object collections.
 use crate::Ocel;
 use std::collections::{BTreeMap, BTreeSet};
 
