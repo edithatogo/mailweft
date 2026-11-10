@@ -22,11 +22,14 @@ jobs:
           cargo fmt --all
           cargo test --workspace --all-targets
           cargo test -p mailweft-core --features rust4pm-validation --test rust4pm_interop
+          python3 scripts/conductor_doctor.py --sync
       - name: Commit verified dependency resolution
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add Cargo.lock crates/
+          git add Cargo.lock crates/ conductor/ docs/EXECUTION-ORDER.md
           git diff --cached --quiet || (git commit -m 'chore: lock and format typed OCEL and patched Rust4PM' && git push origin HEAD:feat/quality-ocel-secure-rust4pm)
 
 # Second qualification includes property-based tests and typed OCEL values.
+
+# Requalification after native-value type and Conductor-version fixes.
