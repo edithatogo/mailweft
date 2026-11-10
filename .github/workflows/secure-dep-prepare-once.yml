@@ -33,3 +33,5 @@ jobs:
 # Second qualification includes property-based tests and typed OCEL values.
 
 # Requalification after native-value type and Conductor-version fixes.
+
+# Recheck after typed attachment test expectation update.
