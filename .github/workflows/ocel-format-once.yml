@@ -1,0 +1,26 @@
+name: One-time OCEL Rust formatter
+on:
+  push:
+    branches: [feat/ocel-contract-validation]
+    paths: ['.github/workflows/ocel-format-once.yml']
+permissions:
+  contents: write
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: true
+      - run: rustup toolchain install stable --profile minimal --component rustfmt
+      - run: cargo +stable fmt --all
+      - name: Commit only formatting
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add crates/
+          if ! git diff --cached --quiet; then
+            git commit -m 'style: format OCEL validator and tests'
+            git push origin HEAD:feat/ocel-contract-validation
+          fi
