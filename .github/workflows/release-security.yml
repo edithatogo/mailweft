@@ -1,0 +1,52 @@
+name: Release dependency security qualification
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+permissions:
+  contents: read
+concurrency:
+  group: release-security-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  supply-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout immutable source and lockfile
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+      - name: Install pinned Rust
+        run: |
+          rustup toolchain install 1.99.1 --profile minimal
+          rustc --version
+      - name: Install auditable versions of supply-chain tools
+        run: |
+          cargo install --locked cargo-audit --version 0.22.2
+          cargo install --locked cargo-deny --version 0.20.2
+      - name: Run independent full-graph scans and known-blocker precheck
+        shell: bash
+        run: |
+          set +e
+          cargo audit --file Cargo.lock
+          audit_rc=$?
+          cargo deny --locked check advisories bans licenses sources
+          deny_rc=$?
+          python3 scripts/release_guard.py --lock Cargo.lock
+          guard_rc=$?
+          {
+            echo '### Release security gate'
+            echo "cargo audit exit: $audit_rc"
+            echo "cargo deny exit: $deny_rc"
+            echo "known-advisory guard exit: $guard_rc"
+            echo 'All three checks must pass. This workflow never publishes a release.'
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$audit_rc" -ne 0 ] || [ "$deny_rc" -ne 0 ] || [ "$guard_rc" -ne 0 ]; then
+            echo 'RELEASE_BLOCKED: unresolved supply-chain qualification'
+            exit 1
+          fi
+      - name: State release approval boundary
+        run: echo 'Scans passed; independent package fidelity, platform matrix, human release approval and publication remain separate gates.'

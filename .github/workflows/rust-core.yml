@@ -2,9 +2,9 @@ name: Rust converter checks
 on:
   push:
     branches: [main, 'feat/**']
-    paths: ['Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml', 'crates/**', 'contracts/**', 'fixtures/synthetic/**', 'scripts/validate_runtime_contracts.py', 'scripts/validate_selection_outputs.py', '.github/workflows/rust-core.yml']
+    paths: ['Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml', 'crates/**', 'contracts/**', 'fixtures/synthetic/**', 'scripts/validate_runtime_contracts.py', 'scripts/validate_selection_outputs.py', 'scripts/validate_ocel_integrity.py', '.github/workflows/rust-core.yml']
   pull_request:
-    paths: ['Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml', 'crates/**', 'contracts/**', 'fixtures/synthetic/**', 'scripts/validate_runtime_contracts.py', 'scripts/validate_selection_outputs.py', '.github/workflows/rust-core.yml']
+    paths: ['Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml', 'crates/**', 'contracts/**', 'fixtures/synthetic/**', 'scripts/validate_runtime_contracts.py', 'scripts/validate_selection_outputs.py', 'scripts/validate_ocel_integrity.py', '.github/workflows/rust-core.yml']
 permissions:
   contents: read
 concurrency:

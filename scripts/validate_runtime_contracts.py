@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 from jsonschema import Draft202012Validator, FormatChecker
+from validate_ocel_integrity import validate_ocel
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = b"From: alice@example.invalid\r\nTo: bob@example.invalid\r\nSubject: Fixture\r\n\r\nHello\r\n"
@@ -42,6 +43,7 @@ def main():
                 raise AssertionError("Rust CLI rejected a valid synthetic fixture")
             return json.loads(result.stdout)
         bundle = invoke("convert-evidence", mail, meta)
+        validate_ocel(bundle["conversion"]["log"])
         receipt = bundle["receipt"]
         validators["source-receipt"].validate(receipt)
         assert receipt["source_copy_id"] == bundle["conversion"]["source_copy_id"]
