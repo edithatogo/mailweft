@@ -7,7 +7,11 @@ fn sample() -> Ocel {
     convert_eml(MIME, "custodian", at).unwrap().log
 }
 fn codes(log: &Ocel) -> Vec<&'static str> {
-    validate_ocel(log).unwrap_err().into_iter().map(|x| x.code).collect()
+    validate_ocel(log)
+        .unwrap_err()
+        .into_iter()
+        .map(|x| x.code)
+        .collect()
 }
 #[test]
 fn real_generated_ocel_validates_without_mutation() {
@@ -33,7 +37,11 @@ fn missing_type_declaration_is_detected() {
 #[test]
 fn missing_attribute_declaration_is_detected() {
     let mut log = sample();
-    let ty = log.object_types.iter_mut().find(|t| t.name == "mime_attachment").unwrap();
+    let ty = log
+        .object_types
+        .iter_mut()
+        .find(|t| t.name == "mime_attachment")
+        .unwrap();
     ty.attributes.clear();
     assert!(codes(&log).contains(&"OBJECT_ATTRIBUTE_UNDECLARED"));
 }
@@ -47,7 +55,11 @@ fn duplicate_qualified_relationship_is_detected() {
 #[test]
 fn conflicting_object_attribute_history_is_detected() {
     let mut log = sample();
-    let attachment = log.objects.iter_mut().find(|o| o.object_type == "mime_attachment").unwrap();
+    let attachment = log
+        .objects
+        .iter_mut()
+        .find(|o| o.object_type == "mime_attachment")
+        .unwrap();
     let mut conflicting = attachment.attributes[0].clone();
     conflicting.value = "different".into();
     attachment.attributes.push(conflicting);
@@ -56,7 +68,11 @@ fn conflicting_object_attribute_history_is_detected() {
 #[test]
 fn unsupported_type_claim_is_not_silently_coerced() {
     let mut log = sample();
-    let typ = log.object_types.iter_mut().find(|t| t.name == "mime_attachment").unwrap();
+    let typ = log
+        .object_types
+        .iter_mut()
+        .find(|t| t.name == "mime_attachment")
+        .unwrap();
     typ.attributes[0].value_type = "integer".into();
     assert!(codes(&log).contains(&"ATTRIBUTE_TYPE_UNSUPPORTED"));
 }
