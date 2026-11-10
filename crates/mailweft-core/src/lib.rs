@@ -51,7 +51,7 @@ pub struct OcelType {
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Attribute {
     pub name: String,
-    pub value: String,
+    pub value: serde_json::Value,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
@@ -222,7 +222,7 @@ pub fn convert_eml(
     }
     let mut event_attributes = vec![Attribute {
         name: "source_sha256".into(),
-        value: source_sha256.clone(),
+        value: serde_json::Value::String(source_sha256.clone()),
     }];
     header_claims::add_claims(
         &parsed,
@@ -239,9 +239,9 @@ pub fn convert_eml(
     );
     event_attributes.push(Attribute {
         name: "attachment_count".into(),
-        value: attachment_count.to_string(),
+        value: serde_json::Value::from(attachment_count as u64),
     });
-    event_attributes.sort_by(|a, b| (&a.name, &a.value).cmp(&(&b.name, &b.value)));
+    event_attributes.sort_by(|a, b| a.name.cmp(&b.name));
     relationships.sort_by(|a, b| (&a.qualifier, &a.object_id).cmp(&(&b.qualifier, &b.object_id)));
     let event_id = format!(
         "event_{}",
@@ -252,7 +252,7 @@ pub fn convert_eml(
     );
 
     Ok(Conversion {
-        schema_version: "1.3.0",
+        schema_version: "1.4.0",
         source_sha256: source_sha256.clone(),
         message_candidate_id,
         source_copy_id,
@@ -276,7 +276,7 @@ pub fn convert_eml(
                     .into_iter()
                     .map(|field| AttributeType {
                         name: field.into(),
-                        value_type: "string".into(),
+                        value_type: if field == "decoded_byte_length" { "integer" } else { "string" }.into(),
                     })
                     .collect()
                 } else {
@@ -290,7 +290,7 @@ pub fn convert_eml(
                     let mut types = header_claims::attribute_types();
                     types.push(AttributeType {
                         name: "attachment_count".into(),
-                        value_type: "string".into(),
+                        value_type: "integer".into(),
                     });
                     types
                 },
