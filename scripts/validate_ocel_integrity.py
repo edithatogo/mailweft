@@ -20,15 +20,38 @@ def _types(items: list, description: str) -> dict:
         attrs = item.get("attributes")
         if not isinstance(attrs, list):
             raise ValueError(f"{description}: missing attribute catalogue")
-        names = set()
+        names = {}
         for att in attrs:
             if not isinstance(att, dict) or not att.get("name") or not att.get("type"):
                 raise ValueError(f"{description}: malformed attribute definition")
             if att["name"] in names:
                 raise ValueError(f"{description}: duplicate attribute definition")
-            names.add(att["name"])
+            names[att["name"]] = att["type"]
         types[name] = names
     return types
+
+
+
+def _type_matches(value, typ: str) -> bool:
+    if typ == "string":
+        return isinstance(value, str)
+    if typ == "boolean":
+        return isinstance(value, bool)
+    if typ == "integer":
+        return isinstance(value, int) and not isinstance(value, bool)
+    if typ == "float":
+        return isinstance(value, (int, float)) and not isinstance(value, bool)
+    if typ == "time":
+        from datetime import datetime
+        if not isinstance(value, str):
+            return False
+        try:
+            datetime.fromisoformat(value.replace("Z", "+00:00"))
+            return True
+        except ValueError:
+            return False
+    return False
+
 
 
 def validate_ocel(log: dict) -> None:
@@ -59,8 +82,8 @@ def validate_ocel(log: dict) -> None:
         for att in attrs:
             if not isinstance(att, dict) or att.get("name") not in catalogue:
                 raise ValueError("undeclared attribute")
-            if not isinstance(att.get("value"), str):
-                raise ValueError("malformed attribute value")
+            if not _type_matches(att.get("value"), catalogue[att["name"]]):
+                raise ValueError("attribute type mismatch")
             if object_values and not isinstance(att.get("time"), str):
                 raise ValueError("object attribute missing time")
             key = (att["name"], att.get("time"))
