@@ -4,6 +4,7 @@ mod attachments;
 mod batch;
 pub mod corpus;
 mod header_claims;
+pub mod ocel_validate;
 pub mod source;
 pub mod transfer_map;
 mod zones;
