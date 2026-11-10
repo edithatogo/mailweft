@@ -147,3 +147,42 @@ fn rust4pm_preserves_candidate_reply_object_links() {
         .count();
     assert_eq!(actual, expected);
 }
+
+#[test]
+fn rust4pm_xml_roundtrip_preserves_typed_attributes_and_qualified_links() {
+    use process_mining::Exportable;
+    let raw = b"From: a@example.invalid\r\nTo: b@example.invalid\r\nMessage-ID: <child@example.invalid>\r\nDate: Tue, 10 Nov 2026 07:00:00 +0000\r\n\r\nHello";
+    let at = Utc.with_ymd_and_hms(2026, 11, 10, 7, 0, 0).unwrap();
+    let log = convert_eml(raw, "synthetic", at).unwrap().log;
+    let dir = tempfile::tempdir().unwrap();
+    let json = dir.path().join("case.json");
+    let xml = dir.path().join("case.xml");
+    std::fs::write(&json, serde_json::to_vec(&log).unwrap()).unwrap();
+    let original = OCEL::import_from_path(&json).unwrap();
+    original.export_to_path(&xml).unwrap();
+    let restored = OCEL::import_from_path(&xml).unwrap();
+    assert_eq!(restored.object_types, original.object_types);
+    assert_eq!(restored.event_types, original.event_types);
+    assert_eq!(restored.objects, original.objects);
+    assert_eq!(restored.events, original.events);
+}
+
+#[cfg(feature = "rust4pm-sqlite-validation")]
+#[test]
+fn rust4pm_sqlite_roundtrip_preserves_typed_attributes_and_qualified_links() {
+    use process_mining::Exportable;
+    let raw = b"From: a@example.invalid\r\nTo: b@example.invalid\r\nDate: Tue, 10 Nov 2026 07:00:00 +0000\r\n\r\nHello";
+    let at = Utc.with_ymd_and_hms(2026, 11, 10, 7, 0, 0).unwrap();
+    let log = convert_eml(raw, "synthetic", at).unwrap().log;
+    let dir = tempfile::tempdir().unwrap();
+    let json = dir.path().join("case.json");
+    let sqlite = dir.path().join("case.sqlite");
+    std::fs::write(&json, serde_json::to_vec(&log).unwrap()).unwrap();
+    let original = OCEL::import_from_path(&json).unwrap();
+    original.export_to_path(&sqlite).unwrap();
+    let restored = OCEL::import_from_path(&sqlite).unwrap();
+    assert_eq!(restored.object_types, original.object_types);
+    assert_eq!(restored.event_types, original.event_types);
+    assert_eq!(restored.objects, original.objects);
+    assert_eq!(restored.events, original.events);
+}
