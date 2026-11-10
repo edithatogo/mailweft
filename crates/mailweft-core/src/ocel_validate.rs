@@ -2,6 +2,8 @@
 //! This is an additional invariant gate, not full normative schema certification.
 //! It does not change the authoritative OCEL event or object collections.
 use crate::Ocel;
+use chrono::DateTime;
+use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -33,16 +35,16 @@ pub fn validate_ocel(log: &Ocel) -> Result<(), Vec<OcelViolation>> {
                     format!("{label}/{}", item.name),
                 );
             }
-            let mut names = BTreeSet::new();
+            let mut names = BTreeMap::new();
             for attribute in &item.attributes {
-                if attribute.name.is_empty() || !names.insert(attribute.name.clone()) {
+                if attribute.name.is_empty() || names.insert(attribute.name.clone(), attribute.value_type.clone()).is_some() {
                     fail(
                         &mut errors,
                         "ATTRIBUTE_DEFINITION_DUPLICATE",
                         format!("{label}/{}/{}", item.name, attribute.name),
                     );
                 }
-                if attribute.value_type != "string" {
+                if !matches!(attribute.value_type.as_str(), "string" | "time" | "integer" | "float" | "boolean") {
                     fail(
                         &mut errors,
                         "ATTRIBUTE_TYPE_UNSUPPORTED",
@@ -70,12 +72,16 @@ pub fn validate_ocel(log: &Ocel) -> Result<(), Vec<OcelViolation>> {
         }
         let mut seen = BTreeMap::new();
         for attr in &object.attributes {
-            if !allowed.is_some_and(|a| a.contains(&attr.name)) {
+            if !allowed.is_some_and(|a| a.contains_key(&attr.name)) {
                 fail(
                     &mut errors,
                     "OBJECT_ATTRIBUTE_UNDECLARED",
                     format!("{}/{}", object.id, attr.name),
                 );
+            }
+            if let Some(value_type) = allowed.and_then(|a| a.get(&attr.name))
+                && !valid_value(&attr.value, value_type) {
+                fail(&mut errors, "OBJECT_ATTRIBUTE_TYPE_MISMATCH", format!("{}/{}", object.id, attr.name));
             }
             let key = (attr.name.clone(), attr.time);
             if let Some(previous) = seen.insert(key, &attr.value) {
@@ -113,6 +119,10 @@ pub fn validate_ocel(log: &Ocel) -> Result<(), Vec<OcelViolation>> {
                     "EVENT_ATTRIBUTE_UNDECLARED",
                     format!("{}/{}", event.id, attr.name),
                 );
+            }
+            if let Some(value_type) = allowed.and_then(|a| a.get(&attr.name))
+                && !valid_value(&attr.value, value_type) {
+                fail(&mut errors, "EVENT_ATTRIBUTE_TYPE_MISMATCH", format!("{}/{}", event.id, attr.name));
             }
             if !seen.insert(attr.name.as_str()) {
                 fail(
@@ -160,5 +170,16 @@ fn check_links(
                 format!("{owner}/{}", link.object_id),
             );
         }
+    }
+}
+
+fn valid_value(value: &Value, typ: &str) -> bool {
+    match typ {
+        "string" => value.is_string(),
+        "time" => value.as_str().is_some_and(|s| DateTime::parse_from_rfc3339(s).is_ok()),
+        "integer" => value.as_i64().is_some() || value.as_u64().is_some(),
+        "float" => value.as_f64().is_some() && value.is_number(),
+        "boolean" => value.is_boolean(),
+        _ => false,
     }
 }
