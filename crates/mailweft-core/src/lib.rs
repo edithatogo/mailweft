@@ -58,7 +58,7 @@ pub struct Attribute {
 pub struct ObjectAttribute {
     pub name: String,
     pub time: DateTime<Utc>,
-    pub value: String,
+    pub value: serde_json::Value,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
