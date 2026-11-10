@@ -113,7 +113,7 @@ pub fn validate_ocel(log: &Ocel) -> Result<(), Vec<OcelViolation>> {
         }
         let mut seen = BTreeSet::new();
         for attr in &event.attributes {
-            if !allowed.is_some_and(|a| a.contains(&attr.name)) {
+            if !allowed.is_some_and(|a| a.contains_key(&attr.name)) {
                 fail(
                     &mut errors,
                     "EVENT_ATTRIBUTE_UNDECLARED",
