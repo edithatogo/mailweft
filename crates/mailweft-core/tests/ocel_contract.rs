@@ -66,7 +66,7 @@ fn conflicting_object_attribute_history_is_detected() {
     assert!(codes(&log).contains(&"OBJECT_ATTRIBUTE_CONFLICT"));
 }
 #[test]
-fn unsupported_type_claim_is_not_silently_coerced() {
+fn mismatched_declared_type_is_not_silently_coerced() {
     let mut log = sample();
     let typ = log
         .object_types
@@ -74,5 +74,5 @@ fn unsupported_type_claim_is_not_silently_coerced() {
         .find(|t| t.name == "mime_attachment")
         .unwrap();
     typ.attributes[0].value_type = "integer".into();
-    assert!(codes(&log).contains(&"ATTRIBUTE_TYPE_UNSUPPORTED"));
+    assert!(codes(&log).contains(&"OBJECT_ATTRIBUTE_TYPE_MISMATCH"));
 }
