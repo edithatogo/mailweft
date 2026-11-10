@@ -20,11 +20,15 @@ fn mutated(seed: u64) -> Vec<u8> {
         state = next(state);
         match state % 4 {
             0 if index < data.len() => data[index] = (state >> 8) as u8,
-            1 if data.len() > 1 && index < data.len() => { data.remove(index); },
+            1 if data.len() > 1 && index < data.len() => {
+                data.remove(index);
+            }
             2 if data.len() < 1024 => data.insert(index, (state >> 16) as u8),
             _ => {
-                if index < data.len() { data[index] = 0; }
-            },
+                if index < data.len() {
+                    data[index] = 0;
+                }
+            }
         }
     }
     data
@@ -44,12 +48,25 @@ fn synthetic_mime_mutations_never_panic_or_emit_oversized_source() {
             }
             if let Ok(evidence) = zoning {
                 assert_eq!(evidence.source_sha256.len(), 64);
-                assert!(evidence.parts.iter().all(|part| part.raw_start <= part.raw_end
-                    && part.raw_end <= candidate.len()));
-                assert!(evidence.parts.iter().flat_map(|part| &part.zones).all(|zone|
-                    zone.decoded_start <= zone.decoded_end));
+                assert!(
+                    evidence
+                        .parts
+                        .iter()
+                        .all(|part| part.raw_start <= part.raw_end
+                            && part.raw_end <= candidate.len())
+                );
+                assert!(
+                    evidence
+                        .parts
+                        .iter()
+                        .flat_map(|part| &part.zones)
+                        .all(|zone| zone.decoded_start <= zone.decoded_end)
+                );
             }
         }));
-        assert!(result.is_ok(), "deterministic malformed MIME seed {seed} caused panic");
+        assert!(
+            result.is_ok(),
+            "deterministic malformed MIME seed {seed} caused panic"
+        );
     }
 }
