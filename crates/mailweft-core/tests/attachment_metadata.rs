@@ -25,10 +25,10 @@ fn attachment_has_safe_metadata_and_no_filename_or_body_leak() {
     assert!(
         attrs
             .iter()
-            .any(|x| x.name == "decoded_byte_length" && x.value == "5")
+            .any(|x| x.name == "decoded_byte_length" && x.value == serde_json::json!(5))
     );
     let name = attrs.iter().find(|x| x.name == "filename_sha256").unwrap();
-    assert_eq!(name.value.len(), 64);
+    assert_eq!(name.value.as_str().unwrap().len(), 64);
     assert!(
         c.log.events[0]
             .relationships
