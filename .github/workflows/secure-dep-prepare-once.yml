@@ -9,7 +9,7 @@ jobs:
   pin:
     if: github.repository == 'edithatogo/mailweft'
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
@@ -23,6 +23,7 @@ jobs:
           cargo fmt --all
           cargo test --workspace --all-targets
           cargo test -p mailweft-core --features rust4pm-validation --test rust4pm_interop
+          cargo test -p mailweft-core --features rust4pm-sqlite-validation --test rust4pm_interop
           python3 scripts/conductor_doctor.py --sync
       - name: Commit verified dependency resolution
         run: |
@@ -40,3 +41,5 @@ jobs:
 # Requalification for supported integer type mismatch regression.
 
 # Ensure pinned Conductor checkout is present before repository verification.
+
+# OCEL XML and SQLite roundtrip qualification.
