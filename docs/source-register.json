@@ -1,0 +1,111 @@
+{
+  "reviewed_on": "2026-11-08",
+  "scope": "Primary literature/documentation discovery; not an exhaustive systematic review. PROV/TIME/SKOS are retained standards references; FORGE requires next-task verification.",
+  "sources": [
+    {
+      "id": "RFC5322",
+      "title": "Internet Message Format",
+      "url": "https://www.rfc-editor.org/rfc/rfc5322",
+      "use": "Header roles, groups, Resent blocks and Bcc visibility; a source header is not independently verified identity.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "OCEL",
+      "title": "OCEL specification overview",
+      "url": "https://ocel-standard.org/specification/overview/",
+      "use": "OCEL 2.0 JSON/XML/SQLite remain the baseline. The current site identifies CSV/bundled CSV-Parquet as OCEL 2.1 extensions; qualify separately.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "ZEBRA",
+      "title": "Lampert, Dale and Paris (2009), Segmenting Email Message Text into Zones",
+      "url": "https://aclanthology.org/D09-1096/",
+      "use": "Historical zoning baseline; our labels are a proposed taxonomy, not a verbatim reproduction of their nine labels.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "ACTS",
+      "title": "Cohen, Carvalho and Mitchell (2004), Learning to Classify Email into Speech Acts",
+      "url": "https://aclanthology.org/W04-3240/",
+      "use": "Prior art for communication-act classification; not a new contribution.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "REQUESTS",
+      "title": "Lampert et al. (2008), Requests and Commitments in Email are More Complex Than You Think",
+      "url": "https://aclanthology.org/U08-1009/",
+      "use": "Utterance-level ambiguity and contextual attribution.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "EPA",
+      "title": "Rameshkumar et al. (2018), EPA addressee tagging",
+      "url": "https://aclanthology.org/W18-6104/",
+      "use": "Task-to-person benchmark; it does not provide independent business-completion ground truth.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "QUAGGA",
+      "title": "Quagga email segmentation reference implementation",
+      "url": "https://github.com/HPI-Information-Systems/Quagga",
+      "use": "Benchmark candidate; qualify code and annotation licences independently; no runtime adoption.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "TALON",
+      "title": "Mailgun Talon",
+      "url": "https://github.com/mailgun/talon",
+      "use": "Quotation/signature baseline only; Python is not a production requirement.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "FORGE",
+      "title": "Mailgun Forge",
+      "url": "https://github.com/mailgun/forge",
+      "use": "Annotation candidate from previous plan; exact version and rights still require qualification.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "TEXT_OCEL",
+      "title": "Buss et al. (2026), Process mining between the lines",
+      "url": "https://doi.org/10.1016/j.is.2026.102713",
+      "use": "Published collector/refiner extraction approach combining heuristic and generative variants; mandatory research comparator, not a core dependency.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "TEXT_OCEL_CODE",
+      "title": "Author implementation for Buss et al.",
+      "url": "https://github.com/Alinabuss/OCEL_extractor_v2",
+      "use": "Reproducibility candidate. Code licence not qualified in this review; do not copy/translate by default.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "OCED_QUALITY",
+      "title": "Kabierski et al. (2026), Data quality in object-centric event data",
+      "url": "https://doi.org/10.1007/s44311-026-00043-x",
+      "use": "Map evaluation diagnostics to published object-centric quality issues.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "PROV",
+      "title": "W3C PROV-O",
+      "url": "https://www.w3.org/TR/prov-o/",
+      "use": "Semantic crosswalk reference; retain minimal native JSON contracts, no mandatory RDF store.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "TIME",
+      "title": "W3C OWL-Time",
+      "url": "https://www.w3.org/TR/owl-time/",
+      "use": "Temporal crosswalk reference; interval uncertainty remains in evidence sidecars.",
+      "reuse": "reference; no source or dataset copied"
+    },
+    {
+      "id": "SKOS",
+      "title": "W3C SKOS",
+      "url": "https://www.w3.org/TR/skos-reference/",
+      "use": "Versioned label mapping, broader/narrower relationships and explicit unknown mappings.",
+      "reuse": "reference; no source or dataset copied"
+    }
+  ]
+}

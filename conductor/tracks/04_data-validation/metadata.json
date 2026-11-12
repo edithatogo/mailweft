@@ -1,0 +1,29 @@
+{
+  "track_id": "04_data-validation",
+  "id": "04_data-validation",
+  "type": "feature",
+  "title": "Synthetic and Enron raw-to-processed validation",
+  "description": "Synthetic and Enron raw-to-processed validation",
+  "status": "new",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
+  "requirements": [
+    "R11",
+    "R13",
+    "R14",
+    "R17",
+    "R24",
+    "R48"
+  ],
+  "tasks": [
+    "T04.01",
+    "T04.02",
+    "T04.03",
+    "T04.04",
+    "T04.05",
+    "T04.06",
+    "T04.07",
+    "T04.08"
+  ],
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
+}

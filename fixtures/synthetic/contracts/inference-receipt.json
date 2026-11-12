@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "receipt_id": "receipt:syn-1",
+  "subject_id": "act:syn-1",
+  "evidence_refs": [
+    "evidence:syn-1"
+  ],
+  "producer_version": "synthetic-rule-fixture-1",
+  "config_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "method": "rule",
+  "score": null,
+  "calibration_status": "not_applicable",
+  "checks": [
+    {
+      "name": "source_anchor",
+      "result": "pass"
+    },
+    {
+      "name": "attribution",
+      "result": "not_run"
+    }
+  ],
+  "decision": "candidate",
+  "policy_version": "synthetic-policy-1",
+  "allowed_scope_ids": [
+    "scope:synthetic"
+  ]
+}

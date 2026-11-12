@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/email-ocel/contracts/v1/validation-report.schema.json",
+  "title": "ValidationReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "dataset_id",
+    "comparison_kind",
+    "match_status",
+    "n_reference",
+    "n_generated",
+    "n_matched",
+    "format_roundtrip_passed",
+    "unknown_limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "dataset_id": {
+      "type": "string"
+    },
+    "comparison_kind": {
+      "enum": [
+        "synthetic_exact",
+        "population_paired",
+        "population_unpaired",
+        "ocel_interop",
+        "semantic_gold"
+      ]
+    },
+    "match_status": {
+      "enum": [
+        "exact",
+        "partial",
+        "unmatched",
+        "not_applicable"
+      ]
+    },
+    "n_reference": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "n_generated": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "n_matched": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "format_roundtrip_passed": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "loss_ledger": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unknown_limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

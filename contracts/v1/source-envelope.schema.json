@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/email-ocel/contracts/v1/source-envelope.schema.json",
+  "title": "Mailweft SourceEnvelope 1.0.0",
+  "description": "Private supplied-source metadata; references and coverage are caller claims. Runtime additionally bounds UTF-8 reference bytes and verifies hash/length.",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "source_id", "source_sha256", "byte_length", "observed_at", "fidelity", "coverage_claim", "producer", "rights_ref", "scope_ref"],
+  "$defs": {
+    "reference": {"type": "string", "minLength": 1, "maxLength": 4096, "pattern": "\\S", "not": {"pattern": "[\\u0000-\\u001f\\u007f]"}}
+  },
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "source_id": {"$ref": "#/$defs/reference"},
+    "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "byte_length": {"type": "integer", "minimum": 1, "maximum": 16777216},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "fidelity": {"enum": ["raw_rfc5322", "platform_export", "rendered_html"]},
+    "coverage_claim": {"enum": ["unknown", "partial", "complete_supplied_selection"]},
+    "producer": {"type": "object", "additionalProperties": false, "required": ["name", "version"], "properties": {
+      "name": {"$ref": "#/$defs/reference"}, "version": {"$ref": "#/$defs/reference"}
+    }},
+    "rights_ref": {"$ref": "#/$defs/reference"},
+    "scope_ref": {"$ref": "#/$defs/reference"},
+    "custodian_ref": {"anyOf": [{"$ref": "#/$defs/reference"}, {"type": "null"}]},
+    "locator_ref": {"anyOf": [{"$ref": "#/$defs/reference"}, {"type": "null"}]},
+    "transformation_refs": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/reference"}, "default": []}
+  }
+}

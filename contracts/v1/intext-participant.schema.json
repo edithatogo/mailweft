@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/email-ocel/contracts/v1/intext-participant.schema.json",
+  "title": "InTextParticipantAssertion",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "assertion_id", "source_copy_id", "segment_id", "mention_hash", "role", "evidence_status", "confidence"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "assertion_id": { "type": "string", "minLength": 1 },
+    "source_copy_id": { "type": "string", "minLength": 1 },
+    "segment_id": { "type": "string", "minLength": 1 },
+    "mention_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "person_identity_candidate_id": { "type": ["string", "null"] },
+    "role": { "enum": ["salutation_addressee", "direct_vocative", "signature_signatory", "signature_contact", "body_mention", "quoted_attributed_actor", "forwarded_attributed_actor", "task_candidate_actor", "unknown"] },
+    "evidence_status": { "const": "inferred_from_text" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "resolution_state": { "enum": ["unresolved", "candidate", "human_confirmed", "rejected"] },
+    "extractor_version": { "type": ["string", "null"] }
+  }
+}

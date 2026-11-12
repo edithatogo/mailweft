@@ -1,0 +1,27 @@
+{
+  "track_id": "05b_email-structure",
+  "id": "05b_email-structure",
+  "type": "feature",
+  "title": "Email zoning and participant enrichment before speech-act NLP",
+  "description": "Email zoning and participant enrichment before speech-act NLP",
+  "status": "in_progress",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
+  "requirements": [
+    "R27",
+    "R28",
+    "R29",
+    "R31"
+  ],
+  "tasks": [
+    "T05b.01",
+    "T05b.02",
+    "T05b.03",
+    "T05b.04",
+    "T05b.05",
+    "T05b.06",
+    "T05b.07",
+    "T05b.08"
+  ],
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
+}

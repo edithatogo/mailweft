@@ -1,0 +1,26 @@
+{
+  "track_id": "06_semantics",
+  "id": "06_semantics",
+  "type": "feature",
+  "title": "Versioned NLP claims, entity resolution and evidence sidecar",
+  "description": "Versioned NLP claims, entity resolution and evidence sidecar",
+  "status": "new",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
+  "requirements": [
+    "R20",
+    "R21",
+    "R22"
+  ],
+  "tasks": [
+    "T06.01",
+    "T06.02",
+    "T06.03",
+    "T06.04",
+    "T06.05",
+    "T06.06",
+    "T06.07",
+    "T06.08"
+  ],
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
+}

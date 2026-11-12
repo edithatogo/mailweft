@@ -1,0 +1,24 @@
+{
+  "track_id": "05_attachments",
+  "id": "05_attachments",
+  "type": "feature",
+  "title": "Opt-in text and attachment content extraction",
+  "description": "Opt-in text and attachment content extraction",
+  "status": "new",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
+  "requirements": [
+    "R16",
+    "R20"
+  ],
+  "tasks": [
+    "T05.01",
+    "T05.02",
+    "T05.03",
+    "T05.04",
+    "T05.05",
+    "T05.06",
+    "T05.07"
+  ],
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
+}

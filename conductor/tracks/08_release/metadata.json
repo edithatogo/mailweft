@@ -1,0 +1,29 @@
+{
+  "track_id": "08_release",
+  "id": "08_release",
+  "type": "feature",
+  "title": "Interoperability, packaging and downstream consumer boundaries",
+  "description": "Interoperability, packaging and downstream consumer boundaries",
+  "status": "new",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
+  "requirements": [
+    "R12",
+    "R16",
+    "R25",
+    "R32",
+    "R47",
+    "R48"
+  ],
+  "tasks": [
+    "T08.01",
+    "T08.02",
+    "T08.03",
+    "T08.04",
+    "T08.05",
+    "T08.06",
+    "T08.07",
+    "T08.08"
+  ],
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
+}

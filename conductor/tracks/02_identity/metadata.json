@@ -1,0 +1,30 @@
+{
+  "track_id": "02_identity",
+  "id": "02_identity",
+  "type": "feature",
+  "title": "Message/custodian identity, duplicates and conversation inference",
+  "description": "Message/custodian identity, duplicates and conversation inference",
+  "status": "in_progress",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
+  "requirements": [
+    "R04",
+    "R05",
+    "R06",
+    "R19",
+    "R27",
+    "R33",
+    "R41"
+  ],
+  "tasks": [
+    "T02.01",
+    "T02.02",
+    "T02.03",
+    "T02.04",
+    "T02.05",
+    "T02.06",
+    "T02.07",
+    "T02.08"
+  ],
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
+}

@@ -1,0 +1,31 @@
+name: Planning and contract checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: planning-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  planning:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out exact source and pinned Conductor
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Verify Conductor source, commands and reconciled context
+        run: python3 scripts/conductor_doctor.py --check
+      - name: Install pinned documentation-only validators
+        run: python3 -m pip install --disable-pip-version-check -r requirements-planning.txt
+      - name: Check plans, DAG, drift regressions and schemas
+        run: |
+          python3 scripts/validate_scaffold.py
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+          python3 scripts/validate_contract_examples.py
+      - name: State evidence boundary
+        run: echo 'Repository Conductor context verified; user-host extension registration and scientific validity remain unverified.'

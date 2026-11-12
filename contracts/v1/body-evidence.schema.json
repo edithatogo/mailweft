@@ -1,0 +1,347 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/email-ocel/contracts/v1/body-evidence.schema.json",
+  "title": "Mailweft body evidence 1.2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_sha256",
+    "parts",
+    "skipped_html_parts",
+    "skipped_parts"
+  ],
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "offset": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "zone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "origin_scope",
+        "quote_depth",
+        "forward_depth",
+        "decoded_start",
+        "decoded_end",
+        "raw_start",
+        "raw_end",
+        "offset_quality",
+        "sha256"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "authored",
+            "salutation",
+            "quotation",
+            "forwarded_marker",
+            "forwarded_content",
+            "inline_header",
+            "signoff",
+            "signature",
+            "disclaimer",
+            "unknown"
+          ]
+        },
+        "origin_scope": {
+          "enum": [
+            "new_author_content",
+            "quoted_prior_content",
+            "forwarded_third_party",
+            "generated_or_unknown"
+          ]
+        },
+        "quote_depth": {
+          "$ref": "#/$defs/offset"
+        },
+        "forward_depth": {
+          "$ref": "#/$defs/offset"
+        },
+        "decoded_start": {
+          "$ref": "#/$defs/offset"
+        },
+        "decoded_end": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "raw_start": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "raw_end": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "offset_quality": {
+          "enum": [
+            "exact",
+            "derived"
+          ]
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "offset_quality": {
+                "const": "exact"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "raw_start": {
+                "type": "integer"
+              },
+              "raw_end": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "offset_quality": {
+                "const": "derived"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "raw_start": {
+                "type": "null"
+              },
+              "raw_end": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "part": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part_id",
+        "raw_start",
+        "raw_end",
+        "raw_sha256",
+        "decoded_sha256",
+        "decoded_byte_length",
+        "decoding_problems",
+        "zones",
+        "transfer_map"
+      ],
+      "properties": {
+        "part_id": {
+          "$ref": "#/$defs/offset"
+        },
+        "raw_start": {
+          "$ref": "#/$defs/offset"
+        },
+        "raw_end": {
+          "$ref": "#/$defs/offset"
+        },
+        "raw_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "decoded_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "decoded_byte_length": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2097152
+        },
+        "decoding_problems": {
+          "type": "boolean"
+        },
+        "zones": {
+          "type": "array",
+          "maxItems": 65536,
+          "items": {
+            "$ref": "#/$defs/zone"
+          }
+        },
+        "transfer_map": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "reason",
+            "decoded_byte_length",
+            "units",
+            "source_only_ranges"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "identity",
+                "verified_transfer",
+                "unavailable"
+              ]
+            },
+            "reason": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "decoded_byte_length": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2097152
+            },
+            "units": {
+              "type": "array",
+              "maxItems": 32768,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "decoded_start",
+                  "decoded_end",
+                  "raw_start",
+                  "raw_end"
+                ],
+                "properties": {
+                  "decoded_start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "decoded_end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "raw_start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "raw_end": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            },
+            "source_only_ranges": {
+              "type": "array",
+              "maxItems": 32768,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "properties": {
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "status": {
+                    "const": "unavailable"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "units": {
+                    "maxItems": 0
+                  },
+                  "source_only_ranges": {
+                    "maxItems": 0
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "reason": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "const": "1.2.0"
+    },
+    "source_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "parts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/part"
+      }
+    },
+    "skipped_html_parts": {
+      "$ref": "#/$defs/offset"
+    },
+    "skipped_parts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "part_id",
+          "reason"
+        ],
+        "properties": {
+          "part_id": {
+            "$ref": "#/$defs/offset"
+          },
+          "reason": {
+            "enum": [
+              "html_unsupported",
+              "unsupported_body_kind",
+              "unverifiable_part_range",
+              "decoding_unavailable",
+              "decoded_size_limit",
+              "zone_count_limit"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

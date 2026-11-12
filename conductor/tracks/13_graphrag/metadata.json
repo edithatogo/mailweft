@@ -1,0 +1,30 @@
+{
+  "track_id": "13_graphrag",
+  "id": "13_graphrag",
+  "type": "feature",
+  "title": "Optional evidence-constrained GraphRAG",
+  "description": "Optional evidence-constrained GraphRAG",
+  "status": "new",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
+  "requirements": [
+    "R20",
+    "R21",
+    "R23",
+    "R35",
+    "R38",
+    "R43",
+    "R44",
+    "R52",
+    "R53"
+  ],
+  "tasks": [
+    "T13.01",
+    "T13.02",
+    "T13.03",
+    "T13.04",
+    "T13.05",
+    "T13.06"
+  ],
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
+}

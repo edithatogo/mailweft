@@ -1,0 +1,32 @@
+{
+  "track_id": "09_patterns",
+  "id": "09_patterns",
+  "type": "feature",
+  "title": "Email acts, genres and interaction patterns",
+  "description": "Email acts, genres and interaction patterns",
+  "status": "new",
+  "created_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-09T09:41:19.579068+00:00",
+  "requirements": [
+    "R07",
+    "R27",
+    "R30",
+    "R33",
+    "R34",
+    "R35",
+    "R36",
+    "R37",
+    "R39"
+  ],
+  "tasks": [
+    "T09.01",
+    "T09.02",
+    "T09.03",
+    "T09.04",
+    "T09.05",
+    "T09.06",
+    "T09.07",
+    "T09.08"
+  ],
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
+}

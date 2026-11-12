@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/email-ocel/contracts/v1/extraction-claim.schema.json",
+  "title": "ExtractionClaim",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "claim_id",
+    "source_copy_id",
+    "claim_type",
+    "state",
+    "extraction_version",
+    "evidence_refs",
+    "created_at",
+    "negated",
+    "modality",
+    "review_status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "claim_id": {
+      "type": "string"
+    },
+    "source_copy_id": {
+      "type": "string"
+    },
+    "claim_type": {
+      "enum": [
+        "request",
+        "assignment",
+        "commitment",
+        "deadline",
+        "decision_communicated",
+        "completion_reported",
+        "entity_reference",
+        "other"
+      ]
+    },
+    "state": {
+      "enum": [
+        "asserted_by_actor",
+        "inferred",
+        "corroborated",
+        "contradicted",
+        "rejected"
+      ]
+    },
+    "extraction_version": {
+      "type": "string"
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "claimed_event_time": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "negated": {
+      "type": "boolean"
+    },
+    "modality": {
+      "enum": [
+        "certain",
+        "possible",
+        "hypothetical",
+        "conditional",
+        "unknown"
+      ]
+    },
+    "confidence": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "review_status": {
+      "enum": [
+        "not_reviewed",
+        "accepted",
+        "rejected",
+        "needs_review"
+      ]
+    },
+    "actor_object_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "target_object_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
