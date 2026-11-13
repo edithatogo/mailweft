@@ -71,3 +71,25 @@ fn inspect_returns_source_mapped_zones_without_body_text() {
     assert!(!published.contains("Please review."));
     assert!(!published.contains("Hi Bob,"));
 }
+
+#[test]
+fn reconcile_rejects_unknown_flag_before_reading_selection() {
+    let output = Command::new(env!("CARGO_BIN_EXE_mailweft"))
+        .args(["reconcile", "selection.json", "--unexpected"])
+        .output()
+        .unwrap();
+    assert_eq!(output.status.code(), Some(1));
+    assert!(output.stdout.is_empty());
+    assert!(String::from_utf8_lossy(&output.stderr).contains("Usage: mailweft reconcile"));
+}
+
+#[test]
+fn positional_mode_rejects_invalid_timestamp_before_reading_source() {
+    let output = Command::new(env!("CARGO_BIN_EXE_mailweft"))
+        .args(["nonexistent.eml", "not-a-timestamp"])
+        .output()
+        .unwrap();
+    assert_eq!(output.status.code(), Some(1));
+    assert!(output.stdout.is_empty());
+    assert!(String::from_utf8_lossy(&output.stderr).contains("RFC3339"));
+}
