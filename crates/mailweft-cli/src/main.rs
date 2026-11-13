@@ -142,7 +142,7 @@ fn usage_error(args: &[String]) -> &'static str {
 
 fn main() -> ExitCode {
     let args = env::args().collect::<Vec<_>>();
-    let command = match Cli::try_parse_from(&args) {
+    let command = match Cli::try_parse_from(args.iter().cloned()) {
         Ok(Cli { command: Some(command) }) => command,
         Ok(Cli { command: None }) => {
             eprintln!("error: {}", usage_error(&args));
