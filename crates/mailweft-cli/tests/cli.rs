@@ -93,3 +93,16 @@ fn positional_mode_rejects_invalid_timestamp_before_reading_source() {
     assert!(output.stdout.is_empty());
     assert!(String::from_utf8_lossy(&output.stderr).contains("RFC3339"));
 }
+
+#[test]
+fn help_and_version_work_offline_without_source_paths() {
+    for option in ["--help", "--version"] {
+        let output = Command::new(env!("CARGO_BIN_EXE_mailweft"))
+            .arg(option)
+            .output()
+            .unwrap();
+        assert_eq!(output.status.code(), Some(0), "{option}: {}", String::from_utf8_lossy(&output.stderr));
+        assert!(output.stderr.is_empty());
+        assert!(String::from_utf8_lossy(&output.stdout).contains("mailweft"));
+    }
+}
