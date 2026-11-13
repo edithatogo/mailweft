@@ -66,8 +66,8 @@ fn run(command: CliCommand) -> Result<(String, bool), &'static str> {
             let envelope = parse_envelope_json(&metadata).map_err(|e| e.code())?;
             let raw = read_file(&raw, MAX_SOURCE_BYTES)?;
             let result = convert_with_envelope(&raw, &envelope).map_err(|e| e.code())?;
-            let json = serde_json::to_string_pretty(&result)
-                .map_err(|_| "OUTPUT_SERIALIZATION_FAILED")?;
+            let json =
+                serde_json::to_string_pretty(&result).map_err(|_| "OUTPUT_SERIALIZATION_FAILED")?;
             Ok((json, false))
         }
         CliCommand::Inspect { raw } => {
@@ -79,7 +79,9 @@ fn run(command: CliCommand) -> Result<(String, bool), &'static str> {
         }
         CliCommand::Batch { observed_at, files } => {
             if files.is_empty() || files.len() > 1024 {
-                return Err("Usage: mailweft batch <observed-at:RFC3339> <file.eml> [file2.eml ...]");
+                return Err(
+                    "Usage: mailweft batch <observed-at:RFC3339> <file.eml> [file2.eml ...]",
+                );
             }
             let at = parse_instant(&observed_at)?;
             let mut remaining = 256 * 1024 * 1024usize;
@@ -99,8 +101,8 @@ fn run(command: CliCommand) -> Result<(String, bool), &'static str> {
                 })
                 .collect();
             let log = convert_batch(&inputs).map_err(|_| "SOURCE_CONVERSION_FAILED")?;
-            let json = serde_json::to_string_pretty(&log)
-                .map_err(|_| "OUTPUT_SERIALIZATION_FAILED")?;
+            let json =
+                serde_json::to_string_pretty(&log).map_err(|_| "OUTPUT_SERIALIZATION_FAILED")?;
             Ok((json, false))
         }
         CliCommand::Reconcile {
@@ -108,7 +110,11 @@ fn run(command: CliCommand) -> Result<(String, bool), &'static str> {
             allow_partial,
         } => {
             // Preserve existing reconciliation contract/exit codes and source gates.
-            let mut args = vec![String::from("mailweft"), String::from("reconcile"), selection];
+            let mut args = vec![
+                String::from("mailweft"),
+                String::from("reconcile"),
+                selection,
+            ];
             if allow_partial {
                 args.push(String::from("--allow-partial"));
             }
@@ -132,7 +138,9 @@ fn run(command: CliCommand) -> Result<(String, bool), &'static str> {
 
 fn usage_error(args: &[String]) -> &'static str {
     match args.get(1).map(String::as_str) {
-        Some("convert-evidence") => "Usage: mailweft convert-evidence <raw.eml> <source-envelope.json>",
+        Some("convert-evidence") => {
+            "Usage: mailweft convert-evidence <raw.eml> <source-envelope.json>"
+        }
         Some("inspect") => "Usage: mailweft inspect <raw.eml>",
         Some("batch") => "Usage: mailweft batch <observed-at:RFC3339> <file.eml> [file2.eml ...]",
         Some("reconcile") => "Usage: mailweft reconcile <selection.json> [--allow-partial]",
@@ -143,13 +151,18 @@ fn usage_error(args: &[String]) -> &'static str {
 fn main() -> ExitCode {
     let args = env::args().collect::<Vec<_>>();
     let command = match Cli::try_parse_from(args.iter().cloned()) {
-        Ok(Cli { command: Some(command) }) => command,
+        Ok(Cli {
+            command: Some(command),
+        }) => command,
         Ok(Cli { command: None }) => {
             eprintln!("error: {}", usage_error(&args));
             return ExitCode::FAILURE;
         }
         Err(error) => {
-            if matches!(error.kind(), ErrorKind::DisplayHelp | ErrorKind::DisplayVersion) {
+            if matches!(
+                error.kind(),
+                ErrorKind::DisplayHelp | ErrorKind::DisplayVersion
+            ) {
                 return if error.print().is_ok() {
                     ExitCode::SUCCESS
                 } else {
