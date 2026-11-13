@@ -101,8 +101,13 @@ fn help_and_version_work_offline_without_source_paths() {
             .arg(option)
             .output()
             .unwrap();
-        assert_eq!(output.status.code(), Some(0), "{option}: {}", String::from_utf8_lossy(&output.stderr));
-        assert!(output.stderr.is_empty());
+        assert_eq!(
+            output.status.code(),
+            Some(0),
+            "{option}: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert_eq!(output.stderr, Vec::<u8>::new());
         assert!(String::from_utf8_lossy(&output.stdout).contains("mailweft"));
     }
 }
