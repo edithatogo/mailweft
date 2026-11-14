@@ -12,7 +12,7 @@
 - [Execution Order](../docs/EXECUTION-ORDER.md)
 - [Conductor Setup and Verification](../docs/CONDUCTOR-SETUP.md)
 
-Current accounting: 116 tasks in 15 tracks; 14 completed, 12 in progress, 0 blocked, 90 not started.
+Current accounting: 117 tasks in 16 tracks; 14 completed, 12 in progress, 1 blocked, 90 not started.
 Next eligible task: **T00.06**. Resume partial work; do not recreate the Rust workspace or restart all tasks.
 
 The task manifest owns status, prerequisites and acceptance evidence. `conductor_doctor.py --sync` regenerates plans/indexes/metadata; `--check` rejects drift. Sync does not change task status or certify correctness.

@@ -10,6 +10,11 @@ Task prerequisites, not whole-track links, determine eligibility. Optional resea
 
 ---
 
+## [~] Track: Repository contribution metadata
+*Link: [./tracks/00_repository_metadata/](./tracks/00_repository_metadata/)*
+
+---
+
 ## [~] Track: Raw EML and maildir input, manifests and parse boundaries
 *Link: [./tracks/01_ingestion/](./tracks/01_ingestion/)*
 

@@ -6,7 +6,7 @@
   "description": "Foundation, legal/source gates and Rust workspace",
   "status": "in_progress",
   "created_at": "2026-11-09T09:41:19.579068+00:00",
-  "updated_at": "2026-11-09T09:41:19.579068+00:00",
+  "updated_at": "2026-11-14T16:57:40Z",
   "requirements": [
     "R10",
     "R12",

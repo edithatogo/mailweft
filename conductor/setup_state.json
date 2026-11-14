@@ -8,6 +8,7 @@
   "rust_workspace_implemented": true,
   "rust_package_version": "0.7.0",
   "task_counts": {
+    "blocked": 1,
     "completed": 14,
     "in_progress": 12,
     "not_started": 90
