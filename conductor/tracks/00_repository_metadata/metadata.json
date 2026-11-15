@@ -1,0 +1,18 @@
+{
+  "track_id": "00_repository_metadata",
+  "id": "00_repository_metadata",
+  "type": "chore",
+  "title": "Repository contribution metadata",
+  "description": "Repository contribution metadata",
+  "status": "in_progress",
+  "created_at": "2026-11-14T16:57:40Z",
+  "updated_at": "2026-11-14T16:57:40Z",
+  "requirements": [
+    "R10",
+    "R15"
+  ],
+  "tasks": [
+    "T00a.01"
+  ],
+  "dependency_policy": "Only exact task dependencies in task-manifest.json are executable prerequisites."
+}

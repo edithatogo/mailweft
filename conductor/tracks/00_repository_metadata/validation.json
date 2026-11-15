@@ -1,0 +1,308 @@
+{
+  "task_id": "T00a.01",
+  "source_commit": "14b3de557a7654708f6066f70f4d8bc1e3d1e564",
+  "python": "3.12.14",
+  "phase": "verified documentation proposal; acceptance blocked",
+  "authority": "Current repository-owner request for PR-template maintenance",
+  "baseline": {
+    "python": "3.12.14",
+    "requirements_planning": "# Development-only schema validation; not a Mailweft runtime dependency.\nattrs==26.1.0\njsonschema==4.26.0\njsonschema-specifications==2025.9.1\nreferencing==0.37.0\nrpds-py==2026.5.1\nrfc3339-validator==0.1.4\nsix==1.17.0\n",
+    "rust_toolchain": "[toolchain]\nchannel = \"1.99.1\"\nprofile = \"minimal\"\ncomponents = [\"rustfmt\", \"clippy\"]\n",
+    "tools": {
+      "cargo": null,
+      "rustc": null,
+      "rustup": null
+    },
+    "other_known_tools": [],
+    "results": {
+      "doctor_check": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "scripts/conductor_doctor.py",
+          "--check"
+        ],
+        "exit": 0,
+        "stdout": "CONDUCTOR OK: pinned source, command TOMLs, project/track artifacts and canonical task state agree.\nTask status: {'completed': 14, 'not_started': 90, 'in_progress': 12}\nNext eligible: T00.06, T01.04, T02.04, T01.02, T04.01, T00.02, T05.01\nUser-host extension registration is not verified by this repository check.\n",
+        "stderr": ""
+      },
+      "doctor_status": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "scripts/conductor_doctor.py",
+          "--status"
+        ],
+        "exit": 0,
+        "stdout": "CONDUCTOR OK: pinned source, command TOMLs, project/track artifacts and canonical task state agree.\nTask status: {'completed': 14, 'not_started': 90, 'in_progress': 12}\nNext eligible: T00.06, T01.04, T02.04, T01.02, T04.01, T00.02, T05.01\nUser-host extension registration is not verified by this repository check.\n",
+        "stderr": ""
+      },
+      "head": {
+        "command": [
+          "git",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exit": 0,
+        "stdout": "14b3de557a7654708f6066f70f4d8bc1e3d1e564\n",
+        "stderr": ""
+      },
+      "status": {
+        "command": [
+          "git",
+          "status",
+          "--porcelain"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    }
+  },
+  "acceptance": "blocked; required Rust, pinned schema environment, actual-output runtime/selection and hosted gates remain pending",
+  "template_sha256": "23aaedc9bd2133f23ade0c1a06fafdf87094266af639b36bd7ad678b036d36ac",
+  "existing_task_objects_unchanged": true,
+  "existing_metadata_changes": {
+    "conductor/tracks/05b_email-structure/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/12_ecosystem-reuse/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/02_identity/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/13_graphrag/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/04_data-validation/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/07_research/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/00_foundation/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/08_release/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/01_ingestion/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/03_ocel/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/09_patterns/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/11_frontier-validation/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/10_evidence-incremental/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/05_attachments/metadata.json": [
+      "updated_at"
+    ],
+    "conductor/tracks/06_semantics/metadata.json": [
+      "updated_at"
+    ]
+  },
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "scripts/conductor_doctor.py",
+        "--sync"
+      ],
+      "exit": 0,
+      "stdout": "CONDUCTOR OK: pinned source, command TOMLs, project/track artifacts and canonical task state agree.\nTask status: {'completed': 14, 'not_started': 91, 'in_progress': 12}\nNext eligible: T00.06, T01.04, T02.04, T00a.01, T01.02, T04.01, T00.02, T05.01\nUser-host extension registration is not verified by this repository check.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "scripts/conductor_doctor.py",
+        "--check"
+      ],
+      "exit": 0,
+      "stdout": "CONDUCTOR OK: pinned source, command TOMLs, project/track artifacts and canonical task state agree.\nTask status: {'completed': 14, 'not_started': 91, 'in_progress': 12}\nNext eligible: T00.06, T01.04, T02.04, T00a.01, T01.02, T04.01, T00.02, T05.01\nUser-host extension registration is not verified by this repository check.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "scripts/validate_scaffold.py"
+      ],
+      "exit": 0,
+      "stdout": "SCAFFOLD OK: 53 requirements, 16 tracks, 117 tasks, 17 schemas, 38 task_cards\nValidated exact task DAG, references, requirement coverage and independent core closure.\nPlanning checks only; no Rust compilation, model accuracy or deployment is certified.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "scripts/conductor_doctor.py",
+        "--sync"
+      ],
+      "exit": 0,
+      "stdout": "CONDUCTOR OK: pinned source, command TOMLs, project/track artifacts and canonical task state agree.\nTask status: {'completed': 14, 'not_started': 90, 'in_progress': 13}\nNext eligible: T00.06, T00a.01, T01.04, T02.04, T01.02, T04.01, T00.02, T05.01\nUser-host extension registration is not verified by this repository check.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "scripts/validate_scaffold.py"
+      ],
+      "exit": 0,
+      "stdout": "SCAFFOLD OK: 53 requirements, 16 tracks, 117 tasks, 17 schemas, 38 task_cards\nValidated exact task DAG, references, requirement coverage and independent core closure.\nPlanning checks only; no Rust compilation, model accuracy or deployment is certified.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "scripts/conductor_doctor.py",
+        "--check"
+      ],
+      "exit": 0,
+      "stdout": "CONDUCTOR OK: pinned source, command TOMLs, project/track artifacts and canonical task state agree.\nTask status: {'completed': 14, 'not_started': 90, 'in_progress': 13}\nNext eligible: T00.06, T00a.01, T01.04, T02.04, T01.02, T04.01, T00.02, T05.01\nUser-host extension registration is not verified by this repository check.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_conductor_*.py"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "........\n----------------------------------------------------------------------\nRan 8 tests in 0.068s\n\nOK\n"
+    },
+    {
+      "argv": [
+        "python3",
+        "scripts/conductor_doctor.py",
+        "--sync"
+      ],
+      "exit": 0,
+      "stdout": "CONDUCTOR OK: pinned source, command TOMLs, project/track artifacts and canonical task state agree.\nTask status: {'completed': 14, 'not_started': 90, 'in_progress': 12, 'blocked': 1}\nNext eligible: T00.06, T01.04, T02.04, T01.02, T04.01, T00.02, T05.01\nUser-host extension registration is not verified by this repository check.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "scripts/conductor_doctor.py",
+        "--check"
+      ],
+      "exit": 0,
+      "stdout": "CONDUCTOR OK: pinned source, command TOMLs, project/track artifacts and canonical task state agree.\nTask status: {'completed': 14, 'not_started': 90, 'in_progress': 12, 'blocked': 1}\nNext eligible: T00.06, T01.04, T02.04, T01.02, T04.01, T00.02, T05.01\nUser-host extension registration is not verified by this repository check.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "scripts/validate_scaffold.py"
+      ],
+      "exit": 0,
+      "stdout": "SCAFFOLD OK: 53 requirements, 16 tracks, 117 tasks, 17 schemas, 38 task_cards\nValidated exact task DAG, references, requirement coverage and independent core closure.\nPlanning checks only; no Rust compilation, model accuracy or deployment is certified.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ".............................................\n----------------------------------------------------------------------\nRan 45 tests in 0.606s\n\nOK\n"
+    },
+    {
+      "argv": [
+        "python3",
+        "scripts/conductor_doctor.py",
+        "--sync"
+      ],
+      "exit": 0,
+      "stdout": "CONDUCTOR OK: pinned source, command TOMLs, project/track artifacts and canonical task state agree.\nTask status: {'completed': 14, 'not_started': 90, 'in_progress': 12, 'blocked': 1}\nNext eligible: T00.06, T01.04, T02.04, T01.02, T04.01, T00.02, T05.01\nUser-host extension registration is not verified by this repository check.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "scripts/conductor_doctor.py",
+        "--check"
+      ],
+      "exit": 0,
+      "stdout": "CONDUCTOR OK: pinned source, command TOMLs, project/track artifacts and canonical task state agree.\nTask status: {'completed': 14, 'not_started': 90, 'in_progress': 12, 'blocked': 1}\nNext eligible: T00.06, T01.04, T02.04, T01.02, T04.01, T00.02, T05.01\nUser-host extension registration is not verified by this repository check.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "scripts/validate_scaffold.py"
+      ],
+      "exit": 0,
+      "stdout": "SCAFFOLD OK: 53 requirements, 16 tracks, 117 tasks, 17 schemas, 38 task_cards\nValidated exact task DAG, references, requirement coverage and independent core closure.\nPlanning checks only; no Rust compilation, model accuracy or deployment is certified.\n",
+      "stderr": ""
+    }
+  ],
+  "native_tool_availability": {
+    "cargo": null,
+    "rustc": null,
+    "rustup": null
+  },
+  "native_setup_attempt": {
+    "source": "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init",
+    "result": "curl exit 28: connection timed out after 10001 milliseconds",
+    "installer_executed": false,
+    "note": "No large installation was started; preserve the shared workspace free-space floor."
+  },
+  "review": "Self-review of exact documentation scope and preserved product task state; no independent product/runtime acceptance claimed",
+  "not_run": [
+    {
+      "command": "cargo test --locked --workspace --all-targets --no-fail-fast",
+      "reason": "Pinned Rust toolchain unavailable; bounded first-party bootstrap attempt timed out."
+    },
+    {
+      "command": "cargo test --locked -p mailweft-core --features rust4pm-validation --test rust4pm_interop",
+      "reason": "Pinned Rust toolchain unavailable."
+    },
+    {
+      "command": "cargo fmt --all -- --check",
+      "reason": "Pinned Rust toolchain unavailable."
+    },
+    {
+      "command": "cargo clippy --locked --workspace --all-targets --all-features -- -D warnings",
+      "reason": "Pinned Rust toolchain unavailable."
+    },
+    {
+      "command": "python3 -m pip install -r requirements-planning.txt",
+      "reason": "Exact pinned development schema environment was not installed or qualified for this draft; Python test results apply to the available Python 3.12.14 environment."
+    },
+    {
+      "command": "cargo build --locked -p mailweft-cli",
+      "reason": "Pinned Rust toolchain unavailable."
+    },
+    {
+      "command": "python3 scripts/validate_runtime_contracts.py",
+      "reason": "Actual-output check not run: compiled CLI and pinned schema environment are not qualified."
+    },
+    {
+      "command": "python3 scripts/validate_selection_outputs.py",
+      "reason": "Actual-output check not run: compiled CLI and pinned schema environment are not qualified."
+    },
+    {
+      "command": "Exact-head hosted CI",
+      "reason": "No remote publication performed by this local preparation task; required before merge."
+    }
+  ]
+}
