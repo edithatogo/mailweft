@@ -41,12 +41,12 @@ Remaining: Future upgrades require an explicit qualification change.
 
 ## T00.06 — in_progress
 
-Read-only synthetic Rust, contracts, planning and Conductor checks run in CI.
+Read-only synthetic Rust, contracts, planning and Conductor checks run in CI. User-approved synthetic boundary fuzzing adds shared native invariants, an isolated pinned libFuzzer target, and bounded PR/weekly execution.
 
-Artifacts: `.github/workflows/rust-core.yml`, `.github/workflows/planning-checks.yml`
-Verification: `cargo test --locked --workspace --all-targets --no-fail-fast`; `cargo fmt --all -- --check`; `python3 scripts/conductor_doctor.py --check`
-Evidence: https://github.com/edithatogo/mailweft/actions/runs/42590576579; docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)
-Remaining: Dedicated dependency advisory/security scanning and broader fuzz gates remain open.
+Artifacts: `.github/workflows/rust-core.yml`, `.github/workflows/planning-checks.yml`, `.github/workflows/fuzz.yml`, `fuzz/README.md`, `fuzz/Cargo.toml`, `fuzz/Cargo.lock`, `fuzz/run.sh`, `fuzz/fuzz_targets/email_bytes.rs`, `crates/mailweft-core/tests/fuzz_regressions.rs`, `crates/mailweft-core/tests/support/fuzz_contract.rs`
+Verification: `cargo test --locked --workspace --all-targets --no-fail-fast`; `cargo fmt --all -- --check`; `python3 scripts/conductor_doctor.py --check`; `cargo +1.99.1 test --locked -p mailweft-core --test fuzz_regressions`; `bash fuzz/run.sh 30`
+Evidence: https://github.com/edithatogo/mailweft/actions/runs/42590576579; docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate); fuzz/README.md (synthetic source policy, invariant definitions, exact budgets and reproduction); native fuzz_regressions: 2 passed, 0 failed on Rust 1.99.1; campaign/hosted receipts are recorded separately; fuzz/validation.json: native workspace tests/fmt/scoped Clippy and the local ASan campaign passed; local LeakSanitizer unavailable; final hosted CI pending.
+Remaining: Dedicated dependency advisory/security scanning, hosted CI on the final fuzz commit and wider resource/release qualification remain open.
 
 ## T00.07 — completed
 

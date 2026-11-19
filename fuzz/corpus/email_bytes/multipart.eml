@@ -1,0 +1,11 @@
+From: Alpha <alpha@example.invalid>
+To: beta@example.invalid
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="synthetic"
+
+--synthetic
+Content-Type: text/plain
+Content-Transfer-Encoding: base64
+
+SGVsbG8=
+--synthetic--
