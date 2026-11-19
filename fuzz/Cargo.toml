@@ -1,0 +1,30 @@
+[package]
+name = "mailweft-boundary-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[workspace]
+members = ["."]
+resolver = "3"
+
+[dependencies]
+libfuzzer-sys = "=0.4.13"
+mailweft-core = { path = "../crates/mailweft-core" }
+chrono = { version = "0.4", features = ["serde"] }
+serde_json = "1"
+sha2 = "0.10"
+
+[[bin]]
+name = "email_bytes"
+path = "fuzz_targets/email_bytes.rs"
+test = false
+doc = false
+bench = false
+
+[profile.release]
+opt-level = 1
+codegen-units = 16
