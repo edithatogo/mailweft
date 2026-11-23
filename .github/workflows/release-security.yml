@@ -1,6 +1,8 @@
 name: Release dependency security qualification
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '41 3 * * 1'
   push:
     tags:
       - 'v*'
