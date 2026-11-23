@@ -1,8 +1,6 @@
 name: Release dependency security qualification
 on:
   workflow_dispatch:
-  pull_request:
-    paths: ['Cargo.toml', 'Cargo.lock', 'deny.toml', '.github/workflows/release-security.yml']
   schedule:
     - cron: '41 3 * * 1'
   push:
