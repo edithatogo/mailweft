@@ -14,7 +14,7 @@ The original **2026-11-19** 12-entry ZIP was recovered without modification and 
 - **Archive byte size:** 14,474
 - **Archive Git blob SHA-1, for identity if accepted into Git:** `0913801ac52e0ae380c85a753d3075d2cf124b33`
 - Contents: original `RECEIPT.md`, `SHA256SUMS`, four exact read-only candidate Python source/test snapshots, independent 10-case OCEL negative/positive suite, independent 5-case SQLite semantic oracle, actual test-output transcripts, and a fictional 65,536-byte SQLite fixture. There is no real correspondence, Enron corpus, personal key, or production source modification.
-- Library location is a **proposed receiving location; the owner has not acknowledged it**. The reviewer has also preserved a local downloaded copy. Avoid publishing this ZIP as a released product or implying its included copies are new implementation.
+- Library location was **proposed on 20 November 2026 and explicitly accepted by the owner on 28 November 2026**. The reviewer also preserved a local downloaded copy. This acknowledgement confirms the evidence receiving location only: do not publish this ZIP as a released product or imply its included copies are new implementation.
 - The five independent failures are *expected RED acceptance regressions* and must not be hidden/skipped. The oracle does **not** run Rust4PM.
 
 ## Recheck execution (20 November 2026, Linux Python 3.13.5, SQLite 3.46.1)
@@ -75,9 +75,9 @@ As of this review of canonical **main** manifest `e1c1b1346e2d29a017030d180d4002
 - Issue #4 is open; PR #3 remains draft/open, not merged. The remediation branch is not PR #3.
 - **No task/track metadata, status, code, lock, workflows or registry files are modified by this receiving branch**. Only the existing owner may reconcile the canonical manifest and its generated Conductor artifacts.
 
-## Existing owner: requested receiving acknowledgement and fixes
+## Existing owner: acknowledgement received; implementation fixes remain
 
-Please reply on [issue #4](https://github.com/edithatogo/mailweft/issues/4) or this evidence PR with an **explicit** receipt, e.g. `RECEIVED independent synthetic bundle SHA256 5a957c...; AGREED remote location [path/URL or requested replacement]; accepted only as reproducibility evidence, NOT native/release acceptance`. If you require the ZIP in the GitHub repository instead of Library, specify the approved evidence-only Git path; the reviewer should not unilaterally edit owner-controlled Conductor or native paths.
+**28 November 2026 owner receiving acknowledgement:** In this ChatGPT conversation, the user stated, “I'm the owner and I agree” in response to the explicit request to accept the original 14,474-byte ZIP (SHA-256 `5a957c58e4bf69f45c13b01d6a048e509cd207cc911052be7ff5ceacaf8a2829`) at `/GitHub/mailweft/ocel-receiving/mailweft_ocel_receiving_qualification_20261119.zip`. This accepts that location as the independent *synthetic evidence* receiving archive and completes the reviewer's receipt/coordination gate. The connected GitHub record relays the ChatGPT acknowledgement; it is **not** a separately submitted GitHub review or approval of native, security, merge or release gates. A future move into GitHub requires its own approval and verified upload. No Conductor or implementation ownership is transferred.
 
 Owner retains:
 - Validator rejection repairs and normative OCEL schema qualification.
@@ -86,4 +86,4 @@ Owner retains:
 - Pinned-toolchain exact-head native tests for relevant features, fmt/Clippy and Linux/macOS/Windows CI, followed by independently reviewed Conductor disposition.
 - Release blocker #4 must remain open until substantive requirements pass; **do not merge PR #3, publish, waive gates or claim this reviewer branch supplies native acceptance**.
 
-Earlier independent evidence: [15 Nov](https://github.com/edithatogo/mailweft/issues/4#issuecomment-6889450827) and [19 Nov](https://github.com/edithatogo/mailweft/issues/4#issuecomment-7009259457). This 20 Nov record marks the *reviewer's local evidence verification* complete but **receiving acknowledgement outstanding**. This branch/PR remains separate from production code.
+Earlier independent evidence: [15 Nov](https://github.com/edithatogo/mailweft/issues/4#issuecomment-6889450827) and [19 Nov](https://github.com/edithatogo/mailweft/issues/4#issuecomment-7009259457). Reviewer execution was completed on 20 November; **owner receiving acknowledgement was obtained on 28 November, so this review lane is complete**. The source/binary reproducibility bundle remains a non-release Library artifact; this draft evidence PR is separate from production code. Issue #4 and PR #3 remain unresolved implementation/security work.
