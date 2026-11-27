@@ -207,7 +207,11 @@
       "allowed_paths": [
         ".github/workflows/ci.yml",
         ".github/workflows/planning-checks.yml",
-        ".github/workflows/rust-core.yml"
+        ".github/workflows/rust-core.yml",
+        ".github/workflows/fuzz.yml",
+        "fuzz/**",
+        "crates/mailweft-core/tests/fuzz_regressions.rs",
+        "crates/mailweft-core/tests/support/fuzz_contract.rs"
       ],
       "action": "Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.",
       "acceptance": "CI requires no real mailbox/corpus data. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.",
@@ -218,24 +222,37 @@
         "R10",
         "R12",
         "R13",
-        "R15"
+        "R15",
+        "R11"
       ],
       "lane": "core",
       "implementation": {
-        "summary": "Read-only synthetic Rust, contracts, planning and Conductor checks run in CI.",
-        "remaining": "Dedicated dependency advisory/security scanning and broader fuzz gates remain open.",
+        "summary": "Read-only synthetic Rust, contracts, planning and Conductor checks run in CI. User-approved synthetic boundary fuzzing adds shared native invariants, an isolated pinned libFuzzer target, and bounded PR/weekly execution.",
+        "remaining": "Dedicated dependency advisory/security scanning, hosted CI on the final fuzz commit and wider resource/release qualification remain open.",
         "files": [
           ".github/workflows/rust-core.yml",
-          ".github/workflows/planning-checks.yml"
+          ".github/workflows/planning-checks.yml",
+          ".github/workflows/fuzz.yml",
+          "fuzz/README.md",
+          "fuzz/Cargo.toml",
+          "fuzz/Cargo.lock",
+          "fuzz/run.sh",
+          "fuzz/fuzz_targets/email_bytes.rs",
+          "crates/mailweft-core/tests/fuzz_regressions.rs",
+          "crates/mailweft-core/tests/support/fuzz_contract.rs"
         ],
         "commands": [
           "cargo test --locked --workspace --all-targets --no-fail-fast",
           "cargo fmt --all -- --check",
-          "python3 scripts/conductor_doctor.py --check"
+          "python3 scripts/conductor_doctor.py --check",
+          "cargo +1.99.1 test --locked -p mailweft-core --test fuzz_regressions",
+          "bash fuzz/run.sh 30"
         ],
         "evidence": [
           "https://github.com/edithatogo/mailweft/actions/runs/42590576579",
-          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)"
+          "docs/VERIFICATION-0.7.md (final exact-head CI is the acceptance gate)",
+          "fuzz/README.md (synthetic source policy, invariant definitions, exact budgets and reproduction); native fuzz_regressions: 2 passed, 0 failed on Rust 1.99.1; campaign/hosted receipts are recorded separately",
+          "fuzz/validation.json: native workspace tests/fmt/scoped Clippy and the local ASan campaign passed; local LeakSanitizer unavailable; final hosted CI pending."
         ]
       }
     },

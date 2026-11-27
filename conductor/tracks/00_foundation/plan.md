@@ -64,14 +64,14 @@ A partial task is not unimplemented and not complete. Evidence and remaining acc
 - [~] Task: **T00.06 — Add CI synthetic lint/test/contract and dependency security scans**
 
   - Lane: `core`; dependencies: T00.05.
-  - Requirements: R10, R12, R13, R15.
-  - Allowed paths: `.github/workflows/ci.yml`, `.github/workflows/planning-checks.yml`, `.github/workflows/rust-core.yml`.
+  - Requirements: R10, R12, R13, R15, R11.
+  - Allowed paths: `.github/workflows/ci.yml`, `.github/workflows/planning-checks.yml`, `.github/workflows/rust-core.yml`, `.github/workflows/fuzz.yml`, `fuzz/**`, `crates/mailweft-core/tests/fuzz_regressions.rs`, `crates/mailweft-core/tests/support/fuzz_contract.rs`.
   - Action: Resume from the recorded implementation; implement only remaining acceptance, with a failing regression first.
   - Acceptance: CI requires no real mailbox/corpus data. Run targeted `cargo test` and `cargo fmt --check` once Cargo exists; until then verify document syntax and mark runtime checks BLOCKED.
   - Verification: `cargo test --locked --workspace --all-targets --no-fail-fast; cargo fmt --all -- --check; python3 scripts/conductor_doctor.py --check`.
   - Evidence: `conductor/tracks/00_foundation/evidence.md`.
-  - Implemented: Read-only synthetic Rust, contracts, planning and Conductor checks run in CI.
-  - Remaining: Dedicated dependency advisory/security scanning and broader fuzz gates remain open.
+  - Implemented: Read-only synthetic Rust, contracts, planning and Conductor checks run in CI. User-approved synthetic boundary fuzzing adds shared native invariants, an isolated pinned libFuzzer target, and bounded PR/weekly execution.
+  - Remaining: Dedicated dependency advisory/security scanning, hosted CI on the final fuzz commit and wider resource/release qualification remain open.
 
 - [x] Task: **T00.07 — Verify Conductor submodule and project context integrity**
 
