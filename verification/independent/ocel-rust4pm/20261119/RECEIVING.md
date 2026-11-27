@@ -87,3 +87,31 @@ Owner retains:
 - Release blocker #4 must remain open until substantive requirements pass; **do not merge PR #3, publish, waive gates or claim this reviewer branch supplies native acceptance**.
 
 Earlier independent evidence: [15 Nov](https://github.com/edithatogo/mailweft/issues/4#issuecomment-6889450827) and [19 Nov](https://github.com/edithatogo/mailweft/issues/4#issuecomment-7009259457). Reviewer execution was completed on 20 November; **owner receiving acknowledgement was obtained on 28 November, so this review lane is complete**. The source/binary reproducibility bundle remains a non-release Library artifact; this draft evidence PR is separate from production code. Issue #4 and PR #3 remain unresolved implementation/security work.
+
+
+## 28 November 2026 — independently executed candidate correction proposal
+
+**Scope:** unowned, standalone Python receiving-test/evidence work only. The corrected source was exercised in a temporary copy; **no production implementation, owner branch, lock, workflow, Conductor file, issue or PR #3 was changed**. This is not a clean native/release result or instruction to automatically apply the proposal.
+
+- Proposed artifact: [`validator_candidate_rejection.patch`](validator_candidate_rejection.patch); Git blob `8e8f21b7facfdd7c8f5028170f77745ed9b61a31`, SHA-256 `0fac412900018fa00b27199237895dff9362b6838001fcf7f32fb10bc24d24f1`. It is a source *patch proposal*, not a merged change.
+- Exact **candidate-only** preimage: `feat/quality-ocel-secure-rust4pm` at `16948cb586f40cf608914f5bfb90f173f4cbf248`, `scripts/validate_ocel_integrity.py` Git blob `a68c40b2c2873d96f8f9cfd781e3485a0bbddbda` (5,158 bytes). Postpatch Git blob (local, not a published implementation source) `d3d667f11aa465619ac2bcd5e244cc2842144e8a` (5,546 bytes). This patch must **not** be applied blindly to current `main`; main's validator is a different, string-only implementation.
+- **RED → GREEN** (Python 3.13.5, Linux, isolated fictional fixtures): untouched candidate 13/13 existing tests passed and 5/10 independent acceptance cases passed, with five expected *failure-to-reject* findings. After `git apply --check` and successful patch application to a clean temporary candidate copy, existing tests **13/13 passed** and previously failing independent acceptance cases **10/10 passed**. Neither original test nor independent negative coverage was weakened or skipped.
+- Corrected rejection semantics: RFC3339 timestamps with explicit offsets on event timestamps, object histories and time-typed values; duplicate event attribute names (irrespective of extraneous time fields); unsupported catalogue attribute types even if never instantiated. Existing five OCEL primitive type, qualified E2O/O2O and time-history test fixtures still pass.
+- **Ponytail:** no replacement runtime validator, dependency, duplicate fork or new workflow. The proposal uses Python standard-library `datetime` and `re` and reuses the *already accepted* immutable ZIP's tests. The owner must evaluate this diff in their native/contract lane, and can reject it if a more central change is warranted.
+
+Reproduction on a clean *temporary copy* of the candidate, using the already accepted ZIP:
+
+```sh
+# The ZIP has been verified separately by SHA-256 and contains synthetic tests only.
+git apply --check /path/to/validator_candidate_rejection.patch
+git apply /path/to/validator_candidate_rejection.patch
+python3 -m unittest discover -v -s scripts -p 'test_*.py'
+cp /path/to/unpacked-bundle/independent_ocel_cases.py ./independent_ocel_cases.py
+python3 independent_ocel_cases.py
+```
+
+The original 19 November ZIP and its SHA-256 have not changed. The patch file is independently hosted on this verification branch so the owner can inspect or cherry-pick it without this reviewer pushing into owned implementation files.
+
+**Fresh read-only locked inventory, main `a45d4a8cdbd9a52073cb3acac0ff015dcf420176`:** the main lock Git blob is still `59c727a76feb95b5aad1340a36e7d90ed4b34808`, resolving `quick-xml 0.37.5`, `process_mining 0.6.2`, `chrono 0.4.45`. PR #3 resolves `quick-xml 0.37.5`; candidate resolves `quick-xml 0.41.0` with a pinned fork but still has only narrow version-floor evidence. The separate `chrono 0.4.45` unmaintained notice is documented in [issue #4's 24 November receiving comment](https://github.com/edithatogo/mailweft/issues/4#issuecomment-7110957577). No fresh full RustSec database, unsuppressed cargo-deny audit, native Rust4PM feature matrix, normative schema validation or official release qualification was executed by this evidence patch.
+
+**Final boundary:** reviewer-owned patch proposal is implemented/tested and ready for owner evaluation, but native/CI/Conductor and full source remediation **remain owned and blocked**. PR #27 is a draft evidence carrier, not a source-implementation PR and not approval to merge.
