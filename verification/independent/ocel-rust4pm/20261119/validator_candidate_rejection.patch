@@ -1,0 +1,75 @@
+--- a/scripts/validate_ocel_integrity.py
++++ b/scripts/validate_ocel_integrity.py
+@@ -6,6 +6,21 @@
+ """
+ from __future__ import annotations
+ 
++from datetime import datetime
++import re
++
++_ATTRIBUTE_TYPES = {"string", "boolean", "integer", "float", "time"}
++_RFC3339 = re.compile(r"\d{4}-\d{2}-\d{2}[Tt]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:[Zz]|[+-]\d{2}:\d{2})\Z")
++
++
++def _timestamp(value) -> bool:
++    if not isinstance(value, str) or not _RFC3339.fullmatch(value):
++        return False
++    try:
++        return datetime.fromisoformat(value.replace("Z", "+00:00").replace("z", "+00:00")).utcoffset() is not None
++    except ValueError:
++        return False
++
+ 
+ def _types(items: list, description: str) -> dict:
+     if not isinstance(items, list):
+@@ -22,8 +37,9 @@
+             raise ValueError(f"{description}: missing attribute catalogue")
+         names = {}
+         for att in attrs:
+-            if not isinstance(att, dict) or not att.get("name") or not att.get("type"):
+-                raise ValueError(f"{description}: malformed attribute definition")
++            if (not isinstance(att, dict) or not isinstance(att.get("name"), str)
++                    or not att["name"] or att.get("type") not in _ATTRIBUTE_TYPES):
++                raise ValueError(f"{description}: malformed/unsupported attribute definition")
+             if att["name"] in names:
+                 raise ValueError(f"{description}: duplicate attribute definition")
+             names[att["name"]] = att["type"]
+@@ -42,14 +58,7 @@
+     if typ == "float":
+         return isinstance(value, (int, float)) and not isinstance(value, bool)
+     if typ == "time":
+-        from datetime import datetime
+-        if not isinstance(value, str):
+-            return False
+-        try:
+-            datetime.fromisoformat(value.replace("Z", "+00:00"))
+-            return True
+-        except ValueError:
+-            return False
++        return _timestamp(value)
+     return False
+ 
+ 
+@@ -84,9 +93,9 @@
+                 raise ValueError("undeclared attribute")
+             if not _type_matches(att.get("value"), catalogue[att["name"]]):
+                 raise ValueError("attribute type mismatch")
+-            if object_values and not isinstance(att.get("time"), str):
+-                raise ValueError("object attribute missing time")
+-            key = (att["name"], att.get("time"))
++            if object_values and not _timestamp(att.get("time")):
++                raise ValueError("object attribute invalid/missing time")
++            key = (att["name"], att.get("time")) if object_values else att["name"]
+             if key in signatures:
+                 raise ValueError("duplicate timestamped attribute")
+             signatures.add(key)
+@@ -117,7 +126,7 @@
+         if not isinstance(event_id, str) or not event_id or event_id in event_ids:
+             raise ValueError("duplicate/missing event ID")
+         event_ids.add(event_id)
+-        if not isinstance(event.get("time"), str) or not event["time"]:
+-            raise ValueError("event timestamp missing")
++        if not _timestamp(event.get("time")):
++            raise ValueError("event timestamp invalid/missing")
+         check_attributes(event, event_types[event["type"]], False)
+         check_links(event)
